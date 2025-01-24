@@ -486,16 +486,16 @@ def get_stock_data(ticker, apiKey=None):
         start_date = (end_date - datetime.timedelta(days=int(2 * 365)))
         start_date_1y = (end_date - datetime.timedelta(days=int(1 * 365)))
         extended_data_r = yf.download(ticker, start=start_date.strftime('%Y-%m-%d'), end=end_date.strftime('%Y-%m-%d'), interval="1d")
-        extended_data_r.columns = extended_data_r.columns.map('_'.join)
+        #extended_data_r.columns = extended_data_r.columns.map('_'.join)
         extended_data_r.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume']
         macd_data_r = yf.download(ticker, start=start_date_1y.strftime('%Y-%m-%d'), end=end_date.strftime('%Y-%m-%d'), interval="1d")
-        macd_data_r.columns = macd_data_r.columns.map('_'.join)
+        #macd_data_r.columns = macd_data_r.columns.map('_'.join)
         macd_data_r.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume']
         rsi_data_r = yf.download(ticker, start=start_date_1y.strftime('%Y-%m-%d'), end=end_date.strftime('%Y-%m-%d'), interval="1d")
-        rsi_data_r.columns = rsi_data_r.columns.map('_'.join)
+        #rsi_data_r.columns = rsi_data_r.columns.map('_'.join)
         rsi_data_r.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume']
         ta_data_r = yf.download(ticker, start=start_date_1y.strftime('%Y-%m-%d'), end=end_date.strftime('%Y-%m-%d'), interval="1d")
-        ta_data_r.columns = ta_data_r.columns.map('_'.join)
+        #ta_data_r.columns = ta_data_r.columns.map('_'.join)
         ta_data_r.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume']
     except: end_date = extended_data_r = macd_data_r = rsi_data_r = ta_data_r = ""
 
