@@ -240,12 +240,12 @@ if st.button("Get Data"):
                             )
                         return fig
                     #thresholds for table
-                    ta_data['STOCH Consensus'] = ta_data['%K'].apply(lambda x: consensus(x, [20, 40, 60, 80]))
-                    ta_data['ADX Consensus'] = ta_data['ADX'].apply(lambda x: "Strong Trend" if x > 25 else "Weak Trend")
-                    ta_data['Williams %R Consensus'] = ta_data['Williams %R'].apply(lambda x: consensus(x, [-80, -50, -20, 0]))
-                    ta_data['CCI Consensus'] = ta_data['CCI'].apply(lambda x: consensus(x, [-100, -50, 50, 100]))
-                    ta_data['ROC Consensus'] = ta_data['ROC'].apply(lambda x: consensus(x, [-5, 0, 5, 10]))
-                    ta_data['UO Consensus'] = ta_data['UO'].apply(lambda x: consensus(x, [30, 50, 70, 80]))
+                    ta_data['STOCH Consensus'] = ta_data['%K'].astype(float).apply(lambda x: consensus(x, [20, 40, 60, 80]))
+                    ta_data['ADX Consensus'] = ta_data['ADX'].astype(float).apply(lambda x: "Strong Trend" if x > 25 else "Weak Trend")
+                    ta_data['Williams %R Consensus'] = ta_data['Williams %R'].astype(float).apply(lambda x: consensus(x, [-80, -50, -20, 0]))
+                    ta_data['CCI Consensus'] = ta_data['CCI'].astype(float).apply(lambda x: consensus(x, [-100, -50, 50, 100]))
+                    ta_data['ROC Consensus'] = ta_data['ROC'].astype(float).apply(lambda x: consensus(x, [-5, 0, 5, 10]))
+                    ta_data['UO Consensus'] = ta_data['UO'].astype(float).apply(lambda x: consensus(x, [30, 50, 70, 80]))
                     #
                     fig.add_trace(go.Candlestick(
                         x=data.index,
