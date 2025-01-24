@@ -532,6 +532,15 @@ if st.button("Get Data"):
 #############################################         #############################################
 
         st.header(f'{name}', divider='gray')
+
+        try:
+            st.dataframe(extended_data_r)
+            st.dataframe(macd_data_r)
+            st.dataframe(rsi_data_r)
+            st.dataframe(ta_data_r)
+            st.dataframe(yf_com) 
+        except Exception as e:
+            st.error(f"{str(e)}")
         
         try: change_dollar = price - previous_close
         except: change_dollar = 'N/A'
