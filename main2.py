@@ -542,11 +542,13 @@ if st.button("Get Data"):
         except Exception as e:
             st.error(f"{str(e)}")
         try:
-            if isinstance(end_date, str):
-                endd = datetime.datetime.strptime(end_date, '%Y-%m-%d').replace(tzinfo=pytz.UTC)
-            else:
-                endd = datetime.datetime.now().replace(tzinfo=pytz.UTC) 
-                startd = (endd - datetime.timedelta(days=int(365)))
+            if endd == "" or endd is None:
+                endd = datetime.datetime.now().replace(tzinfo=pytz.UTC)
+            elif isinstance(endd, str):
+                try:
+                    endd = datetime.datetime.strptime(endd, '%Y-%m-%d').replace(tzinfo=pytz.UTC)
+                except ValueError:
+                    endd = datetime.datetime.now().replace(tzinfo=pytz.UTC)
             stock_data = yf.download(ticker, start=startd.strftime('%Y-%m-%d'), end=endd.strftime('%Y-%m-%d'), interval=interval)
             st.dataframe(stock_data)
         except Exception as e:
