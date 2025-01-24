@@ -479,24 +479,24 @@ def get_stock_data(ticker, apiKey=None):
             cumret = (1+rel).cumprod()-1
             cumret = cumret.fillna(0)
             return cumret
-        yf_com = relativereturn(yf.download(compare_tickers, start.strftime('%Y-%m-%d'), end.strftime('%Y-%m-%d'))['Adj Close'])
+        yf_com = relativereturn(yf.download(compare_tickers, start.strftime('%Y-%m-%d'), end.strftime('%Y-%m-%d'))['Close'])
     except: yf_com = matching_etf = ""
     try:
         end_date = datetime.datetime.now().replace(tzinfo=pytz.UTC)
         start_date = (end_date - datetime.timedelta(days=int(2 * 365)))
         start_date_1y = (end_date - datetime.timedelta(days=int(1 * 365)))
         extended_data_r = yf.download(ticker, start=start_date.strftime('%Y-%m-%d'), end=end_date.strftime('%Y-%m-%d'), interval="1d")
-        #extended_data_r.columns = extended_data_r.columns.map('_'.join)
-        extended_data_r.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume']
+        extended_data_r.columns = extended_data_r.columns.map('_'.join)
+        extended_data_r.columns = ['Close', 'High', 'Low', 'Open', 'Volume']
         macd_data_r = yf.download(ticker, start=start_date_1y.strftime('%Y-%m-%d'), end=end_date.strftime('%Y-%m-%d'), interval="1d")
-        #macd_data_r.columns = macd_data_r.columns.map('_'.join)
-        macd_data_r.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume']
+        macd_data_r.columns = macd_data_r.columns.map('_'.join)
+        macd_data_r.columns = ['Close', 'High', 'Low', 'Open', 'Volume']
         rsi_data_r = yf.download(ticker, start=start_date_1y.strftime('%Y-%m-%d'), end=end_date.strftime('%Y-%m-%d'), interval="1d")
-        #rsi_data_r.columns = rsi_data_r.columns.map('_'.join)
-        rsi_data_r.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume']
+        rsi_data_r.columns = rsi_data_r.columns.map('_'.join)
+        rsi_data_r.columns = ['Close', 'High', 'Low', 'Open', 'Volume']
         ta_data_r = yf.download(ticker, start=start_date_1y.strftime('%Y-%m-%d'), end=end_date.strftime('%Y-%m-%d'), interval="1d")
-        #ta_data_r.columns = ta_data_r.columns.map('_'.join)
-        ta_data_r.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume']
+        ta_data_r.columns = ta_data_r.columns.map('_'.join)
+        ta_data_r.columns = ['Close', 'High', 'Low', 'Open', 'Volume']
     except: end_date = extended_data_r = macd_data_r = rsi_data_r = ta_data_r = ""
 
     try:
