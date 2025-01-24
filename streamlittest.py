@@ -35,7 +35,6 @@ def get_stock_data(ticker):
         ta_data_r.columns = ta_data_r.columns.map('_'.join)
         ta_data_r.columns = ['Close', 'High', 'Low', 'Open', 'Volume']
     except Exception as e: end_date = extended_data_r = macd_data_r = rsi_data_r = ta_data_r = ""
-        st.write(e)
     
     return end_date , extended_data_r , macd_data_r , rsi_data_r , ta_data_r , ticker, price
 
