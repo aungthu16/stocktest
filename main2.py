@@ -541,7 +541,14 @@ if st.button("Get Data"):
             st.dataframe(yf_com) 
         except Exception as e:
             st.error(f"{str(e)}")
-        
+        try:
+            endd = datetime.today()
+            startd = end_date - datetime.timedelta(days=int(2 * 365))
+            stock_data = yf.download(ticker, start=startd.strftime('%Y-%m-%d'), end=endd.strftime('%Y-%m-%d'), interval=interval)
+            st.dataframe(stock_data)
+        except Exception as e:
+            st.error(f"{str(e)}")
+
         try: change_dollar = price - previous_close
         except: change_dollar = 'N/A'
         try: change_percent = (change_dollar / previous_close) * 100
