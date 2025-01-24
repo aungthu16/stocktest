@@ -548,7 +548,7 @@ if st.button("Get Data"):
             st.dataframe(stock_data)
             stock_data.columns = stock_data.columns.map('_'.join)
             st.dataframe(stock_data)
-            stock_data.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume']
+            stock_data.columns = ['Close', 'High', 'Low', 'Open', 'Volume']
             st.dataframe(stock_data)
         except Exception as e:
             st.error(f"{str(e)}")
