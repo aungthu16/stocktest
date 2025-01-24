@@ -472,8 +472,8 @@ def get_stock_data(ticker, apiKey=None):
                     }
         matching_etf = sector_etf_mapping.get(sector)
         compare_tickers = (upper_ticker, '^GSPC', matching_etf)
-        end = datetime.datetime.today()
-        start = end - relativedelta(years=5)
+        end = datetime.datetime.now().replace(tzinfo=pytz.UTC)
+        start = (end - datetime.timedelta(days=int(5 * 365)))
         def relativereturn(df):
             rel = df.pct_change()
             cumret = (1+rel).cumprod()-1
@@ -483,8 +483,8 @@ def get_stock_data(ticker, apiKey=None):
     except: yf_com = matching_etf = ""
     try:
         end_date = datetime.datetime.now().replace(tzinfo=pytz.UTC)
-        start_date = (end_date - datetime.timedelta(days=int(2 * 365))).replace(tzinfo=pytz.UTC)
-        start_date_1y = (end_date - datetime.timedelta(days=int(1 * 365))).replace(tzinfo=pytz.UTC)
+        start_date = (end_date - datetime.timedelta(days=int(2 * 365)))
+        start_date_1y = (end_date - datetime.timedelta(days=int(1 * 365)))
         extended_data_r = yf.download(ticker, start=start_date.strftime('%Y-%m-%d'), end=end_date.strftime('%Y-%m-%d'), interval="1d")
         extended_data_r.columns = extended_data_r.columns.map('_'.join)
         extended_data_r.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume']
