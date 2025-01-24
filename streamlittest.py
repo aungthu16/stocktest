@@ -13,48 +13,30 @@ import re
 from dateutil.relativedelta import relativedelta
 import pytz
 
-st.set_page_config(page_title='US Stock Analysis Tool', layout='wide', page_icon="./Image/logo.png")
-
 @st.cache_data(ttl=3600)
 def get_stock_data(ticker):
 
     stock = yf.Ticker(ticker)
-    lowercase_ticker = ticker.lower()
-    upper_ticker = ticker.upper()
     price = stock.info.get('currentPrice', 'N/A')
-    picture_url = f'https://logos.stockanalysis.com/{lowercase_ticker}.svg'
-    exchange = stock.info.get('exchange', 'N/A')
-    if exchange == 'NYQ':
-        exchange_value = "NYSE"
-    elif exchange == 'NMS':
-        exchange_value = "NASDAQ"
-    else:
-        exchange_value = "N/A"
-    lower_exchange = exchange_value.lower()
-    
     try:
-        end_date = datetime.today()
-        start_date = (end_date - datetime.timedelta(days=int(2 * 365)))
-        start_date_1y = (end_date - datetime.timedelta(days=int(1 * 365)))
+        end_date = datetime.datetime.now().replace(tzinfo=pytz.UTC)
+        start_date = (end_date - datetime.timedelta(days=int(2 * 365))).replace(tzinfo=pytz.UTC)
+        start_date_1y = (end_date - datetime.timedelta(days=int(1 * 365))).replace(tzinfo=pytz.UTC)
         extended_data_r = yf.download(ticker, start=start_date.strftime('%Y-%m-%d'), end=end_date.strftime('%Y-%m-%d'), interval="1d")
         extended_data_r.columns = extended_data_r.columns.map('_'.join)
-        extended_data_r.columns = ['Close', 'High', 'Low', 'Open', 'Volume']
+        extended_data_r.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume']
         macd_data_r = yf.download(ticker, start=start_date_1y.strftime('%Y-%m-%d'), end=end_date.strftime('%Y-%m-%d'), interval="1d")
         macd_data_r.columns = macd_data_r.columns.map('_'.join)
-        macd_data_r.columns = ['Close', 'High', 'Low', 'Open', 'Volume']
+        macd_data_r.columns = ['Adj Close','Close', 'High', 'Low', 'Open', 'Volume']
         rsi_data_r = yf.download(ticker, start=start_date_1y.strftime('%Y-%m-%d'), end=end_date.strftime('%Y-%m-%d'), interval="1d")
         rsi_data_r.columns = rsi_data_r.columns.map('_'.join)
-        rsi_data_r.columns = ['Close', 'High', 'Low', 'Open', 'Volume']
+        rsi_data_r.columns = ['Adj Close','Close', 'High', 'Low', 'Open', 'Volume']
         ta_data_r = yf.download(ticker, start=start_date_1y.strftime('%Y-%m-%d'), end=end_date.strftime('%Y-%m-%d'), interval="1d")
         ta_data_r.columns = ta_data_r.columns.map('_'.join)
-        ta_data_r.columns = ['Close', 'High', 'Low', 'Open', 'Volume']
+        ta_data_r.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume']
     except: end_date = extended_data_r = macd_data_r = rsi_data_r = ta_data_r = ""
-
-    try:
-        eps_yield = eps/price
-    except: eps_yield = "N/A"
     
-    return end_date , extended_data_r , macd_data_r , rsi_data_r , ta_data_r , ticker
+    return end_date , extended_data_r , macd_data_r , rsi_data_r , ta_data_r , ticker, price
 
 ''
 ''
@@ -71,12 +53,9 @@ with main_col1:
     with input_col2:
         apiKey = st.text_input("Enter your RapidAPI Key (optional):", "")
 
-st.write("This analysis dashboard is designed to enable beginner investors to analyze stocks effectively and with ease. Please note that the information in this page is intended for educational purposes only and it does not constitute investment advice or a recommendation to buy or sell any security. We are not responsible for any losses resulting from trading decisions based on this information.")
-st.info('Data is sourced from Yahoo Finance, Morningstar, Seeking Alpha, Market Beat, Stockanalysis.com and Alpha Spread. Certain sections require API keys to operate. Users are advised to subscribe to the Morningstar and Seeking Alpha APIs provided by Api Dojo through rapidapi.com.')
-
 if st.button("Get Data"):
     try:
-            end_date , extended_data_r , macd_data_r , rsi_data_r , ta_data_r , ticker = get_stock_data(ticker)
+            end_date , extended_data_r , macd_data_r , rsi_data_r , ta_data_r , ticker, price = get_stock_data(ticker)
      
 
 
@@ -86,7 +65,7 @@ if st.button("Get Data"):
             st.info("It is important to note that investment decisions should not be based solely on technical analysis. Technical analysis primarily relies on historical price movements and cannot predict future outcomes with certainty.")
             st.caption("This page is derived from the historical price data provided by Yahoo Finance.")
             try: 
-                st.write(extended_data_r)
+                st.dataframe(extended_data_r)
             except Exception as e: st.warning(e)
             try:
                 extended_data = extended_data_r 
@@ -104,7 +83,7 @@ if st.button("Get Data"):
                     last_year_start = (end_date - datetime.timedelta(days=int(1 * 365))).replace(tzinfo=pytz.UTC)
                     data = extended_data.loc[extended_data.index >= last_year_start]
                     data.columns = data.columns.map('_'.join)
-                    data.columns = ['Close', 'High', 'Low', 'Open', 'Volume', 'SMA20', 'SMA50', 'SMA200']
+                    data.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume', 'SMA20', 'SMA50', 'SMA200']
                     volume_colors = ['green' if data['Close'][i] >= data['Open'][i] else 'red' for i in range(len(data))]
                     max_volume = data['Volume'].max()
                     #MACD
