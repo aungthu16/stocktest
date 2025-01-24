@@ -546,6 +546,10 @@ if st.button("Get Data"):
             startd = (endd - datetime.timedelta(days=int(2 * 365)))
             stock_data = yf.download(ticker, start=startd.strftime('%Y-%m-%d'), end=endd.strftime('%Y-%m-%d'), interval="1d")
             st.dataframe(stock_data)
+            stock_data.columns = stock_data.columns.map('_'.join)
+            st.dataframe(stock_data)
+            stock_data.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume']
+            st.dataframe(stock_data)
         except Exception as e:
             st.error(f"{str(e)}")
 
