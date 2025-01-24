@@ -499,7 +499,7 @@ if st.button("Get Data"):
                     with rsi_tcol2:
                         st.info("If RSI > 70, it generally indicates an Overbought condition. If RSI < 30, it generally indicates an Oversold condition. If RSI is between 30 and 70, it indicates a Neutral condition.")
                     #st.subheader("",divider = 'gray')
-            except: st.warning("Failed to request historical price data.")
+            except Exception as e: st.warning(e)
 
             ###Finviz picture
             # st.subheader("Price Data", divider ='gray')
