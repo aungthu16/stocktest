@@ -1544,14 +1544,14 @@ if st.button("Get Data"):
                         ticker4 = '' if len(ticker_4) > 4 else ticker_4
                         scompare_tickers = [upper_ticker for upper_ticker in (upper_ticker, ticker2, ticker3, ticker4) if upper_ticker]
                         if scompare_tickers:
-                            send = datetime.datetime.today()
-                            sstart = send - relativedelta(years=5)
+                            send = datetime.datetime.now().replace(tzinfo=pytz.UTC)
+                            sstart = (send - datetime.timedelta(days=int(5 * 365)))
                             def relativereturn(mb_alt_df):
                                 rel = mb_alt_df.pct_change()
                                 cumret = (1+rel).cumprod()-1
                                 cumret = cumret.fillna(0)
                                 return cumret
-                            mb_alt_df = relativereturn(yf.download(scompare_tickers, sstart.strftime('%Y-%m-%d'), send.strftime('%Y-%m-%d'))['Adj Close'])
+                            mb_alt_df = relativereturn(yf.download(scompare_tickers, sstart.strftime('%Y-%m-%d'), send.strftime('%Y-%m-%d'))['Close'])
                             mb_alt_df_melted = mb_alt_df.reset_index().melt(id_vars='Date', var_name='Ticker', value_name='Relative Return')
                             #unique_years_sorted = df_melted['Date'].dt.year.unique()
                             custom_colors = {
@@ -3297,7 +3297,9 @@ if st.button("Get Data"):
                     with rsi_tcol2:
                         st.info("If RSI > 70, it generally indicates an Overbought condition. If RSI < 30, it generally indicates an Oversold condition. If RSI is between 30 and 70, it indicates a Neutral condition.")
                     #st.subheader("",divider = 'gray')
-            except: st.warning("Failed to request historical price data.")
+            except Exception as e:
+                    st.write(f'{name} has no growth estimates data. {e}')
+            #except: st.warning("Failed to request historical price data.")
 
             ###Finviz picture
             # st.subheader("Price Data", divider ='gray')
