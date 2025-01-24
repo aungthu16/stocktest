@@ -85,6 +85,9 @@ if st.button("Get Data"):
 #############################################                         #############################################
             st.info("It is important to note that investment decisions should not be based solely on technical analysis. Technical analysis primarily relies on historical price movements and cannot predict future outcomes with certainty.")
             st.caption("This page is derived from the historical price data provided by Yahoo Finance.")
+            try: 
+                st.dataframe(extended_data_r)
+            except Exception as e: st.warning(e)
             try:
                 extended_data = extended_data_r 
                 macd_data = macd_data_r 
@@ -101,7 +104,7 @@ if st.button("Get Data"):
                     last_year_start = (end_date - datetime.timedelta(days=int(1 * 365))).replace(tzinfo=pytz.UTC)
                     data = extended_data.loc[extended_data.index >= last_year_start]
                     data.columns = data.columns.map('_'.join)
-                    data.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume', 'SMA20', 'SMA50', 'SMA200']
+                    data.columns = ['Close', 'High', 'Low', 'Open', 'Volume', 'SMA20', 'SMA50', 'SMA200']
                     volume_colors = ['green' if data['Close'][i] >= data['Open'][i] else 'red' for i in range(len(data))]
                     max_volume = data['Volume'].max()
                     #MACD
