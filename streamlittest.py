@@ -80,10 +80,10 @@ if st.button("Get Data"):
                     extended_data['SMA20'] = extended_data['Close'].rolling(window=20).mean()
                     extended_data['SMA50'] = extended_data['Close'].rolling(window=50).mean()
                     extended_data['SMA200'] = extended_data['Close'].rolling(window=200).mean()
-                    last_year_start = (end_date - datetime.timedelta(days=int(1 * 365))).replace(tzinfo=pytz.UTC)
+                    last_year_start = (end_date - datetime.timedelta(days=int(1 * 365)))
                     data = extended_data.loc[extended_data.index >= last_year_start]
                     data.columns = data.columns.map('_'.join)
-                    data.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume', 'SMA20', 'SMA50', 'SMA200']
+                    data.columns = ['Close', 'High', 'Low', 'Open', 'Volume', 'SMA20', 'SMA50', 'SMA200']
                     volume_colors = ['green' if data['Close'][i] >= data['Open'][i] else 'red' for i in range(len(data))]
                     max_volume = data['Volume'].max()
                     #MACD
