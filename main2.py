@@ -485,19 +485,32 @@ def get_stock_data(ticker, apiKey=None):
         end_date = datetime.datetime.now().replace(tzinfo=pytz.UTC)
         start_date = (end_date - datetime.timedelta(days=int(2 * 365))).replace(tzinfo=pytz.UTC)
         start_date_1y = (end_date - datetime.timedelta(days=int(1 * 365))).replace(tzinfo=pytz.UTC)
+        # Fetch data with proper error handling
         extended_data_r = yf.download(ticker, start=start_date.strftime('%Y-%m-%d'), end=end_date.strftime('%Y-%m-%d'), interval="1d")
-        extended_data_r = extended_data_r.copy()  
-        extended_data_r.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume']
-        macd_data_r = yf.download(ticker, start=start_date_1y, end=end_date, interval="1d")
-        macd_data_r = macd_data_r.copy()
-        macd_data_r.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume']
-        rsi_data_r = yf.download(ticker, start=start_date_1y, end=end_date, interval="1d")
-        rsi_data_r = rsi_data_r.copy()
-        rsi_data_r.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume']
-        ta_data_r = yf.download(ticker, start=start_date_1y, end=end_date, interval="1d")
-        ta_data_r = ta_data_r.copy()
-        ta_data_r.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume']
-    except: end_date = extended_data_r = macd_data_r = rsi_data_r = ta_data_r = ""
+        if extended_data_r.empty:
+            st.error(f"No data returned for {ticker}")
+            extended_data_r = None
+        macd_data_r = yf.download(ticker, start=start_date_1y.strftime('%Y-%m-%d'), end=end_date.strftime('%Y-%m-%d'), interval="1d")
+        if macd_data_r.empty:
+            macd_data_r = None
+        rsi_data_r = yf.download(ticker, start=start_date_1y.strftime('%Y-%m-%d'), end=end_date.strftime('%Y-%m-%d'), interval="1d")
+        if rsi_data_r.empty:
+            rsi_data_r = None
+        ta_data_r = yf.download(ticker, start=start_date_1y.strftime('%Y-%m-%d'), end=end_date.strftime('%Y-%m-%d'), interval="1d")
+        if ta_data_r.empty:
+            ta_data_r = None
+        # Only process data if it exists
+        if extended_data_r is not None:
+            extended_data_r.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume']
+        if macd_data_r is not None:
+            macd_data_r.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume']
+        if rsi_data_r is not None:
+            rsi_data_r.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume']
+        if ta_data_r is not None:
+            ta_data_r.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume']
+    except Exception as e:
+        print(f"Error fetching historical data: {str(e)}")
+        end_date = extended_data_r = macd_data_r = rsi_data_r = ta_data_r = ""
 
     try:
         eps_yield = eps/price
