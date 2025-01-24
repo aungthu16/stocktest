@@ -33,9 +33,9 @@ def get_stock_data(ticker):
     lower_exchange = exchange_value.lower()
     
     try:
-        end_date = datetime.datetime.now().replace(tzinfo=pytz.UTC)
-        start_date = (end_date - datetime.timedelta(days=int(2 * 365))).replace(tzinfo=pytz.UTC)
-        start_date_1y = (end_date - datetime.timedelta(days=int(1 * 365))).replace(tzinfo=pytz.UTC)
+        end_date = datetime.datetime.now()
+        start_date = (end_date - datetime.timedelta(days=int(2 * 365)))
+        start_date_1y = (end_date - datetime.timedelta(days=int(1 * 365)))
         extended_data_r = yf.download(ticker, start=start_date.strftime('%Y-%m-%d'), end=end_date.strftime('%Y-%m-%d'), interval="1d")
         extended_data_r.columns = extended_data_r.columns.map('_'.join)
         extended_data_r.columns = ['Close', 'High', 'Low', 'Open', 'Volume']
