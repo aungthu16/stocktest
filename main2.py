@@ -472,8 +472,8 @@ def get_stock_data(ticker, apiKey=None):
                     }
         matching_etf = sector_etf_mapping.get(sector)
         compare_tickers = (upper_ticker, '^GSPC', matching_etf)
-        end = datetime.datetime.now().replace(tzinfo=pytz.UTC)
-        start = (end - datetime.timedelta(days=int(5 * 365))).replace(tzinfo=pytz.UTC)
+        end = datetime.datetime.today()
+        start = end - relativedelta(years=5)
         def relativereturn(df):
             rel = df.pct_change()
             cumret = (1+rel).cumprod()-1
@@ -482,9 +482,9 @@ def get_stock_data(ticker, apiKey=None):
         yf_com = relativereturn(yf.download(compare_tickers, start.strftime('%Y-%m-%d'), end.strftime('%Y-%m-%d'))['Close'])
     except: yf_com = matching_etf = ""
     try:
-        end_date = datetime.datetime.now().replace(tzinfo=pytz.UTC)
-        start_date = (end_date - datetime.timedelta(days=int(2 * 365))).replace(tzinfo=pytz.UTC)
-        start_date_1y = (end_date - datetime.timedelta(days=int(1 * 365))).replace(tzinfo=pytz.UTC)
+        end_date = datetime.datetime.today()
+        start_date = (end_date - datetime.timedelta(days=int(2 * 365)))
+        start_date_1y = (end_date - datetime.timedelta(days=int(1 * 365)))
         extended_data_r = yf.download(ticker, start=start_date.strftime('%Y-%m-%d'), end=end_date.strftime('%Y-%m-%d'), interval="1d")
         extended_data_r.columns = extended_data_r.columns.map('_'.join)
         extended_data_r.columns = ['Close', 'High', 'Low', 'Open', 'Volume']
@@ -532,27 +532,7 @@ if st.button("Get Data"):
 #############################################         #############################################
 
         st.header(f'{name}', divider='gray')
-
-        try:
-            st.dataframe(extended_data_r)
-            st.dataframe(macd_data_r)
-            st.dataframe(rsi_data_r)
-            st.dataframe(ta_data_r)
-            st.dataframe(yf_com) 
-        except Exception as e:
-            st.error(f"{str(e)}")
-        try:
-            endd = datetime.datetime.now().replace(tzinfo=pytz.UTC)
-            startd = (endd - datetime.timedelta(days=int(2 * 365)))
-            stock_data = yf.download(ticker, start=startd.strftime('%Y-%m-%d'), end=endd.strftime('%Y-%m-%d'), interval="1d")
-            st.dataframe(stock_data)
-            stock_data.columns = stock_data.columns.map('_'.join)
-            st.dataframe(stock_data)
-            stock_data.columns = ['Close', 'High', 'Low', 'Open', 'Volume']
-            st.dataframe(stock_data)
-        except Exception as e:
-            st.error(f"{str(e)}")
-
+        
         try: change_dollar = price - previous_close
         except: change_dollar = 'N/A'
         try: change_percent = (change_dollar / previous_close) * 100
@@ -941,7 +921,7 @@ if st.button("Get Data"):
                             title_y=1,  
                             title_x=0.75, 
                             margin=dict(t=30, b=40, l=40, r=30),
-                            xaxis_title="Year",
+                            xaxis_title=None,
                             yaxis_title="Dividends (USD)",
                             xaxis=dict(type='category',tickangle=tick_angle),
                         )
@@ -981,7 +961,7 @@ if st.button("Get Data"):
                             title_y=1,  
                             title_x=0, 
                             margin=dict(t=30, b=40, l=40, r=30),
-                            xaxis_title='Date',
+                            xaxis_title=None,
                             yaxis_title='Earnings',
                             xaxis=dict(type='category',showgrid=True),
                             yaxis=dict(showgrid=True),
@@ -1052,7 +1032,7 @@ if st.button("Get Data"):
                                 title_x=0, 
                                 margin=dict(t=30, b=40, l=40, r=30),
                                 xaxis=dict(
-                                    title='Time Period',
+                                    title=None,
                                     categoryorder='array',
                                     showgrid=True,  
                                     categoryarray=['90 Days Ago', '60 Days Ago', '30 Days Ago', '7 Days Ago', 'Current'],
@@ -1090,7 +1070,7 @@ if st.button("Get Data"):
                                 title_y=1,  
                                 title_x=0, 
                                 margin=dict(t=30, b=30, l=40, r=30),
-                                xaxis_title='Year',
+                                xaxis_title=None,
                                 yaxis_title='Value',
                                 xaxis=dict(tickmode='array', tickvals=eps_unique_years_sorted, autorange='reversed',showgrid=True),
                                 yaxis=dict(showgrid=True),
@@ -1127,15 +1107,16 @@ if st.button("Get Data"):
                             title_y=1,  
                             title_x=0, 
                             margin=dict(t=30, b=30, l=40, r=30),
-                            xaxis_title='Year',
+                            xaxis_title=None,
                             yaxis_title='Value (%)',
                             xaxis=dict(tickmode='array', tickvals=growth_unique_years_sorted,showgrid=True),
                             yaxis=dict(showgrid=True),
+                            legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.010),
                             height=400
                         )
                         st.plotly_chart(fig_growth, use_container_width=True)
                 except Exception as e:
-                        st.write(f'{name} has no growth estimates data. {e}')
+                        st.warning(f'{name} has no growth estimates data.')
             
             with gcol2:
                 try:
@@ -1195,73 +1176,115 @@ if st.button("Get Data"):
 
 # Scores
             st.subheader('Scores', divider='gray')
-            score_col1, score_col2, score_col3, score_col4, score_col5 = st.columns([1,3,1,3,1])
-            with score_col2:
-                try:
-                    sa_altmanz_value = 'N/A' if sa_altmanz == 'N/A' else float(sa_altmanz)
-                    if sa_altmanz_value != 'N/A':
-                        fig = go.Figure(go.Indicator(
-                            title={"text":"Altman Z-Score", "font": {"size": 20}},
-                            mode="gauge+number",
-                            value=sa_altmanz_value,
-                            number={"font": {"size": 45}},
-                            gauge={
-                                'axis': {'range': [0, 4]}, 
-                                'bar': {'color': "#5F9BEB"},
-                                'steps': [
-                                    {'range': [0, 1.8], 'color': "#DA4453"},
-                                    {'range': [1.8, 3], 'color': "#F6BB42"},
-                                    {'range': [3, 4], 'color': "#8CC152"}
-                                ],
-                                # 'threshold': {
-                                #     'line': {'color': "black", 'width': 4},
-                                #     'thickness': 0.75,
-                                #     'value': sa_altmanz_value
-                                # }
-                            }
-                        ))
-                        fig.update_layout(
-                            height=350,
-                            margin=dict(t=50, b=20, l=40, r=30)
-                        )
-                        st.plotly_chart(fig)
-                    else:
-                        st.warning("Altman Z-Score data is not available.")
-                    st.caption("A score below 1.8 signals the company is likely headed for bankruptcy, while companies with scores above 3 are not likely to go bankrupt. Investors may consider purchasing a stock if its Altman Z-Score value is closer to 3 and selling, or shorting, a stock if the value is closer to 1.8.")
-                except: st.warning("Altman Z-Score data is not available.")
-            with score_col4:    
-                try:    
+            try:
+                score_col1, score_col2 = st.columns([2,3])
+                with score_col1:
                     sa_piotroski_value = 'N/A' if sa_piotroski == 'N/A' else float(sa_piotroski)
                     if sa_piotroski_value != 'N/A':
                         fig = go.Figure(go.Indicator(
-                            title={"text":"Piotroski F-Score", "font": {"size": 20}},
-                            mode="gauge+number",
-                            value=sa_piotroski_value,
-                            number={"font": {"size": 45}},
+                            mode="gauge",
                             gauge={
-                                'axis': {'range': [0, 9]},
-                                'bar': {'color': "#5F9BEB"},
+                                'shape': "bullet",
+                                'axis': {
+                                    'range': [0, 9], 
+                                    'visible': True,
+                                    'tickcolor': 'white',
+                                    'ticklen': 0,
+                                    'showticklabels': True,
+                                    'tickwidth': 0
+                                },
+                                'bar': {'color': "#5F9BEB", 'thickness':0.5},
+                                'threshold': {
+                                    'line': {'color': "blue", 'width': 0},
+                                    'thickness': 0.5,
+                                    'value': sa_piotroski_value
+                                },
                                 'steps': [
-                                    {'range': [0, 3], 'color': "#DA4453"},
-                                    {'range': [3, 6], 'color': "#F6BB42"},
-                                    {'range': [6, 9], 'color': "#8CC152"}
+                                    {'range': [0, 1.8], 'color': "#ED2C0A"},
+                                    {'range': [1.8, 3.6], 'color': "#F0702C"},
+                                    {'range': [3.6, 5.4], 'color': "#FBB907"},
+                                    {'range': [5.4, 7.2], 'color': "#B0B431"},
+                                    {'range': [7.2, 9], 'color': "#88B03E"}
                                 ],
-                                # 'threshold': {
-                                #     'line': {'color': "black", 'width': 4},
-                                #     'thickness': 0.75,
-                                #     'value': sa_piotroski_value
-                                # }
-                            }
+                            },
+                            value=sa_piotroski_value,
+                            domain={'x': [0.1, 1], 'y': [0, 1]},
+                            title={'text': f"{sa_piotroski_value:,.0f}/9"}
                         ))
+            
                         fig.update_layout(
-                            height=350,
-                            margin=dict(t=50, b=20, l=40, r=30)
+                            height=100,
+                            margin=dict(l=30, r=30, t=30, b=30),
+                            title={
+                                'text': "Piotroski F-Score",
+                                'y':1,
+                                'x':0,
+                                'xanchor':'left',
+                                'yanchor':'top',
+                                'font':{'size':20}
+                            }
                         )
-                        st.plotly_chart(fig)
+                        st.plotly_chart(fig, use_container_width=True)
                     else:
                         st.warning("Piotroski F-Score data is not available.")
+                with score_col2:
                     st.caption("A company with a high Piotroski F-Score (say, 7 or above) is likely to be in good financial health, and may therefore be a good investment. Conversely, a company with a low score (say, 3 or below) may be in poor financial health, and may therefore be a risky investment.")
-                except: st.warning("Piotroski F-Score data is not available.")
+            except Exception as e:
+                st.warning("Piotroski F-Score data is not available.")
+            
+            try:
+                score_col3, score_col4 = st.columns([2,3])
+                with score_col3:
+                    sa_altmanz_value = 'N/A' if sa_altmanz == 'N/A' else float(sa_altmanz)
+                    if sa_altmanz_value != 'N/A':
+                        fig = go.Figure(go.Indicator(
+                            mode="gauge",
+                            gauge={
+                                'shape': "bullet",
+                                'axis': {
+                                    'range': [0, 4], 
+                                    'visible': True,
+                                    'tickcolor': 'white',
+                                    'ticklen': 0,
+                                    'showticklabels': True,
+                                    'tickwidth': 0
+                                },
+                                'bar': {'color': "#5F9BEB", 'thickness':0.5},
+                                'threshold': {
+                                    'line': {'color': "blue", 'width': 0},
+                                    'thickness': 0.5,
+                                    'value': sa_altmanz_value
+                                },
+                                'steps': [
+                                    {'range': [0, 1.8], 'color': "#ED2C0A"},
+                                    {'range': [1.8, 3.0], 'color': "#FBB907"},
+                                    {'range': [3.0, 4.0], 'color': "#88B03E"}
+                                ],
+                            },
+                            value=sa_altmanz_value,
+                            domain={'x': [0.1, 1], 'y': [0, 1]},
+                            title={'text': f"{sa_altmanz_value}"}
+                        ))
+            
+                        fig.update_layout(
+                            height=100,
+                            margin=dict(l=30, r=30, t=30, b=30),
+                            title={
+                                'text': "Altman Z-Score",
+                                'y':1,
+                                'x':0,
+                                'xanchor':'left',
+                                'yanchor':'top',
+                                'font':{'size':20}
+                            }
+                        )
+                        st.plotly_chart(fig, use_container_width=True)
+                    else:
+                        st.warning("Altman Z-Score data is not available.")
+                with score_col4:
+                    st.caption("A score below 1.8 signals the company is likely headed for bankruptcy, while companies with scores above 3 are not likely to go bankrupt. Investors may consider purchasing a stock if its Altman Z-Score value is closer to 3 and selling, or shorting, a stock if the value is closer to 1.8.")
+            except Exception as e:
+                st.warning("Altman Z-Score data is not available.")
             st.caption("Data source: Stockanalysis.com")
 
 #Analysts Ratings
@@ -1412,8 +1435,9 @@ if st.button("Get Data"):
                         title_y=1,  
                         title_x=0, 
                         margin=dict(t=30, b=40, l=40, r=30),
-                        xaxis=dict(title="Date", showticklabels=show_labels, showgrid=True), 
+                        xaxis=dict(title=None, showticklabels=show_labels, showgrid=True), 
                         yaxis=dict(title="Cumulative Relative Return", showgrid=True),
+                        legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.010),
                         height=500,
                     )
                     st.plotly_chart(fig, use_container_width=True)
@@ -1422,25 +1446,228 @@ if st.button("Get Data"):
                 st.warning(f'Error getting historical data. {e}')
             st.caption("Data source: Yahoo Finance")
             ''
-            col1,col2 = st.columns([3, 3])
+            col1,col2,col3 = st.columns([3,1, 3])
             with col1:
+                st.subheader("Industry and Sector", divider = 'gray')
+                #try:
+                #    st.subheader(f'Valuation for Industry and Sector')
+                #    def highlight_company(s):
+                #        return ['background-color: yellow' if s.name == mb_com_df.columns[1] else '' for _ in s]
+                #    mb_com_styled_df = mb_com_df.style.apply(highlight_company, axis=0)
+                #    st.dataframe(mb_com_styled_df,hide_index=True,use_container_width=True)
+                #except Exception as e:
+                #    st.warning(f"Valuation Comparison: No data available.")
+                #st.caption("Data source: Market Beat")
+
                 try:
-                    st.subheader(f'Valuation for Industry and Sector')
-                    def highlight_company(s):
-                        return ['background-color: yellow' if s.name == mb_com_df.columns[1] else '' for _ in s]
-                    mb_com_styled_df = mb_com_df.style.apply(highlight_company, axis=0)
-                    st.dataframe(mb_com_styled_df,hide_index=True,use_container_width=True)
+                    vscolors = ['#4FC1E9', '#48CFAD', '#EC87C0', '#FFCE54']
+                    try:
+                        numeric_df = mb_com_df.copy()
+                        def convert_value(x):
+                            if not isinstance(x, str):
+                                return x
+                            x = x.replace('$', '').replace('%', '').replace(',', '')
+                            if 'T' in x:
+                                return float(x.replace('T', '')) * 1000
+                            elif 'B' in x:
+                                return float(x.replace('B', ''))
+                            elif 'M' in x:
+                                return float(x.replace('M', '')) / 1000
+                            return float(x)
+                        for col in numeric_df.columns:
+                            if col != "Metric":
+                                numeric_df[col] = numeric_df[col].apply(convert_value)
+                        dividend_data = numeric_df[numeric_df['Metric'] == 'Dividend Yield']
+                        fig1 = go.Figure()
+                        fig1.add_trace(go.Bar(
+                            x=mb_com_df.columns[1:],
+                            y=dividend_data.iloc[0, 1:],
+                            text=[f"{x:.2f}%" for x in dividend_data.iloc[0, 1:]],
+                            textposition='auto',
+                            marker=dict(cornerradius=5),
+                            marker_color=vscolors
+                        ))
+                        fig1.update_layout(
+                            title={"text":"Dividend Yield Comparison","font": {"size": 22}},
+                            xaxis_title=None,
+                            yaxis_title='Dividend Yield (%)',
+                            height=400,
+                            showlegend=False
+                        )
+                        st.plotly_chart(fig1, use_container_width=True)
+                    except Exception as e:
+                        st.warning("Dividend Yield Comparison: No data available.")
+                        
+                    try:
+                        ratio_metrics = ['P/E Ratio', 'Price / Sales', 'Price / Cash', 'Price / Book']
+                        ratio_data = numeric_df[numeric_df['Metric'].isin(ratio_metrics)]
+                        fig2 = go.Figure()
+                        for i,column in enumerate(mb_com_df.columns[1:]):
+                            fig2.add_trace(go.Bar(
+                                name=column,
+                                x=ratio_metrics,
+                                y=ratio_data[column],
+                                marker=dict(cornerradius=5),
+                                marker_color=vscolors[i]
+                            ))
+                        fig2.update_layout(
+                            title={"text":"Ratios Comparison","font": {"size": 22}},
+                            xaxis_title=None,
+                            yaxis_title='Value',
+                            barmode='group',
+                            height=500,
+                            showlegend=True,
+                            legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.010)
+                        )
+                        st.plotly_chart(fig2, use_container_width=True)
+                    except Exception as e:
+                        st.warning("Ratio Comparison: No data available.")
+
+                    try:
+                        performance_metrics = ['7 Day Performance', '1 Month Performance', '1 Year Performance']
+                        performance_data = numeric_df[numeric_df['Metric'].isin(performance_metrics)]
+                        fig3 = go.Figure()
+                        for i,column in enumerate(mb_com_df.columns[1:]):
+                            fig3.add_trace(go.Bar(
+                                name=column,
+                                x=performance_metrics,
+                                y=performance_data[column],
+                                marker=dict(cornerradius=5),
+                                marker_color=vscolors[i]
+                            ))
+                        fig3.update_layout(
+                            title={"text":"Performance Comparison","font": {"size": 22}},
+                            xaxis_title=None,
+                            yaxis_title='Performance (%)',
+                            barmode='group',
+                            height=500,
+                            showlegend=True,
+                            legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.010)
+                        )
+                        st.plotly_chart(fig3, use_container_width=True)
+                    except Exception as e:
+                        st.warning("Performance Comparison: No data available.")
+
+                    try:
+                        def convert_to_billions(value):
+                            if 'T' in value:
+                                return float(value.replace('$', '').replace('T', '')) * 1000
+                            elif 'B' in value:
+                                return float(value.replace('$', '').replace('B', ''))
+                            elif 'M' in value:
+                                return float(value.replace('$', '').replace('M', '')) / 1000
+                            return float(value.replace('$', ''))
+                        income_data = mb_com_df[mb_com_df['Metric'] == 'Net Income']
+                        income_values = [convert_to_billions(str(x)) for x in income_data.iloc[0, 1:]]
+                        fig4 = go.Figure()
+                        fig4.add_trace(go.Bar(
+                            x=mb_com_df.columns[1:],
+                            y=income_values,
+                            text=[f"${x:.2f}B" for x in income_values],
+                            textposition='auto',
+                            marker=dict(cornerradius=5),
+                            marker_color=vscolors
+                        ))
+                        fig4.update_layout(
+                            title={"text":"Net Income Comparison (in Billions USD)","font": {"size": 22}},
+                            xaxis_title=None,
+                            yaxis_title='Net Income (Billion $)',
+                            height=400,
+                            showlegend=False
+                        )
+                        st.plotly_chart(fig4, use_container_width=True)
+                    except Exception as e:
+                        st.warning("Net Income Comparison: No data available.")
+                        
                 except Exception as e:
                     st.warning(f"Valuation Comparison: No data available.")
                 st.caption("Data source: Market Beat")
                 ''
-            with col2:
+            with col3:
+                st.subheader("Dividend", divider = 'gray')
+                #try:
+                #    st.subheader('Dividends Comparison')
+                #    def highlight_company(s):
+                #        return ['background-color: yellow' if s.name == mb_div_df.columns[1] else '' for _ in s]
+                #    mb_div_styled_df = mb_div_df.style.apply(highlight_company, axis=0)
+                #    st.dataframe(mb_div_styled_df,hide_index=True,use_container_width=True)
+                #except Exception as e:
+                #    st.warning(f"Dividends Comparison: No data available.")
+                #st.caption("Data source: Market Beat")
+
                 try:
-                    st.subheader('Dividends Comparison')
-                    def highlight_company(s):
-                        return ['background-color: yellow' if s.name == mb_div_df.columns[1] else '' for _ in s]
-                    mb_div_styled_df = mb_div_df.style.apply(highlight_company, axis=0)
-                    st.dataframe(mb_div_styled_df,hide_index=True,use_container_width=True)
+                    try:
+                        numeric_df = mb_div_df.copy()
+                        for col in numeric_df.columns:
+                            if col != "Type":
+                                mask = numeric_df['Type'] != 'Track Record'
+                                numeric_df.loc[mask, col] = numeric_df.loc[mask, col].replace('[\$,\%]', '', regex=True).astype(float)
+                        vscolors2 = ['#4FC1E9', '#48CFAD', '#EC87C0', '#FFCE54']
+                        annual_data = numeric_df[numeric_df['Type'] == 'Annual Dividend']
+                        fig1 = go.Figure()
+                        fig1.add_trace(go.Bar(
+                            x=mb_div_df.columns[1:],
+                            y=annual_data.iloc[0, 1:],
+                            text=[f"${x:.2f}" for x in annual_data.iloc[0, 1:]],
+                            textposition='auto',
+                            marker=dict(cornerradius=5),
+                            marker_color=vscolors2[:3]
+                        ))
+                        fig1.update_layout(
+                            title={"text":"Annual Dividend Comparison","font": {"size": 22}},
+                            xaxis_title=None,
+                            yaxis_title='Annual Dividend ($)',
+                            height=400,
+                            showlegend=False
+                        )
+                        st.plotly_chart(fig1, use_container_width=True)
+                    except Exception as e:
+                        st.warning("Annual Dividend Comparison: No data available.")
+
+                    try:
+                        yield_data = numeric_df[numeric_df['Type'] == 'Dividend Yield']
+                        fig2 = go.Figure()
+                        fig2.add_trace(go.Bar(
+                            x=mb_div_df.columns[1:],
+                            y=yield_data.iloc[0, 1:],
+                            text=[f"{x:.2f}%" for x in yield_data.iloc[0, 1:]],
+                            textposition='auto',
+                            marker=dict(cornerradius=5),
+                            marker_color=vscolors2[:3]
+                        ))
+                        fig2.update_layout(
+                            title={"text":"Dividend Yield Comparison","font": {"size": 22}},
+                            xaxis_title=None,
+                            yaxis_title='Dividend Yield (%)',
+                            height=400,
+                            showlegend=False
+                        )
+                        st.plotly_chart(fig2, use_container_width=True)
+                    except Exception as e:
+                        st.warning("Dividend Yield Comparison: No data available.")
+
+                    try:
+                        growth_data = numeric_df[numeric_df['Type'] == 'Annualized 3-Year Dividend Growth']
+                        fig3 = go.Figure()
+                        fig3.add_trace(go.Bar(
+                            x=mb_div_df.columns[1:],
+                            y=growth_data.iloc[0, 1:],
+                            text=[f"{x:.2f}%" for x in growth_data.iloc[0, 1:]],
+                            textposition='auto',
+                            marker=dict(cornerradius=5),
+                            marker_color=vscolors2[:3]
+                        ))
+                        fig3.update_layout(
+                            title={"text":"Annualized 3-Year Dividend Growth Comparison","font": {"size": 22}},
+                            xaxis_title=None,
+                            yaxis_title='Growth Rate (%)',
+                            height=400,
+                            showlegend=False
+                        )
+                        st.plotly_chart(fig3, use_container_width=True)
+                    except Exception as e:
+                        st.warning("Dividend Growth Comparison: No data available.")
+                            
                 except Exception as e:
                     st.warning(f"Dividends Comparison: No data available.")
                 st.caption("Data source: Market Beat")
@@ -1492,13 +1719,14 @@ if st.button("Get Data"):
                                 title_x=0,
                                 margin=dict(t=30, b=40, l=40, r=30),
                                 xaxis=dict(
-                                    title="Date",
+                                    title=None,
                                     showgrid=True
                                 ),
                                 yaxis=dict(
                                     title="Cumulative Relative Return",
                                     showgrid=True
                                 ),
+                                legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.010),
                                 height=500,
                             )
                             st.plotly_chart(fig, use_container_width=True)
@@ -1544,8 +1772,8 @@ if st.button("Get Data"):
                         ticker4 = '' if len(ticker_4) > 4 else ticker_4
                         scompare_tickers = [upper_ticker for upper_ticker in (upper_ticker, ticker2, ticker3, ticker4) if upper_ticker]
                         if scompare_tickers:
-                            send = datetime.datetime.now().replace(tzinfo=pytz.UTC)
-                            sstart = (send - datetime.timedelta(days=int(5 * 365))).replace(tzinfo=pytz.UTC)
+                            send = datetime.datetime.today()
+                            sstart = send - relativedelta(years=5)
                             def relativereturn(mb_alt_df):
                                 rel = mb_alt_df.pct_change()
                                 cumret = (1+rel).cumprod()-1
@@ -1585,7 +1813,7 @@ if st.button("Get Data"):
                                     title_x=0, 
                                     margin=dict(t=30, b=40, l=40, r=30),
                                     xaxis=dict(
-                                        title="Date",
+                                        title=None,
                                         showticklabels=show_labels,
                                         showgrid=True
                                     ),
@@ -1593,6 +1821,7 @@ if st.button("Get Data"):
                                         title="Cumulative Relative Return",
                                         showgrid=True
                                     ),
+                                    legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.010),
                                     height=500,
                                 )
                                 st.plotly_chart(fig, use_container_width=True)
@@ -1650,8 +1879,9 @@ if st.button("Get Data"):
                     title_x=0, 
                     margin=dict(t=30, b=40, l=40, r=30),
                     barmode='group', 
-                    xaxis_title='Date',
+                    xaxis_title=None,
                     yaxis_title='USD in Million',
+                    legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.010),
                     height=400
                 )
                 fig.update_xaxes(
@@ -1720,8 +1950,9 @@ if st.button("Get Data"):
                     title_x=0, 
                     margin=dict(t=30, b=40, l=40, r=30),
                     barmode='group', 
-                    xaxis_title='Date',
+                    xaxis_title=None,
                     yaxis_title='USD in Million',
+                    legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.010),
                     height=400
                 )
                 fig.update_xaxes(
@@ -1790,8 +2021,9 @@ if st.button("Get Data"):
                     title_x=0, 
                     margin=dict(t=30, b=40, l=40, r=30),
                     barmode='group', 
-                    xaxis_title='Date',
+                    xaxis_title=None,
                     yaxis_title='USD in Million',
+                    legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.010),
                     height=400
                 )
                 fig.update_xaxes(
@@ -1848,7 +2080,7 @@ if st.button("Get Data"):
                         title_y=1,  
                         title_x=0, 
                         margin=dict(t=30, b=30, l=40, r=30),
-                        xaxis_title='Year',
+                        xaxis_title=None,
                         yaxis_title='Value',
                         xaxis=dict(tickmode='array', tickvals=unique_years_sorted, autorange='reversed',showgrid=True),
                         yaxis=dict(showgrid=True),
@@ -1882,7 +2114,7 @@ if st.button("Get Data"):
                         title_y=1,  
                         title_x=0, 
                         margin=dict(t=30, b=30, l=40, r=30),
-                        xaxis_title='Year',
+                        xaxis_title=None,
                         yaxis_title='Value',
                         xaxis=dict(tickmode='array', tickvals=unique_years_sorted, autorange='reversed',showgrid=True),
                         yaxis=dict(showgrid=True),
@@ -1918,7 +2150,7 @@ if st.button("Get Data"):
                         title_y=1,  
                         title_x=0, 
                         margin=dict(t=30, b=30, l=40, r=30),
-                        xaxis_title='Year',
+                        xaxis_title=None,
                         yaxis_title='Value (%)',
                         xaxis=dict(tickmode='array', tickvals=unique_years_sorted, autorange='reversed',showgrid=True),
                         yaxis=dict(showgrid=True),
@@ -1951,7 +2183,7 @@ if st.button("Get Data"):
                         title_y=1,  
                         title_x=0, 
                         margin=dict(t=30, b=30, l=40, r=30),
-                        xaxis_title='Year',
+                        xaxis_title=None,
                         yaxis_title='Value (%)',
                         xaxis=dict(tickmode='array', tickvals=unique_years_sorted, autorange='reversed',showgrid=True),
                         yaxis=dict(showgrid=True),
@@ -1990,7 +2222,7 @@ if st.button("Get Data"):
                         title_y=1,  
                         title_x=0, 
                         margin=dict(t=30, b=30, l=40, r=30),
-                        xaxis_title='Year',
+                        xaxis_title=None,
                         yaxis_title='Value (%)',
                         barmode='group',  
                         xaxis=dict(autorange='reversed'),
@@ -2025,7 +2257,7 @@ if st.button("Get Data"):
                         title_y=1,  
                         title_x=0, 
                         margin=dict(t=30, b=30, l=40, r=30),
-                        xaxis_title='Year',
+                        xaxis_title=None,
                         yaxis_title='Value (%)',
                         xaxis=dict(tickmode='array', tickvals=unique_years_sorted, autorange='reversed',showgrid=True),
                         yaxis=dict(showgrid=True),
@@ -2896,10 +3128,10 @@ if st.button("Get Data"):
                     extended_data['SMA20'] = extended_data['Close'].rolling(window=20).mean()
                     extended_data['SMA50'] = extended_data['Close'].rolling(window=50).mean()
                     extended_data['SMA200'] = extended_data['Close'].rolling(window=200).mean()
-                    last_year_start = (end_date - datetime.timedelta(days=int(1 * 365))).replace(tzinfo=pytz.UTC)
+                    last_year_start = (end_date - datetime.timedelta(days=int(1 * 365)))
                     data = extended_data.loc[extended_data.index >= last_year_start]
                     data.columns = data.columns.map('_'.join)
-                    data.columns = ['Adj Close', 'Close', 'High', 'Low', 'Open', 'Volume', 'SMA20', 'SMA50', 'SMA200']
+                    data.columns = ['Close', 'High', 'Low', 'Open', 'Volume', 'SMA20', 'SMA50', 'SMA200']
                     volume_colors = ['green' if data['Close'][i] >= data['Open'][i] else 'red' for i in range(len(data))]
                     max_volume = data['Volume'].max()
                     #MACD
@@ -3052,16 +3284,17 @@ if st.button("Get Data"):
                         fig.add_annotation(x=0.5, y=0.25, text=label, showarrow=False, font=dict(size=20))
                         fig.update_layout(
                             font=dict(size=14),
-                            margin=dict(t=30, b=30, l=50, r=50),
+                            margin=dict(t=0, b=0, l=50, r=50),
+                            height=350
                             )
                         return fig
                     #thresholds for table
-                    ta_data['STOCH Consensus'] = ta_data['%K'].apply(lambda x: consensus(x, [20, 40, 60, 80]))
-                    ta_data['ADX Consensus'] = ta_data['ADX'].apply(lambda x: "Strong Trend" if x > 25 else "Weak Trend")
-                    ta_data['Williams %R Consensus'] = ta_data['Williams %R'].apply(lambda x: consensus(x, [-80, -50, -20, 0]))
-                    ta_data['CCI Consensus'] = ta_data['CCI'].apply(lambda x: consensus(x, [-100, -50, 50, 100]))
-                    ta_data['ROC Consensus'] = ta_data['ROC'].apply(lambda x: consensus(x, [-5, 0, 5, 10]))
-                    ta_data['UO Consensus'] = ta_data['UO'].apply(lambda x: consensus(x, [30, 50, 70, 80]))
+                    ta_data['STOCH Consensus'] = ta_data['%K'].astype(float).apply(lambda x: consensus(x, [20, 40, 60, 80]))
+                    ta_data['ADX Consensus'] = ta_data['ADX'].astype(float).apply(lambda x: "Strong Trend" if x > 25 else "Weak Trend")
+                    ta_data['Williams %R Consensus'] = ta_data['Williams %R'].astype(float).apply(lambda x: consensus(x, [-80, -50, -20, 0]))
+                    ta_data['CCI Consensus'] = ta_data['CCI'].astype(float).apply(lambda x: consensus(x, [-100, -50, 50, 100]))
+                    ta_data['ROC Consensus'] = ta_data['ROC'].astype(float).apply(lambda x: consensus(x, [-5, 0, 5, 10]))
+                    ta_data['UO Consensus'] = ta_data['UO'].astype(float).apply(lambda x: consensus(x, [30, 50, 70, 80]))
                     #
                     fig.add_trace(go.Candlestick(
                         x=data.index,
@@ -3100,13 +3333,14 @@ if st.button("Get Data"):
                     tick_vals = data.index[::30]
                     tick_text = [date.strftime("%b %Y") for date in tick_vals]
                     fig.update_layout(
-                        title={"text":f"Moving Average and Price Data", "font": {"size": 30}},
+                        title={"text":f"Price Data with Moving Average & RSI", "font": {"size": 30}},
                         xaxis_rangeslider_visible=False,
                         xaxis=dict(
                             type="category",
                             showgrid=True,
                             ticktext=tick_text,
-                            tickvals=tick_vals
+                            tickvals=tick_vals,
+                            showticklabels=False 
                         ),
                         yaxis=dict(
                             title="Price (USD)",
@@ -3119,7 +3353,14 @@ if st.button("Get Data"):
                             showgrid=False,
                             range=[0, max_volume * 3],
                             showticklabels=False
-                        )
+                        ),
+                        margin=dict(l=0, r=0, t=None, b=0),
+                        height=None,
+                        legend=dict(
+                        yanchor="top",
+                        y=0.99,
+                        xanchor="left",
+                        x=0.010)
                     )
                     fig_macd.add_trace(go.Scatter(
                         x=macd_data.index, y=macd_data['MACD'],
@@ -3150,27 +3391,32 @@ if st.button("Get Data"):
                     tick_vals = macd_data.index[::30]
                     tick_text = [date.strftime("%b %Y") for date in tick_vals]
                     fig_macd.update_layout(
-                        title={"text":f"MACD Chart", "font": {"size": 30}}, xaxis_title="Date", yaxis_title="MACD Value",
+                        title={"text":f"MACD Chart", "font": {"size": 30}}, xaxis_title=None, yaxis_title="MACD Value",
                         xaxis_rangeslider_visible=False,
                         xaxis=dict(
                             type="category",
                             ticktext=tick_text,
                             tickvals=tick_vals,
                             showgrid=True
-                        )
+                        ),
+                        legend=dict(
+                        yanchor="top",
+                        y=0.99,
+                        xanchor="left",
+                        x=0.010)
                     )
                     fig_rsi.add_trace(go.Scatter(
                         x=rsi_data.index, y=rsi_data['RSI'],
                         line=dict(color='#D772AD', width=1),
+                        showlegend=False,
                         name="RSI"
                     ))
-                    fig_rsi.add_hline(y=70, line=dict(color='red', width=1, dash='dash'), annotation_text="Overbought", annotation_position="top left")
-                    fig_rsi.add_hline(y=30, line=dict(color='green', width=1, dash='dash'), annotation_text="Oversold", annotation_position="bottom left")
+                    fig_rsi.add_hline(y=70, line=dict(color='red', width=1, dash='dash'),annotation_text="70", annotation_position="top left",showlegend=False, name="Overbought")
+                    fig_rsi.add_hline(y=30, line=dict(color='green', width=1, dash='dash'),annotation_text="30", annotation_position="bottom left",showlegend=False, name="Oversold")
                     tick_vals_rsi = rsi_data.index[::30]
                     tick_text_rsi = [date.strftime("%b %Y") for date in tick_vals_rsi]
                     fig_rsi.update_layout(
-                        title={"text":f"RSI Chart", "font": {"size": 30}},
-                        xaxis_title="Date",
+                        xaxis_title=None,
                         yaxis_title="RSI",
                         xaxis=dict(
                             type="category",
@@ -3178,7 +3424,14 @@ if st.button("Get Data"):
                             tickvals=tick_vals_rsi,
                             showgrid=True
                         ),
-                        yaxis=dict(range=[0, 100])
+                        yaxis=dict(range=[0, 100], showgrid=False, showticklabels=True),
+                        height=200,
+                        margin=dict(l=0, r=0, t=0, b=0),
+                        legend=dict(
+                        yanchor="top",
+                        y=0.99,
+                        xanchor="left",
+                        x=0.010)
                     )
                     #
                     if macd_latest > signal_latest:
@@ -3247,15 +3500,20 @@ if st.button("Get Data"):
                             'Value': formatted_values,
                             'Signal': indicator_signals
                         })
-                        st.dataframe(summary_df,hide_index=True,use_container_width=True)
+                        st.dataframe(summary_df,hide_index=True,use_container_width=True, height=300)
                     #st.subheader("",divider = 'gray')
-
-                    macol1, macol2 = st.columns([3,1])
-                    with macol1:
-                        st.plotly_chart(fig)
-                    with macol2:
+                    gauge_col1, gauge_col2, gauge_col3 = st.columns([3,3,3])
+                    with gauge_col1:
                         st.plotly_chart(create_gauge("Moving Average Consensus", ma_score))
-                    ma_tcol1, ma_tcol2 = st.columns([3,3]) 
+                    with gauge_col2:
+                        st.plotly_chart(create_gauge("MACD Consensus", macd_score))
+                    with gauge_col3:
+                        st.plotly_chart(create_gauge("RSI Consensus", rsi_score))
+                    
+                    st.plotly_chart(fig)
+                    st.plotly_chart(fig_rsi)
+                    ''
+                    ma_tcol1, ma_tcol2 = st.columns([3,3])
                     with ma_tcol1:
                         st.write(get_signal(price, data['SMA20'][-1], 20))
                         st.write(get_signal(price, data['SMA50'][-1], 50))
@@ -3270,36 +3528,24 @@ if st.button("Get Data"):
                             st.write("🔵  No recent 50-200 SMAs crossover detected.")
                     with ma_tcol2:
                         st.info("SMAs calculate the average price over a period, treating all past prices equally. If the current stock price is above the SMA, it suggests a buy signal, as the price is above the historical average for that period. A sell signal is suggested when the current price is below the SMA.")
-                    st.subheader("",divider = 'gray')
-
-                    mdcol1, mdcol2 = st.columns([3,1])
-                    with mdcol1:
-                        st.plotly_chart(fig_macd)
-                    with mdcol2:
-                        st.plotly_chart(create_gauge("MACD Consensus", macd_score))
-                    md_tcol1, md_tcol2 = st.columns([3,3])
-                    with md_tcol1:
-                        st.write(macd_signal)
-                        st.write(crossover_signal)
-                    with md_tcol2:
-                        st.info("The MACD Line is above the Signal Line, indicating a bullish crossover and the stock might be trending upward, so we interpret this as a Buy signal. When the MACD Line is below the Signal Line, it means bearish crossover and the stock might be trending downward, so we interpret this as a Sell signal.")
-                    st.subheader("",divider = 'gray')
-
-                    rsicol1, rsicol2 = st.columns([3,1])
-                    with rsicol1:
-                        st.plotly_chart(fig_rsi)
-                    with rsicol2:
-                        st.plotly_chart(create_gauge("RSI Consensus", rsi_score))
+                    ''
                     rsi_tcol1, rsi_tcol2 = st.columns([3,3])
                     with rsi_tcol1:
                         st.write(rsi_signal)
                         st.write(trend_analysis)
                     with rsi_tcol2:
                         st.info("If RSI > 70, it generally indicates an Overbought condition. If RSI < 30, it generally indicates an Oversold condition. If RSI is between 30 and 70, it indicates a Neutral condition.")
+                    st.subheader("",divider = 'gray')
+                    
+                    st.plotly_chart(fig_macd)
+                    md_tcol1, md_tcol2 = st.columns([3,3])
+                    with md_tcol1:
+                        st.write(macd_signal)
+                        st.write(crossover_signal)
+                    with md_tcol2:
+                        st.info("The MACD Line is above the Signal Line, indicating a bullish crossover and the stock might be trending upward, so we interpret this as a Buy signal. When the MACD Line is below the Signal Line, it means bearish crossover and the stock might be trending downward, so we interpret this as a Sell signal.")
                     #st.subheader("",divider = 'gray')
-            except Exception as e:
-                    st.write(f'{name} has no growth estimates data. {e}')
-            #except: st.warning("Failed to request historical price data.")
+            except: st.warning("Failed to request historical price data.")
 
             ###Finviz picture
             # st.subheader("Price Data", divider ='gray')
