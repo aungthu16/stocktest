@@ -1459,7 +1459,6 @@ if st.button("Get Data"):
                     #except Exception as e:
                     #    st.warning(f"Valuation Comparison: No data available.")
                     #st.caption("Data source: Market Beat")
-    
                     
                         vscolors = ['#4FC1E9', '#48CFAD', '#EC87C0', '#FFCE54']
                         try:
@@ -1516,7 +1515,7 @@ if st.button("Get Data"):
                                 xaxis_title=None,
                                 yaxis_title='Value',
                                 barmode='group',
-                                height=500,
+                                height=400,
                                 showlegend=True,
                                 legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.010)
                             )
@@ -1542,7 +1541,7 @@ if st.button("Get Data"):
                                 xaxis_title=None,
                                 yaxis_title='Performance (%)',
                                 barmode='group',
-                                height=500,
+                                height=400,
                                 showlegend=True,
                                 legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.010)
                             )
