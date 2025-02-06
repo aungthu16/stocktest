@@ -326,62 +326,6 @@ def get_stock_data(ticker, apiKey=None):
         else:    
             insider_mb = ""
     except: insider_mb = ""
-
-    ##### Alpha Spread comparison #####
-    try:
-        as_rv_url = f'https://www.alphaspread.com/security/{lower_exchange}/{lowercase_ticker}/relative-valuation'
-        as_rv_response = requests.get(as_rv_url)
-        as_rv_soup = BeautifulSoup(as_rv_response.text, 'html.parser')
-        as_rv_tables = as_rv_soup.find_all('table')
-        if len(as_rv_tables) >= 0:
-            as_rv_result = pd.read_html(str(as_rv_tables[15]))[0]
-            as_rv_result = pd.DataFrame(as_rv_result)
-            as_rv_result = as_rv_result.drop(as_rv_result.columns[[1, -1]], axis=1)
-            as_rv_result.columns.values[0] = 'Country'
-            as_rv_result.columns.values[1] = 'Company'
-        else:    
-            as_rv_result = ""
-        asp_url = f'https://www.alphaspread.com/security/{lower_exchange}/{lowercase_ticker}/profitability'
-        asp_response = requests.get(asp_url)
-        asp_soup = BeautifulSoup(asp_response.text, 'html.parser')
-        asp_tables = asp_soup.find_all('table')
-        if len(asp_tables) >= 0:
-            asp = pd.read_html(str(asp_tables[4]))[0]
-            asp = pd.DataFrame(asp)
-            asp = asp.drop(asp.columns[[1, -1]], axis=1)
-            asp.columns.values[0] = 'Country'
-            asp.columns.values[1] = 'Company'
-            asp = asp.iloc[:, -3:]
-        else:    
-            asp = ""
-        asp_url = f'https://www.alphaspread.com/security/{lower_exchange}/{lowercase_ticker}/profitability'
-        asp_response = requests.get(asp_url)
-        asp_soup = BeautifulSoup(asp_response.text, 'html.parser')
-        asp_tables = asp_soup.find_all('table')
-        if len(asp_tables) >= 0:
-            asp = pd.read_html(str(asp_tables[4]))[0]
-            asp = pd.DataFrame(asp)
-            asp = asp.drop(asp.columns[[1, -1]], axis=1)
-            asp.columns.values[0] = 'Country'
-            asp.columns.values[1] = 'Company'
-            asp = asp.iloc[:, -3:]
-        else:    
-            asp = ""
-        asp2_url = f'https://www.alphaspread.com/security/{lower_exchange}/{lowercase_ticker}/profitability'
-        asp2_response = requests.get(asp2_url)
-        asp2_soup = BeautifulSoup(asp2_response.text, 'html.parser')
-        asp2_tables = asp2_soup.find_all('table')
-        if len(asp_tables) >= 0:
-            asp2 = pd.read_html(str(asp2_tables[27]))[0]
-            asp2 = pd.DataFrame(asp2)
-            asp2 = asp2.drop(asp2.columns[[1, -1]], axis=1)
-            asp2.columns.values[0] = 'Country'
-            asp2.columns.values[1] = 'Company'
-            asp2 = asp2.iloc[:, -3:]
-        else:    
-            asp2 = ""
-        as_combined_table = pd.concat([as_rv_result, asp, asp2], axis = 1)
-    except: as_rv_result = as_combined_table = ""
     
     name = stock.info.get('longName', 'N/A')
     sector = stock.info.get('sector', 'N/A')
@@ -503,7 +447,7 @@ def get_stock_data(ticker, apiKey=None):
         eps_yield = eps/price
     except: eps_yield = "N/A"
     
-    return news, as_rv_result, as_combined_table, insider_mb, sa_growth_df, eps_yield, end_date, extended_data_r, macd_data_r, rsi_data_r, ta_data_r, matching_etf, yf_com, mb_alt_headers, sa_metrics_df2, sa_metrics_df, cashflow_statement_tb, quarterly_cashflow_statement_tb, balance_sheet_tb, quarterly_balance_sheet_tb, income_statement_tb, quarterly_income_statement_tb, mb_alt_df, mb_div_df, mb_com_df, mb_targetprice_value, mb_predicted_upside, mb_consensus_rating, mb_rating_score, sa_analysts_count, sa_analysts_consensus, sa_analysts_targetprice, sa_altmanz, sa_piotroski, sk_targetprice, authors_strongsell_count, authors_strongbuy_count, authors_sell_count, authors_hold_count, authors_buy_count, authors_rating, authors_count, epsRevisionsGrade, dpsRevisionsGrade, dividendYieldGrade, divSafetyCategoryGrade, divGrowthCategoryGrade, divConsistencyCategoryGrade, sellSideRating, ticker_id, quant_rating, growth_grade, momentum_grade, profitability_grade, value_grade, yield_on_cost_grade, performance_id, fair_value, fvDate, moat, moatDate, starRating, assessment, eps_trend, earnings_history, dividend_history, earningsDate, previous_close, current_ratio, fcf, revenue, exchange_value, upper_ticker, roa, ebitdamargin, operatingmargin, grossmargin, profitmargin, roe, revenue_growth_current, exDividendDate, pbRatio, deRatio, dividends, ticker, sharesOutstanding, institutionsPct, insiderPct, totalEsg, enviScore, socialScore, governScore, percentile, price, beta, name, sector, industry, employee, marketCap, longProfile, eps, pegRatio, picture_url, country, yf_targetprice, yf_consensus, yf_analysts_count, website, peRatio, forwardPe, dividendYield, payoutRatio, apiKey
+    return news, insider_mb, sa_growth_df, eps_yield, end_date, extended_data_r, macd_data_r, rsi_data_r, ta_data_r, matching_etf, yf_com, mb_alt_headers, sa_metrics_df2, sa_metrics_df, cashflow_statement_tb, quarterly_cashflow_statement_tb, balance_sheet_tb, quarterly_balance_sheet_tb, income_statement_tb, quarterly_income_statement_tb, mb_alt_df, mb_div_df, mb_com_df, mb_targetprice_value, mb_predicted_upside, mb_consensus_rating, mb_rating_score, sa_analysts_count, sa_analysts_consensus, sa_analysts_targetprice, sa_altmanz, sa_piotroski, sk_targetprice, authors_strongsell_count, authors_strongbuy_count, authors_sell_count, authors_hold_count, authors_buy_count, authors_rating, authors_count, epsRevisionsGrade, dpsRevisionsGrade, dividendYieldGrade, divSafetyCategoryGrade, divGrowthCategoryGrade, divConsistencyCategoryGrade, sellSideRating, ticker_id, quant_rating, growth_grade, momentum_grade, profitability_grade, value_grade, yield_on_cost_grade, performance_id, fair_value, fvDate, moat, moatDate, starRating, assessment, eps_trend, earnings_history, dividend_history, earningsDate, previous_close, current_ratio, fcf, revenue, exchange_value, upper_ticker, roa, ebitdamargin, operatingmargin, grossmargin, profitmargin, roe, revenue_growth_current, exDividendDate, pbRatio, deRatio, dividends, ticker, sharesOutstanding, institutionsPct, insiderPct, totalEsg, enviScore, socialScore, governScore, percentile, price, beta, name, sector, industry, employee, marketCap, longProfile, eps, pegRatio, picture_url, country, yf_targetprice, yf_consensus, yf_analysts_count, website, peRatio, forwardPe, dividendYield, payoutRatio, apiKey
 
 ''
 ''
@@ -525,7 +469,7 @@ st.info('Data is sourced from Yahoo Finance, Morningstar, Seeking Alpha, Market 
 
 if st.button("Get Data"):
     try:
-        news, as_rv_result, as_combined_table, insider_mb, sa_growth_df, eps_yield, end_date, extended_data_r, macd_data_r, rsi_data_r, ta_data_r, matching_etf, yf_com, mb_alt_headers, sa_metrics_df2, sa_metrics_df, cashflow_statement_tb, quarterly_cashflow_statement_tb, balance_sheet_tb, quarterly_balance_sheet_tb, income_statement_tb, quarterly_income_statement_tb, mb_alt_df, mb_div_df, mb_com_df, mb_targetprice_value, mb_predicted_upside, mb_consensus_rating, mb_rating_score, sa_analysts_count, sa_analysts_consensus, sa_analysts_targetprice, sa_altmanz, sa_piotroski, sk_targetprice, authors_strongsell_count, authors_strongbuy_count, authors_sell_count, authors_hold_count, authors_buy_count, authors_rating, authors_count, epsRevisionsGrade, dpsRevisionsGrade, dividendYieldGrade, divSafetyCategoryGrade, divGrowthCategoryGrade, divConsistencyCategoryGrade, sellSideRating, ticker_id, quant_rating, growth_grade, momentum_grade, profitability_grade, value_grade, yield_on_cost_grade, performance_id, fair_value, fvDate, moat, moatDate, starRating, assessment, eps_trend, earnings_history, dividend_history, earningsDate, previous_close, current_ratio, fcf, revenue, exchange_value, upper_ticker, roa, ebitdamargin, operatingmargin, grossmargin, profitmargin, roe, revenue_growth_current, exDividendDate, pbRatio, deRatio, dividends, ticker, sharesOutstanding, institutionsPct, insiderPct, totalEsg, enviScore, socialScore, governScore, percentile, price, beta, name, sector, industry, employee, marketCap, longProfile, eps, pegRatio, picture_url, country, yf_targetprice, yf_consensus, yf_analysts_count, website, peRatio, forwardPe, dividendYield, payoutRatio, apiKey = get_stock_data(ticker, apiKey if apiKey.strip() else None)
+        news, insider_mb, sa_growth_df, eps_yield, end_date, extended_data_r, macd_data_r, rsi_data_r, ta_data_r, matching_etf, yf_com, mb_alt_headers, sa_metrics_df2, sa_metrics_df, cashflow_statement_tb, quarterly_cashflow_statement_tb, balance_sheet_tb, quarterly_balance_sheet_tb, income_statement_tb, quarterly_income_statement_tb, mb_alt_df, mb_div_df, mb_com_df, mb_targetprice_value, mb_predicted_upside, mb_consensus_rating, mb_rating_score, sa_analysts_count, sa_analysts_consensus, sa_analysts_targetprice, sa_altmanz, sa_piotroski, sk_targetprice, authors_strongsell_count, authors_strongbuy_count, authors_sell_count, authors_hold_count, authors_buy_count, authors_rating, authors_count, epsRevisionsGrade, dpsRevisionsGrade, dividendYieldGrade, divSafetyCategoryGrade, divGrowthCategoryGrade, divConsistencyCategoryGrade, sellSideRating, ticker_id, quant_rating, growth_grade, momentum_grade, profitability_grade, value_grade, yield_on_cost_grade, performance_id, fair_value, fvDate, moat, moatDate, starRating, assessment, eps_trend, earnings_history, dividend_history, earningsDate, previous_close, current_ratio, fcf, revenue, exchange_value, upper_ticker, roa, ebitdamargin, operatingmargin, grossmargin, profitmargin, roe, revenue_growth_current, exDividendDate, pbRatio, deRatio, dividends, ticker, sharesOutstanding, institutionsPct, insiderPct, totalEsg, enviScore, socialScore, governScore, percentile, price, beta, name, sector, industry, employee, marketCap, longProfile, eps, pegRatio, picture_url, country, yf_targetprice, yf_consensus, yf_analysts_count, website, peRatio, forwardPe, dividendYield, payoutRatio, apiKey = get_stock_data(ticker, apiKey if apiKey.strip() else None)
      
 #############################################         #############################################
 ############################################# Profile #############################################
@@ -545,7 +489,13 @@ if st.button("Get Data"):
         marketCap_value = 'N/A' if marketCap == 'N/A' else f'${marketCap/1000000:,.2f}'
         col1, col2, col3, col4 = st.columns([2, 1, 1, 3])
         with col1:
-            st.image(picture_url, width= 250)
+            #st.image(picture_url, width= 250)
+            background_color = '#C5C6C7'
+            st.markdown(f"""
+                <div style="display: flex; justify-content: center; background-color: {background_color}; padding: 10px; border-radius: 10px;">
+                    <img src="{picture_url}" width="250">
+                </div>
+                """,unsafe_allow_html=True)
 
         with col3:
             sharesOutstanding_value = 'N/A' if sharesOutstanding == 'N/A' else f'{sharesOutstanding/1000000000:,.2f}B'
@@ -664,9 +614,14 @@ if st.button("Get Data"):
                 #st.markdown(f'Current price of the stock is <span style="color:blue;">{assessment}</span>.', unsafe_allow_html=True)
                 st.write(f'Morningstar Current Assessment: {assessment}')
                 ''
-                st.caption(f"An economic moat refers to a company's ability to maintain competitive advantages to protect its long-term profits and market share from competitors.<br>Moat Assessment Date: {moatDate}", unsafe_allow_html=True)
-                st.caption(f"The Star Rating is determined by three factors: a stock's current price, Morningstar's estimate of the stock's fair value, and the uncertainty rating of the fair value. The bigger the discount, the higher the star rating. Four- and 5-star ratings mean the stock is undervalued, while a 3-star rating means it's fairly valued, and 1- and 2-star stocks are overvalued. When looking for investments, a 5-star stock is generally a better opportunity than a 1-star stock.<br>Fair Value Assessment Date: {fvDate}", unsafe_allow_html=True)
-                st.caption("Data source: Morning Star")
+                try:
+                    formatted_moat_date = datetime.datetime.strptime(moatDate, "%Y-%m-%dT%H:%M:%S.%f").strftime("%Y-%m-%d")
+                    formatted_fv_date = datetime.datetime.strptime(fvDate, "%Y-%m-%dT%H:%M:%S.%f").strftime("%Y-%m-%d")
+                    st.caption(f"An economic moat refers to a company's ability to maintain competitive advantages to protect its long-term profits and market share from competitors.<br>Moat Assessment Date: {formatted_moat_date}", unsafe_allow_html=True)
+                    st.caption(f"The Star Rating is determined by three factors: a stock's current price, Morningstar's estimate of the stock's fair value, and the uncertainty rating of the fair value. The bigger the discount, the higher the star rating. Four- and 5-star ratings mean the stock is undervalued, while a 3-star rating means it's fairly valued, and 1- and 2-star stocks are overvalued. When looking for investments, a 5-star stock is generally a better opportunity than a 1-star stock.<br>Fair Value Assessment Date: {formatted_fv_date}", unsafe_allow_html=True)
+                    st.caption("Data source: Morning Star")
+                except Exception as e:
+                    st.write("")
                 ''
 
 #Quant Rating
@@ -990,6 +945,7 @@ if st.button("Get Data"):
                         st.caption("The last actual EPS data exceeded the estimate EPS data.")
                     else:
                         st.caption("No EPS data.")
+                    st.caption(f"Next Earning - {earningsDate}")
             
                 with ecol3:
                     try:
@@ -1402,48 +1358,85 @@ if st.button("Get Data"):
 #############################################            #############################################
 
         with comparison_data:
-            try:
-                yf_com_df = yf_com
-                yf_com_df_melted = yf_com_df.reset_index().melt(id_vars='Date', var_name='Ticker', value_name='Relative Return')
-                yf_com_df_melted['Ticker'] = yf_com_df_melted['Ticker'].replace({'^GSPC': 'S&P500', matching_etf: 'Sector'})
-                unique_years_sorted = yf_com_df_melted['Date'].dt.year.unique()
-                custom_colors = {
-                        upper_ticker: '#DA4453',  
-                        'S&P500': '#5E9BEB',
-                        'Sector': '#FFCE54'
-                }
-                def plot_relative_return_chart(yf_com_df_melted, custom_colors, upper_ticker):
-                    df_plot = yf_com_df_melted.copy()
-                    fig = go.Figure()
-                    for ticker in df_plot['Ticker'].unique():
-                        df_ticker = df_plot[df_plot['Ticker'] == ticker]
-                        show_labels = True if ticker == df_plot['Ticker'].unique()[-1] else False
-                        fig.add_trace(
-                            go.Scatter(
-                                x=df_ticker['Date'],
-                                y=df_ticker['Relative Return'],
-                                mode='lines',
-                                name=ticker,
-                                line=dict(color=custom_colors.get(ticker, '#1f77b4'), shape='spline', smoothing=1.3),
-                                showlegend=True,
-                                hoverinfo="text",
-                                text=[f"{date}: {ret:.2f}%" for date, ret in zip(df_ticker['Date'], df_ticker['Relative Return'])]
+            compcol1,compcol2 = st.columns([3,1])
+            with compcol1:
+                try:
+                    yf_com_df = yf_com
+                    yf_com_df_melted = yf_com_df.reset_index().melt(id_vars='Date', var_name='Ticker', value_name='Relative Return')
+                    yf_com_df_melted['Ticker'] = yf_com_df_melted['Ticker'].replace({'^GSPC': 'S&P500', matching_etf: 'Sector'})
+                    unique_years_sorted = yf_com_df_melted['Date'].dt.year.unique()
+                    custom_colors = {
+                            upper_ticker: '#DA4453',  
+                            'S&P500': '#5E9BEB',
+                            'Sector': '#FFCE54'
+                    }
+                    def plot_relative_return_chart(yf_com_df_melted, custom_colors, upper_ticker):
+                        df_plot = yf_com_df_melted.copy()
+                        fig = go.Figure()
+                        for ticker in df_plot['Ticker'].unique():
+                            df_ticker = df_plot[df_plot['Ticker'] == ticker]
+                            show_labels = True if ticker == df_plot['Ticker'].unique()[-1] else False
+                            fig.add_trace(
+                                go.Scatter(
+                                    x=df_ticker['Date'],
+                                    y=df_ticker['Relative Return'],
+                                    mode='lines',
+                                    name=ticker,
+                                    line=dict(color=custom_colors.get(ticker, '#1f77b4'), shape='spline', smoothing=1.3),
+                                    showlegend=True,
+                                    hoverinfo="text",
+                                    text=[f"{date}: {ret:.2f}%" for date, ret in zip(df_ticker['Date'], df_ticker['Relative Return'])]
+                                )
                             )
+                        fig.update_layout(
+                            title={"text":f'{upper_ticker} - 5 Years Price Performance Comparison With Indices', "font": {"size": 22}},
+                            title_y=1,  
+                            title_x=0, 
+                            margin=dict(t=30, b=40, l=40, r=30),
+                            xaxis=dict(title=None, showticklabels=show_labels, showgrid=True), 
+                            yaxis=dict(title="Cumulative Relative Return", showgrid=True),
+                            legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.010),
+                            height=500,
                         )
-                    fig.update_layout(
-                        title={"text":f'{upper_ticker} - 5 Years Price Performance Comparison With Indices', "font": {"size": 22}},
-                        title_y=1,  
-                        title_x=0, 
-                        margin=dict(t=30, b=40, l=40, r=30),
-                        xaxis=dict(title=None, showticklabels=show_labels, showgrid=True), 
-                        yaxis=dict(title="Cumulative Relative Return", showgrid=True),
-                        legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.010),
-                        height=500,
+                        st.plotly_chart(fig, use_container_width=True)
+                    plot_relative_return_chart(yf_com_df_melted, custom_colors, upper_ticker)
+                except Exception as e:
+                    st.warning(f'Error getting historical data. {e}')
+
+            with compcol2:
+                try:
+                    st.subheader("5 Years Performance Summary")
+                    last_values = yf_com_df_melted.groupby('Ticker').last()
+                    st.metric(
+                        label=upper_ticker,
+                        value=f"{last_values.loc[upper_ticker, 'Relative Return']:.2f}%"
                     )
-                    st.plotly_chart(fig, use_container_width=True)
-                plot_relative_return_chart(yf_com_df_melted, custom_colors, upper_ticker)
-            except Exception as e:
-                st.warning(f'Error getting historical data. {e}')
+                    st.metric(
+                        label="Sector",
+                        value=f"{last_values.loc['Sector', 'Relative Return']:.2f}%"
+                    )
+                    st.metric(
+                        label="S&P500",
+                        value=f"{last_values.loc['S&P500', 'Relative Return']:.2f}%"
+                    )
+                    stock_return = last_values.loc[upper_ticker, 'Relative Return']
+                    sector_return = last_values.loc['Sector', 'Relative Return']
+                    sp500_return = last_values.loc['S&P500', 'Relative Return']
+                    
+                    performance_text = f"{upper_ticker} has "
+                    if stock_return > sector_return and stock_return > sp500_return:
+                        performance_text += f"outperformed both its sector ({sector_return:.2f}%) and S&P500 ({sp500_return:.2f}%) with a return of {stock_return:.2f}%"
+                    elif stock_return < sector_return and stock_return < sp500_return:
+                        performance_text += f"underperformed both its sector ({sector_return:.2f}%) and S&P500 ({sp500_return:.2f}%) with a return of {stock_return:.2f}%"
+                    else:
+                        performance_text += f"shown mixed performance with a return of {stock_return:.2f}% compared to its sector ({sector_return:.2f}%) and S&P500 ({sp500_return:.2f}%)"
+                    
+                    st.write("")
+                    st.caption(performance_text)
+                except Exception as e:
+                    st.write("")
+                ''
+                
             st.caption("Data source: Yahoo Finance")
             ''
             st.subheader("Industry and Sector Comparison", divider = 'gray')
@@ -1607,7 +1600,6 @@ if st.button("Get Data"):
                     #    st.warning(f"Dividends Comparison: No data available.")
                     #st.caption("Data source: Market Beat")
     
-                    
                         try:
                             numeric_df = mb_div_df.copy()
                             for col in numeric_df.columns:
@@ -1686,102 +1678,40 @@ if st.button("Get Data"):
             ''
 
             try:
-                try:
-                    company_values = as_rv_result[as_rv_result['Country'] == 'US']['Company'].head(4)
-                    tickers = [value.split(':')[-1].strip() if ':' in value else '' for value in company_values]
-                    ticker1, ticker2, ticker3, ticker4 = tickers[:4]
-                    scompare_tickers = [ticker for ticker in (ticker1, ticker2, ticker3, ticker4) if ticker]
-                    if scompare_tickers:
-                        send = datetime.datetime.today()
-                        sstart = send - relativedelta(years=5)
-                        def relativereturn(mb_alt_df):
-                            rel = mb_alt_df.pct_change()
-                            cumret = (1 + rel).cumprod() - 1
-                            cumret = cumret.fillna(0)
-                            return cumret
-                        mb_alt_df = relativereturn(yf.download(scompare_tickers, sstart, send)['Adj Close'])
-                        mb_alt_df_melted = mb_alt_df.reset_index().melt(id_vars='Date', var_name='Ticker', value_name='Relative Return')
-                        custom_colors = {
-                            ticker1: '#DA4453',
-                            ticker2: '#4FC1E9',
-                            ticker3: '#A0D468',
-                            ticker4: '#FFCE54'
-                        }
-                        custom_colors = {k: v for k, v in custom_colors.items() if k in scompare_tickers}
-                        def plot_relative_return_comparison(mb_alt_df_melted, custom_colors, main_ticker):
-                            df_plot = mb_alt_df_melted.copy()
-                            fig = go.Figure()
-                            for ticker in df_plot['Ticker'].unique():
-                                df_ticker = df_plot[df_plot['Ticker'] == ticker]
-                                fig.add_trace(
-                                    go.Scatter(
-                                        x=df_ticker['Date'],
-                                        y=df_ticker['Relative Return'],
-                                        mode='lines',
-                                        name=ticker,
-                                        line=dict(color=custom_colors.get(ticker, '#1f77b4'), shape='spline', smoothing=1.3),
-                                        showlegend=True,
-                                        hoverinfo="text",
-                                        text=[f"{date}: {ret:.2f}%" for date, ret in zip(df_ticker['Date'], df_ticker['Relative Return'])]
-                                    )
-                                )
-                                fig.update_layout(
-                                title={"text": f'{main_ticker} - 5 Years Price Performance Comparison With Competitors', "font": {"size": 22}},
-                                title_y=1,
-                                title_x=0,
-                                margin=dict(t=30, b=40, l=40, r=30),
-                                xaxis=dict(
-                                    title=None,
-                                    showgrid=True
-                                ),
-                                yaxis=dict(
-                                    title="Cumulative Relative Return",
-                                    showgrid=True
-                                ),
-                                legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.010),
-                                height=500,
-                            )
-                            st.plotly_chart(fig, use_container_width=True)
-                        ''
-                        st.subheader(f'{name} Competitors List')
-                        st.dataframe(as_combined_table, hide_index=True, use_container_width=True)
-                        st.caption("Data source: Alpha Spread")
-                        ''
-                        plot_relative_return_comparison(mb_alt_df_melted, custom_colors, ticker1)
-                        st.caption("Data source: Yahoo Finance")
-                except:
-                    SPECIAL_TICKERS = {'NVDA', 'ARM', 'NXPI', 'LHX', 'AVGO', 'QCOM', 'TXN', 'INTC', 'STM',
-                                      'THO', 'EME', 'KBR', 'ACM', 'PCAR'
-                                      }
-                    def clean_ticker_name(text):
-                        for ticker in SPECIAL_TICKERS:
-                            if text.startswith(ticker):
-                                remaining = text[len(ticker):].strip()
-                                return f"{ticker} {remaining}"
-                        match = re.match(r"([A-Z]+)([A-Z][a-z].*)", text)
-                        if match:
-                            ticker, name = match.groups()
-                            return f"{ticker} {name.strip()}"
-                        return text
-                    mb_alt_df[mb_alt_headers[0]] = mb_alt_df[mb_alt_headers[0]].apply(clean_ticker_name)
-                    def get_star_rating(rating_text):
-                        try:
-                            rating = round(float(rating_text.split(' ')[0]))
-                            return '★' * rating + '☆' * (5 - rating)
-                        except ValueError:
-                            return rating_text
-                    mb_alt_df[mb_alt_headers[1]] = mb_alt_df[mb_alt_headers[1]].apply(get_star_rating)
-                    def add_space_after_dollar(text):
-                        string = re.sub(r'(\$\d+\.\d{2})(\d+\.\d+%)', r'\1 \2', text)
-                        string = re.sub(r'(\$\d+\.\d{2})([+-])', r'\1 \2', string)
-                        return string
-                    mb_alt_df[mb_alt_headers[2]] = mb_alt_df[mb_alt_headers[2]].apply(add_space_after_dollar)
-                    mb_alt_df[mb_alt_headers[3]] = mb_alt_df[mb_alt_headers[3]].apply(add_space_after_dollar)
-                    mb_alt_df = mb_alt_df.iloc[:, :-1]
-                    st.subheader(f'{name} Competitors List')
-                    st.dataframe(mb_alt_df,hide_index=True,use_container_width=True)
-                    st.caption("Data source: Market Beat")
-                    ''
+                SPECIAL_TICKERS = {'NVDA', 'ARM', 'NXPI', 'LHX', 'AVGO', 'QCOM', 'TXN', 'INTC', 'STM',
+                                    'THO', 'EME', 'KBR', 'ACM', 'PCAR', 'HPQ', 'SAP'
+                                    }
+                def clean_ticker_name(text):
+                    for ticker in SPECIAL_TICKERS:
+                        if text.startswith(ticker):
+                            remaining = text[len(ticker):].strip()
+                            return f"{ticker} {remaining}"
+                    match = re.match(r"([A-Z]+)([A-Z][a-z].*)", text)
+                    if match:
+                        ticker, name = match.groups()
+                        return f"{ticker} {name.strip()}"
+                    return text
+                mb_alt_df[mb_alt_headers[0]] = mb_alt_df[mb_alt_headers[0]].apply(clean_ticker_name)
+                def get_star_rating(rating_text):
+                    try:
+                        rating = round(float(rating_text.split(' ')[0]))
+                        return '★' * rating + '☆' * (5 - rating)
+                    except ValueError:
+                        return rating_text
+                mb_alt_df[mb_alt_headers[1]] = mb_alt_df[mb_alt_headers[1]].apply(get_star_rating)
+                def add_space_after_dollar(text):
+                    string = re.sub(r'(\$\d+\.\d{2})(\d+\.\d+%)', r'\1 \2', text)
+                    string = re.sub(r'(\$\d+\.\d{2})([+-])', r'\1 \2', string)
+                    return string
+                mb_alt_df[mb_alt_headers[2]] = mb_alt_df[mb_alt_headers[2]].apply(add_space_after_dollar)
+                mb_alt_df[mb_alt_headers[3]] = mb_alt_df[mb_alt_headers[3]].apply(add_space_after_dollar)
+                mb_alt_df = mb_alt_df.iloc[:, :-1]
+                st.subheader(f'{name} Competitors List')
+                st.dataframe(mb_alt_df,hide_index=True,use_container_width=True)
+                st.caption("Data source: Market Beat")
+                ''
+                compcol3,compcol4 = st.columns([3,1])
+                with compcol3:
                     try:
                         ticker_2 = mb_alt_df.iloc[1, 0].split()[0]
                         ticker2 = '' if len(ticker_2) > 4 else ticker_2
@@ -1802,10 +1732,10 @@ if st.button("Get Data"):
                             mb_alt_df_melted = mb_alt_df.reset_index().melt(id_vars='Date', var_name='Ticker', value_name='Relative Return')
                             #unique_years_sorted = df_melted['Date'].dt.year.unique()
                             custom_colors = {
-                                upper_ticker: '#DA4453',  
-                                ticker2: '#4FC1E9',
-                                ticker3: '#A0D468',
-                                ticker4: '#FFCE54'
+                                                upper_ticker: '#DA4453',  
+                                                ticker2: '#4FC1E9',
+                                                ticker3: '#A0D468',
+                                                ticker4: '#FFCE54'
                             }
                             custom_colors = {k: v for k, v in custom_colors.items() if k in scompare_tickers}
                             def plot_relative_return_comparison(mb_alt_df_melted, custom_colors, upper_ticker):
@@ -1847,9 +1777,29 @@ if st.button("Get Data"):
                             plot_relative_return_comparison(mb_alt_df_melted, custom_colors, upper_ticker)
                     except Exception as e:
                         print(f"Failed to scrape ticker data from table.")
-                    st.caption("Data source: Yahoo Finance")
+                with compcol4:
+                    try:
+                        st.subheader("5 Years Performance Summary")
+                        last_values = mb_alt_df_melted.groupby('Ticker').last()
+                        for ticker in scompare_tickers:
+                            if ticker in last_values.index:
+                                st.metric(
+                                    label=ticker,
+                                    value=f"{last_values.loc[ticker, 'Relative Return']:.2f}%"
+                                )
+                        st.write("")  # Add some spacing
+                        best_performer = last_values['Relative Return'].idxmax()
+                        worst_performer = last_values['Relative Return'].idxmin()
+                        best_return = last_values.loc[best_performer, 'Relative Return']
+                        worst_return = last_values.loc[worst_performer, 'Relative Return']
+                        
+                        summary = f"Among the competitors, {best_performer} showed the strongest performance with {best_return:.2f}% return, while {worst_performer} had the lowest return at {worst_return:.2f}%."
+                        st.caption(summary)       
+                    except Exception as e:
+                        st.write("")
             except Exception as e:
-                st.warning(f'Performance Comparison: No data available')
+                print(f"Failed to scrape ticker data from table.")
+            st.caption("Data source: Yahoo Finance")
 
 #############################################            #############################################
 ############################################# Statements #############################################
@@ -3135,436 +3085,671 @@ if st.button("Get Data"):
             st.info("It is important to note that investment decisions should not be based solely on technical analysis. Technical analysis primarily relies on historical price movements and cannot predict future outcomes with certainty.")
             st.caption("This page is derived from the historical price data provided by Yahoo Finance.")
             try:
-                extended_data = extended_data_r 
-                macd_data = macd_data_r 
-                rsi_data = rsi_data_r 
-                ta_data = ta_data_r
-                ta_data = ta_data[['High', 'Low', 'Close']].copy()
-                if extended_data.empty:
-                    st.error("No data available for the specified ticker. Please check the ticker symbol and try again.")
-                else:
-                    #SMA
-                    extended_data['SMA20'] = extended_data['Close'].rolling(window=20).mean()
-                    extended_data['SMA50'] = extended_data['Close'].rolling(window=50).mean()
-                    extended_data['SMA200'] = extended_data['Close'].rolling(window=200).mean()
-                    last_year_start = (end_date - datetime.timedelta(days=int(1 * 365)))
-                    data = extended_data.loc[extended_data.index >= last_year_start]
-                    data.columns = data.columns.map('_'.join)
-                    data.columns = ['Close', 'High', 'Low', 'Open', 'Volume', 'SMA20', 'SMA50', 'SMA200']
-                    volume_colors = ['green' if data['Close'][i] >= data['Open'][i] else 'red' for i in range(len(data))]
-                    max_volume = data['Volume'].max()
-                    #MACD
-                    macd_data['EMA12'] = macd_data['Close'].ewm(span=12, adjust=False).mean()
-                    macd_data['EMA26'] = macd_data['Close'].ewm(span=26, adjust=False).mean()
-                    macd_data['MACD'] = macd_data['EMA12'] - macd_data['EMA26']
-                    macd_data['Signal'] = macd_data['MACD'].ewm(span=9, adjust=False).mean()
-                    macd_data['MACD_Hist'] = macd_data['MACD'] - macd_data['Signal']
-                    macd_data['Crossover'] = macd_data['MACD'] > macd_data['Signal']
-                    macd_data['Bullish_Crossover'] = (macd_data['Crossover'] != macd_data['Crossover'].shift(1)) & (macd_data['Crossover'] == True)
-                    macd_data['Bearish_Crossover'] = (macd_data['Crossover'] != macd_data['Crossover'].shift(1)) & (macd_data['Crossover'] == False)
-                    macd_latest_bullish = macd_data['Bullish_Crossover'].iloc[-1]
-                    macd_latest_bearish = macd_data['Bearish_Crossover'].iloc[-1]
-                    #macd_data = macd_data[macd_data.index.dayofweek < 5]
-                    #RSI
-                    change = rsi_data["Close"].diff()
-                    change.dropna(inplace=True)
-                    up = change.apply(lambda x: max(x, 0))
-                    down = change.apply(lambda x: -min(x, 0))
-                    rsi_length = 14
-                    avg_up = up.ewm(alpha=1/rsi_length, min_periods=rsi_length).mean()
-                    avg_down = down.ewm(alpha=1/rsi_length, min_periods=rsi_length).mean()
-                    rsi_data['RSI'] = 100 - (100 / (1 + avg_up / avg_down))
-                    rsi_data['RSI'] = rsi_data['RSI'].apply(lambda x: 100 if avg_down.iloc[0] == 0 else (0 if avg_up.iloc[0] == 0 else x))
-                    latest_rsi = rsi_data['RSI'].iloc[-1]
-                    prev_rsi = rsi_data['RSI'].iloc[-2]
-                    # Stochastic Oscillator (%K and %D)
-                    ta_data['Low14'] = ta_data['Low'].rolling(window=14).min()
-                    ta_data['High14'] = ta_data['High'].rolling(window=14).max()
-                    ta_data['%K'] = 100 * ((ta_data['Close'] - ta_data['Low14']) / (ta_data['High14'] - ta_data['Low14']))
-                    ta_data['%D'] = ta_data['%K'].rolling(window=3).mean()
-                    ta_data['STOCH'] = ta_data['%D']
-                    # Average Directional Index (ADX)
-                    ta_data['+DM'] = np.where((ta_data['High'] - ta_data['High'].shift(1)) > (ta_data['Low'].shift(1) - ta_data['Low']), 
-                                        ta_data['High'] - ta_data['High'].shift(1), 0)
-                    ta_data['-DM'] = np.where((ta_data['Low'].shift(1) - ta_data['Low']) > (ta_data['High'] - ta_data['High'].shift(1)), 
-                                        ta_data['Low'].shift(1) - ta_data['Low'], 0)
-                    ta_data['TR'] = np.maximum(ta_data['High'] - ta_data['Low'], 
-                                            np.maximum(abs(ta_data['High'] - ta_data['Close'].shift(1)), 
-                                                    abs(ta_data['Low'] - ta_data['Close'].shift(1))))
-                    ta_data['ATR'] = ta_data['TR'].rolling(window=14).mean()
-                    ta_data['+DI'] = 100 * (ta_data['+DM'] / ta_data['ATR']).rolling(window=14).mean()
-                    ta_data['-DI'] = 100 * (ta_data['-DM'] / ta_data['ATR']).rolling(window=14).mean()
-                    ta_data['DX'] = 100 * abs((ta_data['+DI'] - ta_data['-DI']) / (ta_data['+DI'] + ta_data['-DI']))
-                    ta_data['ADX'] = ta_data['DX'].rolling(window=14).mean()
-                    # Williams %R
-                    ta_data['Williams %R'] = ((ta_data['High14'] - ta_data['Close']) / (ta_data['High14'] - ta_data['Low14'])) * -100
-                    # Commodity Channel Index (CCI)
-                    ta_data['Mean Price'] = (ta_data['High'] + ta_data['Low'] + ta_data['Close']) / 3
-                    ta_data['CCI'] = (ta_data['Mean Price'] - ta_data['Mean Price'].rolling(window=20).mean()) / (0.015 * ta_data['Mean Price'].rolling(window=20).std())
-                    # Rate of Change (ROC)
-                    ta_data['ROC'] = ((ta_data['Close'] - ta_data['Close'].shift(12)) / ta_data['Close'].shift(12)) * 100
-                    # Ultimate Oscillator (UO)
-                    ta_data['BP'] = ta_data['Close'] - np.minimum(ta_data['Low'], ta_data['Close'].shift(1))
-                    ta_data['TR_UO'] = np.maximum(ta_data['High'] - ta_data['Low'], 
-                                            np.maximum(abs(ta_data['High'] - ta_data['Close'].shift(1)), 
-                                                        abs(ta_data['Low'] - ta_data['Close'].shift(1))))
-                    ta_data['Avg7'] = ta_data['BP'].rolling(window=7).sum() / ta_data['TR_UO'].rolling(window=7).sum()
-                    ta_data['Avg14'] = ta_data['BP'].rolling(window=14).sum() / ta_data['TR_UO'].rolling(window=14).sum()
-                    ta_data['Avg28'] = ta_data['BP'].rolling(window=28).sum() / ta_data['TR_UO'].rolling(window=28).sum()
-                    ta_data['UO'] = 100 * (4 * ta_data['Avg7'] + 2 * ta_data['Avg14'] + ta_data['Avg28']) / 7
-                    #
-                    fig = go.Figure()
-                    fig_macd = go.Figure()
-                    fig_rsi = go.Figure()
-                    #
-                    rsi_latest = rsi_data['RSI'].iloc[-1]
-                    rsi_score = 80 if rsi_latest < 30 else 20 if rsi_latest > 70 else 50
-                    macd_latest = macd_data['MACD'].iloc[-1]
-                    signal_latest = macd_data['Signal'].iloc[-1]
-                    macd_score = 80 if macd_latest > signal_latest else 20
-                    ma_scores = []
-                    if extended_data['Close'].iloc[-1] > extended_data['SMA20'].iloc[-1]: ma_scores.append(80)
-                    else: ma_scores.append(20) 
-                    if extended_data['Close'].iloc[-1] > extended_data['SMA50'].iloc[-1]: ma_scores.append(80)
-                    else: ma_scores.append(20)
-                    if extended_data['Close'].iloc[-1] > extended_data['SMA200'].iloc[-1]: ma_scores.append(80)
-                    else: ma_scores.append(20)
-                    ma_score = np.mean(ma_scores)
-                    stoch_latest =  ta_data['STOCH'].iloc[-1]
-                    stoch_score = 80 if stoch_latest > 80 else 20 if stoch_latest < 20 else 50
-                    adx_latest = ta_data['ADX'].iloc[-1]
-                    adx_score = 80 if adx_latest > 25 else 50
-                    williamsr_latest = ta_data['Williams %R'].iloc[-1]
-                    williamsr_score = 80 if williamsr_latest < -80 else 20 if williamsr_latest > -20 else 50
-                    cci_latest = ta_data['CCI'].iloc[-1]
-                    cci_score = 80 if cci_latest > 100 else 20 if cci_latest < -100 else 50
-                    roc_latest = ta_data['ROC'].iloc[-1]
-                    roc_score = 80 if roc_latest > 0 else 20
-                    uo_latest = ta_data['UO'].iloc[-1]
-                    uo_score = 80 if uo_latest > 70 else 20 if uo_latest < 30 else 50
-                    overall_score = np.mean([rsi_score, macd_score, ma_score,stoch_score, adx_score, williamsr_score, cci_score, roc_score, uo_score])
-                    #
-                    def get_signal(price, sma, period):
-                        if price > sma:
-                            return f"🟢  {ticker}'s share price is ${price:.2f} and {period}SMA is {sma:.2f}, suggesting a BUY signal."
-                        else:
-                            return f"🔴  {ticker}'s share price is ${price:.2f} and {period}SMA is {sma:.2f}, suggesting a SELL signal."
-                    def get_shortsignal(price, sma, period):
-                        if price > sma:
-                            return "Buy"
-                        else:
-                            return "Sell"
-                    def detect_cross(data, short_sma, long_sma, short_period, long_period):
-                        last_cross = None
-                        if extended_data[short_sma].iloc[-2] < extended_data[long_sma].iloc[-2] and extended_data[short_sma].iloc[-1] > extended_data[long_sma].iloc[-1]:
-                            last_cross = f"🟢  Golden Cross: {short_period}SMA crossed above the {long_period}SMA."
-                        elif extended_data[short_sma].iloc[-2] > extended_data[long_sma].iloc[-2] and extended_data[short_sma].iloc[-1] < extended_data[long_sma].iloc[-1]:
-                            last_cross = f"🔴  Death Cross: {short_period}SMA crossed below the {long_period}SMA."
-                        return last_cross
-                    cross_20_50 = detect_cross(data, 'SMA20', 'SMA50', 20, 50)
-                    cross_50_200 = detect_cross(data, 'SMA50', 'SMA200', 50, 200)
-                    def get_sentiment_label(score):
-                        if score <= 20:
-                            return "Strong Negative Bias"
-                        elif score <= 40:
-                            return "Negative Bias"
-                        elif score <= 60:
-                            return "Neutral"
-                        elif score <= 80:
-                            return "Positive Bias"
-                        else:
-                            return "Strong Positive Bias"
-                    def consensus(value, thresholds):
-                        if value < thresholds[0]:
-                            return "Strong Sell"
-                        elif value < thresholds[1]:
-                            return "Sell"
-                        elif value < thresholds[2]:
-                            return "Neutral"
-                        elif value < thresholds[3]:
-                            return "Buy"
-                        else:
-                            return "Strong Buy"
-                    def create_gauge(title, score):
-                        label = get_sentiment_label(score)
-                        fig = go.Figure(go.Indicator(
-                            mode="gauge",
-                            value=score,  
-                            number={'font': {'size': 24}},  
-                            title={'text': title, 'font': {'size': 20}},
-                            gauge={'axis': {'range': [0, 100]},
-                                'bar': {'color': "#5F9BEB"},
-                                'steps': [
-                                    {'range': [0, 15], 'color': "#da4453", 'name': 'Strong Neg'},
-                                    {'range': [15, 45], 'color': "#e9573f", 'name': 'Neg'},
-                                    {'range': [45, 55], 'color': "#f6bb42", 'name': 'Neutral'},
-                                    {'range': [55, 85], 'color': "#a0d468", 'name': 'Pos'},
-                                    {'range': [85, 100], 'color': "#37bc9b", 'name': 'Strong Pos'}]}))
-                        fig.add_annotation(x=0.5, y=0.25, text=label, showarrow=False, font=dict(size=20))
-                        fig.update_layout(
-                            font=dict(size=14),
-                            margin=dict(t=0, b=0, l=50, r=50),
-                            height=350
-                            )
-                        return fig
-                    #thresholds for table
-                    ta_data['STOCH Consensus'] = ta_data['%K'].astype(float).apply(lambda x: consensus(x, [20, 40, 60, 80]))
-                    ta_data['ADX Consensus'] = ta_data['ADX'].astype(float).apply(lambda x: "Strong Trend" if x > 25 else "Weak Trend")
-                    ta_data['Williams %R Consensus'] = ta_data['Williams %R'].astype(float).apply(lambda x: consensus(x, [-80, -50, -20, 0]))
-                    ta_data['CCI Consensus'] = ta_data['CCI'].astype(float).apply(lambda x: consensus(x, [-100, -50, 50, 100]))
-                    ta_data['ROC Consensus'] = ta_data['ROC'].astype(float).apply(lambda x: consensus(x, [-5, 0, 5, 10]))
-                    ta_data['UO Consensus'] = ta_data['UO'].astype(float).apply(lambda x: consensus(x, [30, 50, 70, 80]))
-                    #
-                    fig.add_trace(go.Candlestick(
-                        x=data.index,
-                        open=data['Open'], high=data['High'], low=data['Low'], close=data['Close'],
-                        name="Candlestick",
-                        showlegend=False,
-                        increasing_line_width=0.5, decreasing_line_width=0.5,
-                        opacity=1
-                    ))
-                    fig.add_trace(go.Scatter(
-                        x=data.index, y=data['SMA20'],
-                        line=dict(color='#3BAFDA', width=1),
-                        name="SMA 20",
-                        opacity=0.5
-                    ))
-                    fig.add_trace(go.Scatter(
-                        x=data.index, y=data['SMA50'],
-                        line=dict(color='#F6BB42', width=1),
-                        name="SMA 50",
-                        opacity=0.5
-                    ))
-                    fig.add_trace(go.Scatter(
-                        x=data.index, y=data['SMA200'],
-                        line=dict(color='#D772AD', width=1.5),
-                        name="SMA 200",
-                        opacity=0.5
-                    ))
-                    fig.add_trace(go.Bar(
-                        x=data.index, y=data['Volume'],
-                        marker=dict(color=volume_colors),
-                        name="Volume",
-                        yaxis="y2",
-                        showlegend=False,  
-                        opacity=0.3  
-                    ))
-                    tick_vals = data.index[::30]
-                    tick_text = [date.strftime("%b %Y") for date in tick_vals]
-                    fig.update_layout(
-                        title={"text":f"Price Data with Moving Average & RSI", "font": {"size": 30}},
-                        xaxis_rangeslider_visible=False,
-                        xaxis=dict(
-                            type="category",
-                            showgrid=True,
-                            ticktext=tick_text,
-                            tickvals=tick_vals,
-                            showticklabels=False 
-                        ),
-                        yaxis=dict(
-                            title="Price (USD)",
-                            side="left",
-                            showgrid=True
-                        ),
-                        yaxis2=dict(
-                            side="right",
-                            overlaying="y",
-                            showgrid=False,
-                            range=[0, max_volume * 3],
-                            showticklabels=False
-                        ),
-                        margin=dict(l=0, r=0, t=None, b=0),
-                        height=None,
-                        legend=dict(
-                        yanchor="top",
-                        y=0.99,
-                        xanchor="left",
-                        x=0.010)
-                    )
-                    fig_macd.add_trace(go.Scatter(
-                        x=macd_data.index, y=macd_data['MACD'],
-                        line=dict(color='#3BAFDA', width=1.5),
-                        opacity=0.5,
-                        name="MACD"
-                    ))
-                    fig_macd.add_trace(go.Scatter(
-                        x=macd_data.index, y=macd_data['Signal'],
-                        line=dict(color='#F6BB42', width=1),
-                        opacity=1,
-                        name="Signal"
-                    ))
-                    fig_macd.add_trace(go.Bar(
-                        x=macd_data.index, y=macd_data['MACD_Hist'].where(macd_data['MACD_Hist'] >= 0, 0),  
-                        marker=dict(color='green'),
-                        showlegend=False,
-                        opacity=0.5,
-                        name="MACD Histogram (Above Zero)"
-                    ))
-                    fig_macd.add_trace(go.Bar(
-                        x=macd_data.index, y=macd_data['MACD_Hist'].where(macd_data['MACD_Hist'] < 0, 0),  
-                        marker=dict(color='red'),
-                        showlegend=False,
-                        opacity=0.5,
-                        name="MACD Histogram (Below Zero)"
-                    ))
-                    tick_vals = macd_data.index[::30]
-                    tick_text = [date.strftime("%b %Y") for date in tick_vals]
-                    fig_macd.update_layout(
-                        title={"text":f"MACD Chart", "font": {"size": 30}}, xaxis_title=None, yaxis_title="MACD Value",
-                        xaxis_rangeslider_visible=False,
-                        xaxis=dict(
-                            type="category",
-                            ticktext=tick_text,
-                            tickvals=tick_vals,
-                            showgrid=True
-                        ),
-                        legend=dict(
-                        yanchor="top",
-                        y=0.99,
-                        xanchor="left",
-                        x=0.010)
-                    )
-                    fig_rsi.add_trace(go.Scatter(
-                        x=rsi_data.index, y=rsi_data['RSI'],
-                        line=dict(color='#D772AD', width=1),
-                        showlegend=False,
-                        name="RSI"
-                    ))
-                    fig_rsi.add_hline(y=70, line=dict(color='red', width=1, dash='dash'),annotation_text="70", annotation_position="top left",showlegend=False, name="Overbought")
-                    fig_rsi.add_hline(y=30, line=dict(color='green', width=1, dash='dash'),annotation_text="30", annotation_position="bottom left",showlegend=False, name="Oversold")
-                    tick_vals_rsi = rsi_data.index[::30]
-                    tick_text_rsi = [date.strftime("%b %Y") for date in tick_vals_rsi]
-                    fig_rsi.update_layout(
-                        xaxis_title=None,
-                        yaxis_title="RSI",
-                        xaxis=dict(
-                            type="category",
-                            ticktext=tick_text_rsi,
-                            tickvals=tick_vals_rsi,
-                            showgrid=True
-                        ),
-                        yaxis=dict(range=[0, 100], showgrid=False, showticklabels=True),
-                        height=200,
-                        margin=dict(l=0, r=0, t=0, b=0),
-                        legend=dict(
-                        yanchor="top",
-                        y=0.99,
-                        xanchor="left",
-                        x=0.010)
-                    )
-                    #
-                    if macd_latest > signal_latest:
-                        macd_signal = f"🟢  The Moving Averages Convergence Divergence (MACD) indicator for {ticker} is {macd_latest:.2f} and the signal line is at {signal_latest:.2f}, suggesting it is a BUY signal."
-                        macd_shortsignal = "Buy"
-                    else:
-                        macd_signal = f"🔴  The Moving Averages Convergence Divergence (MACD) indicator for {ticker} is {macd_latest:.2f} and the signal line is at {signal_latest:.2f}, suggesting it is a SELL signal."
-                        macd_shortsignal = "Sell"
-                    if macd_latest_bullish:
-                        crossover_signal = "🟢  Bullish Crossover: MACD line crossed above the signal line."
-                    elif macd_latest_bearish:
-                        crossover_signal = "🔴  Bearish Crossover: MACD line crossed below the signal line."
-                    else:
-                        crossover_signal = "🔵  No recent crossover detected."
-                    #
-                    if latest_rsi < 30:
-                        rsi_signal = f"🟢  {ticker}'s Relative Strength Index (RSI) is {latest_rsi:.2f}, suggesting a BUY signal."
-                        rsi_shortsignal = "Buy"
-                    elif 30 <= latest_rsi <= 70:
-                        rsi_signal = f"🔵  {ticker}'s Relative Strength Index (RSI) is {latest_rsi:.2f}, suggesting a NEUTRAL."
-                        rsi_shortsignal = "Neutral"
-                    else:
-                        rsi_signal = f"🔴  {ticker}'s Relative Strength Index (RSI) is {latest_rsi:.2f}, suggesting a SELL signal."
-                        rsi_shortsignal = "Sell"
-
-                    try:
-                        if latest_rsi > 70:
-                            if prev_rsi >= latest_rsi:
-                                trend_analysis = "🔴  The RSI is above 70 and declining, indicating a potential reversal from overbought."
+                            extended_data = extended_data_r 
+                            macd_data = macd_data_r 
+                            rsi_data = rsi_data_r 
+                            ta_data = ta_data_r
+                            ta_data = ta_data[['High', 'Low', 'Close']].copy()
+                            if extended_data.empty:
+                                st.error("No data available for the specified ticker. Please check the ticker symbol and try again.")
                             else:
-                                trend_analysis = "🔴  The RSI is above 70 and holding, indicating continued overbought conditions."
-                        elif latest_rsi < 30:
-                            if prev_rsi <= latest_rsi:
-                                trend_analysis = "🟢  The RSI is below 30 and rising, indicating a potential reversal from oversold."
-                            else:
-                                trend_analysis = "🟢  The RSI is below 30 and holding, indicating continued oversold conditions."
-                        elif 30 < latest_rsi < 70:
-                            if latest_rsi < 50 and prev_rsi < latest_rsi:
-                                trend_analysis = "🔺  The RSI is approaching 50 from below, indicating strengthening momentum toward neutral."
-                            elif latest_rsi < 50 and prev_rsi > latest_rsi:
-                                trend_analysis = "🔻  The RSI is approaching 30 from neutral, indicating weakening momentum toward oversold condition."
-                            elif latest_rsi < 50 and prev_rsi == latest_rsi:
-                                trend_analysis = "🔻  The RSI is approaching 30 from neutral, indicating weakening momentum toward oversold condition."
-                            elif latest_rsi > 50 and prev_rsi > latest_rsi:
-                                trend_analysis = "🔻  The RSI is approaching 50 from above, indicating weakening momentum."
-                            elif latest_rsi > 50 and prev_rsi < latest_rsi:
-                                trend_analysis = "🔺  The RSI is approaching 70 from neutral, indicating strengthening momentum toward overbought condition."
-                            elif latest_rsi > 50 and prev_rsi == latest_rsi:
-                                trend_analysis = "🔺  The RSI is approaching 70 from neutral, indicating strengthening momentum toward overbought condition."
-                    except: trend_analysis = ""
-                    #
-                    overall_col1, overall_col2 = st.columns ([2,3])
-                    with overall_col1:
-                        st.plotly_chart(create_gauge("Overall Consensus", overall_score))
-                    with overall_col2:
-                        latest_data =  ta_data[['STOCH', 'ADX', 'Williams %R', 'CCI', 'ROC', 'UO', 
-                        'STOCH Consensus', 'ADX Consensus', 'Williams %R Consensus', 
-                        'CCI Consensus', 'ROC Consensus', 'UO Consensus']].iloc[-1]
-                        indicator_names = ['SMA20','SMA50', 'SMA200', 'RSI', 'MACD', 'Stochastic Oscillator (STOCH)', 'Average Directional Index (ADX)', 'Williams %R', 'Commodity Channel Index (CCI)', 'Rate of Change (ROC)', 'Ultimate Oscillator (UO)']
-                        indicator_values = extended_data['SMA20'].iloc[-1], extended_data['SMA50'].iloc[-1], extended_data['SMA200'].iloc[-1], latest_rsi, macd_latest, *latest_data[['STOCH', 'ADX', 'Williams %R', 'CCI', 'ROC', 'UO']].values
-                        indicator_signals = get_shortsignal(price, data['SMA20'][-1], 20), get_shortsignal(price, data['SMA50'][-1], 50), get_shortsignal(price, data['SMA200'][-1], 200), rsi_shortsignal, macd_shortsignal, *latest_data[['STOCH Consensus', 'ADX Consensus', 'Williams %R Consensus', 
-                                                        'CCI Consensus', 'ROC Consensus', 'UO Consensus']].values
-                        formatted_values = [f"{value:.2f}" for value in indicator_values]
-                        summary_df = pd.DataFrame({
-                            'Technical Indicator': indicator_names,
-                            'Value': formatted_values,
-                            'Signal': indicator_signals
-                        })
-                        st.dataframe(summary_df,hide_index=True,use_container_width=True, height=300)
-                    #st.subheader("",divider = 'gray')
-                    gauge_col1, gauge_col2, gauge_col3 = st.columns([3,3,3])
-                    with gauge_col1:
-                        st.plotly_chart(create_gauge("Moving Average Consensus", ma_score))
-                    with gauge_col2:
-                        st.plotly_chart(create_gauge("MACD Consensus", macd_score))
-                    with gauge_col3:
-                        st.plotly_chart(create_gauge("RSI Consensus", rsi_score))
-                    
-                    st.plotly_chart(fig)
-                    st.plotly_chart(fig_rsi)
-                    ''
-                    ma_tcol1, ma_tcol2 = st.columns([3,3])
-                    with ma_tcol1:
-                        st.write(get_signal(price, data['SMA20'][-1], 20))
-                        st.write(get_signal(price, data['SMA50'][-1], 50))
-                        st.write(get_signal(price, data['SMA200'][-1], 200))
-                        if cross_20_50:
-                            st.write(cross_20_50)
-                        else:
-                            st.write("🔵  No recent 20-50 SMAs crossover detected.")
-                        if cross_50_200:
-                            st.write(cross_50_200)
-                        else:
-                            st.write("🔵  No recent 50-200 SMAs crossover detected.")
-                    with ma_tcol2:
-                        st.info("SMAs calculate the average price over a period, treating all past prices equally. If the current stock price is above the SMA, it suggests a buy signal, as the price is above the historical average for that period. A sell signal is suggested when the current price is below the SMA.")
-                    ''
-                    rsi_tcol1, rsi_tcol2 = st.columns([3,3])
-                    with rsi_tcol1:
-                        st.write(rsi_signal)
-                        st.write(trend_analysis)
-                    with rsi_tcol2:
-                        st.info("If RSI > 70, it generally indicates an Overbought condition. If RSI < 30, it generally indicates an Oversold condition. If RSI is between 30 and 70, it indicates a Neutral condition.")
-                    st.subheader("",divider = 'gray')
-                    
-                    st.plotly_chart(fig_macd)
-                    md_tcol1, md_tcol2 = st.columns([3,3])
-                    with md_tcol1:
-                        st.write(macd_signal)
-                        st.write(crossover_signal)
-                    with md_tcol2:
-                        st.info("The MACD Line is above the Signal Line, indicating a bullish crossover and the stock might be trending upward, so we interpret this as a Buy signal. When the MACD Line is below the Signal Line, it means bearish crossover and the stock might be trending downward, so we interpret this as a Sell signal.")
-                    #st.subheader("",divider = 'gray')
-            except: st.warning("Failed to request historical price data.")
+                                #SMA
+                                extended_data['SMA20'] = extended_data['Close'].rolling(window=20).mean()
+                                extended_data['SMA50'] = extended_data['Close'].rolling(window=50).mean()
+                                extended_data['SMA200'] = extended_data['Close'].rolling(window=200).mean()
+                                last_year_start = (end_date - datetime.timedelta(days=int(1 * 365)))
+                                data = extended_data.loc[extended_data.index >= last_year_start]
+                                data.columns = data.columns.map('_'.join)
+                                data.columns = ['Close', 'High', 'Low', 'Open', 'Volume', 'SMA20', 'SMA50', 'SMA200']
+                                volume_colors = ['green' if data['Close'][i] >= data['Open'][i] else 'red' for i in range(len(data))]
+                                max_volume = data['Volume'].max()
+                                #MACD
+                                macd_data['EMA12'] = macd_data['Close'].ewm(span=12, adjust=False).mean()
+                                macd_data['EMA26'] = macd_data['Close'].ewm(span=26, adjust=False).mean()
+                                macd_data['MACD'] = macd_data['EMA12'] - macd_data['EMA26']
+                                macd_data['Signal'] = macd_data['MACD'].ewm(span=9, adjust=False).mean()
+                                macd_data['MACD_Hist'] = macd_data['MACD'] - macd_data['Signal']
+                                macd_data['Crossover'] = macd_data['MACD'] > macd_data['Signal']
+                                macd_data['Bullish_Crossover'] = (macd_data['Crossover'] != macd_data['Crossover'].shift(1)) & (macd_data['Crossover'] == True)
+                                macd_data['Bearish_Crossover'] = (macd_data['Crossover'] != macd_data['Crossover'].shift(1)) & (macd_data['Crossover'] == False)
+                                macd_latest_bullish = macd_data['Bullish_Crossover'].iloc[-1]
+                                macd_latest_bearish = macd_data['Bearish_Crossover'].iloc[-1]
+                                #macd_data = macd_data[macd_data.index.dayofweek < 5]
+                                #RSI
+                                change = rsi_data["Close"].diff()
+                                change.dropna(inplace=True)
+                                up = change.apply(lambda x: max(x, 0))
+                                down = change.apply(lambda x: -min(x, 0))
+                                rsi_length = 14
+                                avg_up = up.ewm(alpha=1/rsi_length, min_periods=rsi_length).mean()
+                                avg_down = down.ewm(alpha=1/rsi_length, min_periods=rsi_length).mean()
+                                rsi_data['RSI'] = 100 - (100 / (1 + avg_up / avg_down))
+                                rsi_data['RSI'] = rsi_data['RSI'].apply(lambda x: 100 if avg_down.iloc[0] == 0 else (0 if avg_up.iloc[0] == 0 else x))
+                                latest_rsi = rsi_data['RSI'].iloc[-1]
+                                prev_rsi = rsi_data['RSI'].iloc[-2]
+                                # Stochastic Oscillator (%K and %D)
+                                ta_data['Low14'] = ta_data['Low'].rolling(window=14).min()
+                                ta_data['High14'] = ta_data['High'].rolling(window=14).max()
+                                ta_data['%K'] = 100 * ((ta_data['Close'] - ta_data['Low14']) / (ta_data['High14'] - ta_data['Low14']))
+                                ta_data['%D'] = ta_data['%K'].rolling(window=3).mean()
+                                ta_data['STOCH'] = ta_data['%D']
+                                # Average Directional Index (ADX)
+                                ta_data['+DM'] = np.where((ta_data['High'] - ta_data['High'].shift(1)) > (ta_data['Low'].shift(1) - ta_data['Low']), 
+                                                    ta_data['High'] - ta_data['High'].shift(1), 0)
+                                ta_data['-DM'] = np.where((ta_data['Low'].shift(1) - ta_data['Low']) > (ta_data['High'] - ta_data['High'].shift(1)), 
+                                                    ta_data['Low'].shift(1) - ta_data['Low'], 0)
+                                ta_data['TR'] = np.maximum(ta_data['High'] - ta_data['Low'], 
+                                                        np.maximum(abs(ta_data['High'] - ta_data['Close'].shift(1)), 
+                                                                abs(ta_data['Low'] - ta_data['Close'].shift(1))))
+                                ta_data['ATR'] = ta_data['TR'].rolling(window=14).mean()
+                                ta_data['+DI'] = 100 * (ta_data['+DM'] / ta_data['ATR']).rolling(window=14).mean()
+                                ta_data['-DI'] = 100 * (ta_data['-DM'] / ta_data['ATR']).rolling(window=14).mean()
+                                ta_data['DX'] = 100 * abs((ta_data['+DI'] - ta_data['-DI']) / (ta_data['+DI'] + ta_data['-DI']))
+                                ta_data['ADX'] = ta_data['DX'].rolling(window=14).mean()
+                                # Williams %R
+                                ta_data['Williams %R'] = ((ta_data['High14'] - ta_data['Close']) / (ta_data['High14'] - ta_data['Low14'])) * -100
+                                # Commodity Channel Index (CCI)
+                                ta_data['Mean Price'] = (ta_data['High'] + ta_data['Low'] + ta_data['Close']) / 3
+                                ta_data['CCI'] = (ta_data['Mean Price'] - ta_data['Mean Price'].rolling(window=20).mean()) / (0.015 * ta_data['Mean Price'].rolling(window=20).std())
+                                # Rate of Change (ROC)
+                                ta_data['ROC'] = ((ta_data['Close'] - ta_data['Close'].shift(12)) / ta_data['Close'].shift(12)) * 100
+                                # Ultimate Oscillator (UO)
+                                ta_data['BP'] = ta_data['Close'] - np.minimum(ta_data['Low'], ta_data['Close'].shift(1))
+                                ta_data['TR_UO'] = np.maximum(ta_data['High'] - ta_data['Low'], 
+                                                        np.maximum(abs(ta_data['High'] - ta_data['Close'].shift(1)), 
+                                                                    abs(ta_data['Low'] - ta_data['Close'].shift(1))))
+                                ta_data['Avg7'] = ta_data['BP'].rolling(window=7).sum() / ta_data['TR_UO'].rolling(window=7).sum()
+                                ta_data['Avg14'] = ta_data['BP'].rolling(window=14).sum() / ta_data['TR_UO'].rolling(window=14).sum()
+                                ta_data['Avg28'] = ta_data['BP'].rolling(window=28).sum() / ta_data['TR_UO'].rolling(window=28).sum()
+                                ta_data['UO'] = 100 * (4 * ta_data['Avg7'] + 2 * ta_data['Avg14'] + ta_data['Avg28']) / 7
+                                # Bollinger Bands
+                                bb_period = 20
+                                ta_data['BB_middle'] = ta_data['Close'].rolling(window=bb_period).mean()
+                                bb_std = ta_data['Close'].rolling(window=bb_period).std()
+                                ta_data['BB_upper'] = ta_data['BB_middle'] + (bb_std * 2)
+                                ta_data['BB_lower'] = ta_data['BB_middle'] - (bb_std * 2)
+                                # S&R levels
+                                def find_support_resistance(data, window=20, threshold=0.05):
+                                    highs = []
+                                    lows = []
+                                    for i in range(window, len(data)-window):
+                                        if all(data['High'].iloc[i] >= data['High'].iloc[i-window:i]) and \
+                                           all(data['High'].iloc[i] >= data['High'].iloc[i+1:i+window]):
+                                            highs.append((data.index[i], data['High'].iloc[i]))
+                                        if all(data['Low'].iloc[i] <= data['Low'].iloc[i-window:i]) and \
+                                           all(data['Low'].iloc[i] <= data['Low'].iloc[i+1:i+window]):
+                                            lows.append((data.index[i], data['Low'].iloc[i]))
+                                    def group_levels(levels, threshold):
+                                        levels = sorted(levels, key=lambda x: x[1])
+                                        grouped = []
+                                        current_group = [levels[0]]
+            
+                                        for level in levels[1:]:
+                                            if abs(level[1] - current_group[0][1])/current_group[0][1] < threshold:
+                                                current_group.append(level)
+                                            else:
+                                                avg_price = sum(x[1] for x in current_group)/len(current_group)
+                                                earliest_date = min(x[0] for x in current_group)
+                                                grouped.append((earliest_date, avg_price))
+                                                current_group = [level]
+                                        avg_price = sum(x[1] for x in current_group)/len(current_group)
+                                        earliest_date = min(x[0] for x in current_group)
+                                        grouped.append((earliest_date, avg_price))
+                                        return grouped
+                                    resistance_levels = group_levels(highs, threshold)
+                                    support_levels = group_levels(lows, threshold)
+                                    return support_levels, resistance_levels
+                                #
+                                fig = go.Figure()
+                                fig_macd = go.Figure()
+                                fig_rsi = go.Figure()
+                                fig_bb = go.Figure()
+                                fig_sr = go.Figure()
+                                #
+                                rsi_latest = rsi_data['RSI'].iloc[-1]
+                                rsi_score = 80 if rsi_latest < 30 else 20 if rsi_latest > 70 else 50
+                                macd_latest = macd_data['MACD'].iloc[-1]
+                                signal_latest = macd_data['Signal'].iloc[-1]
+                                macd_score = 80 if macd_latest > signal_latest else 20
+                                ma_scores = []
+                                if extended_data['Close'].iloc[-1] > extended_data['SMA20'].iloc[-1]: ma_scores.append(80)
+                                else: ma_scores.append(20) 
+                                if extended_data['Close'].iloc[-1] > extended_data['SMA50'].iloc[-1]: ma_scores.append(80)
+                                else: ma_scores.append(20)
+                                if extended_data['Close'].iloc[-1] > extended_data['SMA200'].iloc[-1]: ma_scores.append(80)
+                                else: ma_scores.append(20)
+                                ma_score = np.mean(ma_scores)
+                                stoch_latest =  ta_data['STOCH'].iloc[-1]
+                                stoch_score = 80 if stoch_latest > 80 else 20 if stoch_latest < 20 else 50
+                                adx_latest = ta_data['ADX'].iloc[-1]
+                                adx_score = 80 if adx_latest > 25 else 50
+                                williamsr_latest = ta_data['Williams %R'].iloc[-1]
+                                williamsr_score = 80 if williamsr_latest < -80 else 20 if williamsr_latest > -20 else 50
+                                cci_latest = ta_data['CCI'].iloc[-1]
+                                cci_score = 80 if cci_latest > 100 else 20 if cci_latest < -100 else 50
+                                roc_latest = ta_data['ROC'].iloc[-1]
+                                roc_score = 80 if roc_latest > 0 else 20
+                                uo_latest = ta_data['UO'].iloc[-1]
+                                uo_score = 80 if uo_latest > 70 else 20 if uo_latest < 30 else 50
+                                overall_score = np.mean([rsi_score, macd_score, ma_score,stoch_score, adx_score, williamsr_score, cci_score, roc_score, uo_score])
+                                #
+                                def get_signal(price, sma, period):
+                                    if price > sma:
+                                        return f"🟢  {ticker}'s share price is ${price:.2f} and {period}SMA is {sma:.2f}, suggesting a BUY signal."
+                                    else:
+                                        return f"🔴  {ticker}'s share price is ${price:.2f} and {period}SMA is {sma:.2f}, suggesting a SELL signal."
+                                def get_shortsignal(price, sma, period):
+                                    if price > sma:
+                                        return "Buy"
+                                    else:
+                                        return "Sell"
+                                def detect_cross(data, short_sma, long_sma, short_period, long_period):
+                                    last_cross = None
+                                    if extended_data[short_sma].iloc[-2] < extended_data[long_sma].iloc[-2] and extended_data[short_sma].iloc[-1] > extended_data[long_sma].iloc[-1]:
+                                        last_cross = f"🟢  Golden Cross: {short_period}SMA crossed above the {long_period}SMA."
+                                    elif extended_data[short_sma].iloc[-2] > extended_data[long_sma].iloc[-2] and extended_data[short_sma].iloc[-1] < extended_data[long_sma].iloc[-1]:
+                                        last_cross = f"🔴  Death Cross: {short_period}SMA crossed below the {long_period}SMA."
+                                    return last_cross
+                                cross_20_50 = detect_cross(data, 'SMA20', 'SMA50', 20, 50)
+                                cross_50_200 = detect_cross(data, 'SMA50', 'SMA200', 50, 200)
+                                def get_sentiment_label(score):
+                                    if score <= 20:
+                                        return "Strong Negative Bias"
+                                    elif score <= 40:
+                                        return "Negative Bias"
+                                    elif score <= 60:
+                                        return "Neutral"
+                                    elif score <= 80:
+                                        return "Positive Bias"
+                                    else:
+                                        return "Strong Positive Bias"
+                                def consensus(value, thresholds):
+                                    if value < thresholds[0]:
+                                        return "Strong Sell"
+                                    elif value < thresholds[1]:
+                                        return "Sell"
+                                    elif value < thresholds[2]:
+                                        return "Neutral"
+                                    elif value < thresholds[3]:
+                                        return "Buy"
+                                    else:
+                                        return "Strong Buy"
+                                def create_gauge(title, score):
+                                    label = get_sentiment_label(score)
+                                    fig = go.Figure(go.Indicator(
+                                        mode="gauge",
+                                        value=score,  
+                                        number={'font': {'size': 24}},  
+                                        title={'text': title, 'font': {'size': 20}},
+                                        gauge={'axis': {'range': [0, 100]},
+                                            'bar': {'color': "#5F9BEB"},
+                                            'steps': [
+                                                {'range': [0, 15], 'color': "#da4453", 'name': 'Strong Neg'},
+                                                {'range': [15, 45], 'color': "#e9573f", 'name': 'Neg'},
+                                                {'range': [45, 55], 'color': "#f6bb42", 'name': 'Neutral'},
+                                                {'range': [55, 85], 'color': "#a0d468", 'name': 'Pos'},
+                                                {'range': [85, 100], 'color': "#37bc9b", 'name': 'Strong Pos'}]}))
+                                    fig.add_annotation(x=0.5, y=0.25, text=label, showarrow=False, font=dict(size=20))
+                                    fig.update_layout(
+                                        font=dict(size=14),
+                                        margin=dict(t=10, b=0, l=50, r=50),
+                                        height=350
+                                        )
+                                    return fig
+                                #thresholds for table
+                                ta_data['STOCH Consensus'] = ta_data['%K'].astype(float).apply(lambda x: consensus(x, [20, 40, 60, 80]))
+                                ta_data['ADX Consensus'] = ta_data['ADX'].astype(float).apply(lambda x: "Strong Trend" if x > 25 else "Weak Trend")
+                                ta_data['Williams %R Consensus'] = ta_data['Williams %R'].astype(float).apply(lambda x: consensus(x, [-80, -50, -20, 0]))
+                                ta_data['CCI Consensus'] = ta_data['CCI'].astype(float).apply(lambda x: consensus(x, [-100, -50, 50, 100]))
+                                ta_data['ROC Consensus'] = ta_data['ROC'].astype(float).apply(lambda x: consensus(x, [-5, 0, 5, 10]))
+                                ta_data['UO Consensus'] = ta_data['UO'].astype(float).apply(lambda x: consensus(x, [30, 50, 70, 80]))
+                                #
+                                fig.add_trace(go.Candlestick(
+                                    x=data.index,
+                                    open=data['Open'], high=data['High'], low=data['Low'], close=data['Close'],
+                                    name="Candlestick",
+                                    showlegend=False,
+                                    increasing_line_width=0.5, decreasing_line_width=0.5,
+                                    increasing_line_color='rgba(0,150,0,1)',
+                                    decreasing_line_color='rgba(150,0,0,1)',
+                                    opacity=1
+                                ))
+                                fig.add_trace(go.Scatter(
+                                    x=data.index, y=data['SMA20'],
+                                    line=dict(color='#3BAFDA', width=1),
+                                    name="SMA 20",
+                                    opacity=0.5
+                                ))
+                                fig.add_trace(go.Scatter(
+                                    x=data.index, y=data['SMA50'],
+                                    line=dict(color='#F6BB42', width=1),
+                                    name="SMA 50",
+                                    opacity=0.5
+                                ))
+                                fig.add_trace(go.Scatter(
+                                    x=data.index, y=data['SMA200'],
+                                    line=dict(color='#D772AD', width=1.5),
+                                    name="SMA 200",
+                                    opacity=0.5
+                                ))
+                                fig.add_trace(go.Bar(
+                                    x=data.index, y=data['Volume'],
+                                    marker=dict(color=volume_colors),
+                                    name="Volume",
+                                    yaxis="y2",
+                                    showlegend=False,  
+                                    opacity=0.3  
+                                ))
+                                tick_vals = data.index[::30]
+                                tick_text = [date.strftime("%b %Y") for date in tick_vals]
+                                fig.update_layout(
+                                    title={"text":f"Price Data with Moving Average & RSI", "font": {"size": 30}},
+                                    xaxis_rangeslider_visible=False,
+                                    xaxis=dict(
+                                        type="category",
+                                        showgrid=True,
+                                        ticktext=tick_text,
+                                        tickvals=tick_vals,
+                                        showticklabels=False 
+                                    ),
+                                    yaxis=dict(
+                                        title="Price (USD)",
+                                        side="left",
+                                        showgrid=True
+                                    ),
+                                    yaxis2=dict(
+                                        side="right",
+                                        overlaying="y",
+                                        showgrid=False,
+                                        range=[0, max_volume * 3],
+                                        showticklabels=False
+                                    ),
+                                    margin=dict(l=0, r=0, t=None, b=0),
+                                    height=None,
+                                    legend=dict(
+                                    yanchor="top",
+                                    y=0.99,
+                                    xanchor="left",
+                                    x=0.010)
+                                )
+                                fig_macd.add_trace(go.Scatter(
+                                    x=macd_data.index, y=macd_data['MACD'],
+                                    line=dict(color='#3BAFDA', width=1.5),
+                                    opacity=0.5,
+                                    name="MACD"
+                                ))
+                                fig_macd.add_trace(go.Scatter(
+                                    x=macd_data.index, y=macd_data['Signal'],
+                                    line=dict(color='#F6BB42', width=1),
+                                    opacity=1,
+                                    name="Signal"
+                                ))
+                                fig_macd.add_trace(go.Bar(
+                                    x=macd_data.index, y=macd_data['MACD_Hist'].where(macd_data['MACD_Hist'] >= 0, 0),  
+                                    marker=dict(color='green'),
+                                    showlegend=False,
+                                    opacity=0.5,
+                                    name="MACD Histogram (Above Zero)"
+                                ))
+                                fig_macd.add_trace(go.Bar(
+                                    x=macd_data.index, y=macd_data['MACD_Hist'].where(macd_data['MACD_Hist'] < 0, 0),  
+                                    marker=dict(color='red'),
+                                    showlegend=False,
+                                    opacity=0.5,
+                                    name="MACD Histogram (Below Zero)"
+                                ))
+                                tick_vals = macd_data.index[::30]
+                                tick_text = [date.strftime("%b %Y") for date in tick_vals]
+                                fig_macd.update_layout(
+                                    title={"text":f"MACD Chart", "font": {"size": 30}}, xaxis_title=None, yaxis_title="MACD Value",
+                                    xaxis_rangeslider_visible=False,
+                                    xaxis=dict(
+                                        type="category",
+                                        ticktext=tick_text,
+                                        tickvals=tick_vals,
+                                        showgrid=True
+                                    ),
+                                    legend=dict(
+                                    yanchor="top",
+                                    y=0.99,
+                                    xanchor="left",
+                                    x=0.010)
+                                )
+                                fig_rsi.add_trace(go.Scatter(
+                                    x=rsi_data.index, y=rsi_data['RSI'],
+                                    line=dict(color='#D772AD', width=1),
+                                    showlegend=False,
+                                    name="RSI"
+                                ))
+                                fig_rsi.add_hline(y=70, line=dict(color='red', width=1, dash='dash'),annotation_text="70", annotation_position="top left",showlegend=False, name="Overbought")
+                                fig_rsi.add_hline(y=30, line=dict(color='green', width=1, dash='dash'),annotation_text="30", annotation_position="bottom left",showlegend=False, name="Oversold")
+                                tick_vals_rsi = rsi_data.index[::30]
+                                tick_text_rsi = [date.strftime("%b %Y") for date in tick_vals_rsi]
+                                fig_rsi.update_layout(
+                                    xaxis_title=None,
+                                    yaxis_title="RSI",
+                                    xaxis=dict(
+                                        type="category",
+                                        ticktext=tick_text_rsi,
+                                        tickvals=tick_vals_rsi,
+                                        showgrid=True
+                                    ),
+                                    yaxis=dict(range=[0, 100], showgrid=False, showticklabels=True),
+                                    height=200,
+                                    margin=dict(l=0, r=0, t=0, b=0),
+                                    legend=dict(
+                                    yanchor="top",
+                                    y=0.99,
+                                    xanchor="left",
+                                    x=0.010)
+                                )
+                                #
+                                fig_bb.add_trace(go.Candlestick(
+                                    x=data.index,
+                                    open=data['Open'], high=data['High'], low=data['Low'], close=data['Close'],
+                                    name="Price",
+                                    showlegend=False,
+                                    increasing_line_width=0.5, decreasing_line_width=0.5,
+                                    increasing_line_color='rgba(0,150,0,1)',
+                                    decreasing_line_color='rgba(150,0,0,1)',
+                                    opacity=1
+                                ))
+                                fig_bb.add_trace(go.Scatter(
+                                    x=ta_data.index,
+                                    y=ta_data['BB_middle'],
+                                    line=dict(color='orange', width=1),
+                                    name="Middle Band (20 SMA)",
+                                    opacity=0.5
+                                ))
+                                fig_bb.add_trace(go.Scatter(
+                                    x=ta_data.index,
+                                    y=ta_data['BB_upper'],
+                                    line=dict(color='red', width=1),
+                                    name="Upper Band",
+                                    fill='tonexty',  
+                                    fillcolor='rgba(255,0,0,0.1)',
+                                    opacity=0.5
+                                ))
+                                fig_bb.add_trace(go.Scatter(
+                                    x=ta_data.index,
+                                    y=ta_data['BB_middle'],
+                                    line=dict(color='orange', width=1),
+                                    name="Middle Band (20 SMA)",
+                                    opacity=0,
+                                    showlegend=False
+                                ))
+                                fig_bb.add_trace(go.Scatter(
+                                    x=ta_data.index,
+                                    y=ta_data['BB_lower'],
+                                    line=dict(color='green', width=1),
+                                    name="Lower Band",
+                                    fill='tonexty',
+                                    fillcolor='rgba(0,255,0,0.1)',
+                                    opacity=0.5
+                                ))
+                                tick_vals = data.index[::30]
+                                tick_text = [date.strftime("%b %Y") for date in tick_vals]
+                                fig_bb.update_layout(
+                                    title={"text": "Price Data with Bollinger Bands", "font": {"size": 30}},
+                                    xaxis_rangeslider_visible=False,
+                                    xaxis=dict(
+                                        type="category",
+                                        showgrid=True,
+                                        ticktext=tick_text,
+                                        tickvals=tick_vals
+                                    ),
+                                    yaxis=dict(
+                                        title="Price (USD)",
+                                        side="left",
+                                        showgrid=True
+                                    ),
+                                    margin=dict(l=0, r=0, t=None, b=0),
+                                    height=None,
+                                    legend=dict(
+                                    yanchor="top",
+                                    y=0.99,
+                                    xanchor="left",
+                                    x=0.010)
+                                )
+                                #
+                                current_price = data['Close'].iloc[-1]
+                                support_levels, resistance_levels = find_support_resistance(data)
+                                fig_sr.add_trace(go.Candlestick(
+                                    x=data.index,
+                                    open=data['Open'], high=data['High'], low=data['Low'], close=data['Close'],
+                                    name="Price",
+                                    showlegend=False,
+                                    increasing_line_width=0.5, decreasing_line_width=0.5,
+                                    increasing_line_color='rgba(0,150,0,1)',
+                                    decreasing_line_color='rgba(150,0,0,1)',
+                                    opacity=1
+                                ))
+                                all_levels = [(date, level) for date, level in resistance_levels + support_levels]
+                                all_levels = sorted(all_levels, key=lambda x: x[1], reverse=True)
+                                used_positions = set()
+                                label_spacing = 2  
+                                for start_date, level in all_levels:
+                                    is_resistance = current_price < level
+                                    line_color = 'red' if is_resistance else 'green'
+                                    label_prefix = 'R: ' if is_resistance else 'S: '
+                                    fig_sr.add_trace(go.Scatter(
+                                        x=[start_date, data.index[-1]],
+                                        y=[level, level],
+                                        mode='lines',
+                                        line=dict(color=line_color, width=1, dash='dot'),
+                                        opacity=0.7,
+                                        showlegend=False,
+                                        name=f"{'Resistance' if is_resistance else 'Support'} {level:.2f}"
+                                    ))
+                                    label_y = level
+                                    while label_y in used_positions:
+                                        label_y += label_spacing if is_resistance else -label_spacing
+                                    used_positions.add(label_y)
+                                    fig_sr.add_annotation(
+                                        x=data.index[-1],
+                                        y=label_y,
+                                        text=f"{label_prefix}{level:.2f}",
+                                        showarrow=True if label_y != level else False,
+                                        arrowhead=2,
+                                        arrowsize=1,
+                                        arrowwidth=1,
+                                        arrowcolor=line_color,
+                                        xshift=50,
+                                        font=dict(size=10, color=line_color),
+                                        xanchor='left'
+                                    )
+                                fig_sr.update_layout(
+                                    title={"text": "Support and Resistance Levels", "font": {"size": 30}},
+                                    xaxis_rangeslider_visible=False,
+                                    xaxis=dict(
+                                        type="category",
+                                        showgrid=True,
+                                        ticktext=tick_text,
+                                        tickvals=tick_vals
+                                    ),
+                                    yaxis=dict(
+                                        title="Price (USD)",
+                                        side="left",
+                                        showgrid=True
+                                    ),
+                                    margin=dict(l=0, r=0, t=None, b=0),
+                                    height=None,
+                                    legend=dict(
+                                        yanchor="top",
+                                        y=0.99,
+                                        xanchor="left",
+                                        x=0.010
+                                    )
+                                )
+                                #
+                                if macd_latest > signal_latest:
+                                    macd_signal = f"🟢  The Moving Averages Convergence Divergence (MACD) indicator for {ticker} is {macd_latest:.2f} and the signal line is at {signal_latest:.2f}, suggesting it is a BUY signal."
+                                    macd_shortsignal = "Buy"
+                                else:
+                                    macd_signal = f"🔴  The Moving Averages Convergence Divergence (MACD) indicator for {ticker} is {macd_latest:.2f} and the signal line is at {signal_latest:.2f}, suggesting it is a SELL signal."
+                                    macd_shortsignal = "Sell"
+                                if macd_latest_bullish:
+                                    crossover_signal = "🟢  Bullish Crossover: MACD line crossed above the signal line."
+                                elif macd_latest_bearish:
+                                    crossover_signal = "🔴  Bearish Crossover: MACD line crossed below the signal line."
+                                else:
+                                    crossover_signal = "🔵  No recent crossover detected."
+                                #
+                                if latest_rsi < 30:
+                                    rsi_signal = f"🟢  {ticker}'s Relative Strength Index (RSI) is {latest_rsi:.2f}, suggesting a BUY signal."
+                                    rsi_shortsignal = "Buy"
+                                elif 30 <= latest_rsi <= 70:
+                                    rsi_signal = f"🔵  {ticker}'s Relative Strength Index (RSI) is {latest_rsi:.2f}, suggesting a NEUTRAL."
+                                    rsi_shortsignal = "Neutral"
+                                else:
+                                    rsi_signal = f"🔴  {ticker}'s Relative Strength Index (RSI) is {latest_rsi:.2f}, suggesting a SELL signal."
+                                    rsi_shortsignal = "Sell"
+            
+                                try:
+                                    if latest_rsi > 70:
+                                        if prev_rsi >= latest_rsi:
+                                            trend_analysis = "🔴  The RSI is above 70 and declining, indicating a potential reversal from overbought."
+                                        else:
+                                            trend_analysis = "🔴  The RSI is above 70 and holding, indicating continued overbought conditions."
+                                    elif latest_rsi < 30:
+                                        if prev_rsi <= latest_rsi:
+                                            trend_analysis = "🟢  The RSI is below 30 and rising, indicating a potential reversal from oversold."
+                                        else:
+                                            trend_analysis = "🟢  The RSI is below 30 and holding, indicating continued oversold conditions."
+                                    elif 30 < latest_rsi < 70:
+                                        if latest_rsi < 50 and prev_rsi < latest_rsi:
+                                            trend_analysis = "🔺  The RSI is approaching 50 from below, indicating strengthening momentum toward neutral."
+                                        elif latest_rsi < 50 and prev_rsi > latest_rsi:
+                                            trend_analysis = "🔻  The RSI is approaching 30 from neutral, indicating weakening momentum toward oversold condition."
+                                        elif latest_rsi < 50 and prev_rsi == latest_rsi:
+                                            trend_analysis = "🔻  The RSI is approaching 30 from neutral, indicating weakening momentum toward oversold condition."
+                                        elif latest_rsi > 50 and prev_rsi > latest_rsi:
+                                            trend_analysis = "🔻  The RSI is approaching 50 from above, indicating weakening momentum."
+                                        elif latest_rsi > 50 and prev_rsi < latest_rsi:
+                                            trend_analysis = "🔺  The RSI is approaching 70 from neutral, indicating strengthening momentum toward overbought condition."
+                                        elif latest_rsi > 50 and prev_rsi == latest_rsi:
+                                            trend_analysis = "🔺  The RSI is approaching 70 from neutral, indicating strengthening momentum toward overbought condition."
+                                except: trend_analysis = ""
+                                #
+                                overall_col1, overall_col2 = st.columns ([2,3])
+                                with overall_col1:
+                                    st.plotly_chart(create_gauge("Overall Consensus", overall_score))
+                                with overall_col2:
+                                    latest_data =  ta_data[['STOCH', 'ADX', 'Williams %R', 'CCI', 'ROC', 'UO', 
+                                    'STOCH Consensus', 'ADX Consensus', 'Williams %R Consensus', 
+                                    'CCI Consensus', 'ROC Consensus', 'UO Consensus']].iloc[-1]
+                                    indicator_names = ['SMA20','SMA50', 'SMA200', 'RSI', 'MACD', 'Stochastic Oscillator (STOCH)', 'Average Directional Index (ADX)', 'Williams %R', 'Commodity Channel Index (CCI)', 'Rate of Change (ROC)', 'Ultimate Oscillator (UO)']
+                                    indicator_values = extended_data['SMA20'].iloc[-1], extended_data['SMA50'].iloc[-1], extended_data['SMA200'].iloc[-1], latest_rsi, macd_latest, *latest_data[['STOCH', 'ADX', 'Williams %R', 'CCI', 'ROC', 'UO']].values
+                                    indicator_signals = get_shortsignal(price, data['SMA20'][-1], 20), get_shortsignal(price, data['SMA50'][-1], 50), get_shortsignal(price, data['SMA200'][-1], 200), rsi_shortsignal, macd_shortsignal, *latest_data[['STOCH Consensus', 'ADX Consensus', 'Williams %R Consensus', 
+                                                                    'CCI Consensus', 'ROC Consensus', 'UO Consensus']].values
+                                    formatted_values = [f"{value:.2f}" for value in indicator_values]
+                                    summary_df = pd.DataFrame({
+                                        'Technical Indicator': indicator_names,
+                                        'Value': formatted_values,
+                                        'Signal': indicator_signals
+                                    })
+                                    st.dataframe(summary_df,hide_index=True,use_container_width=True, height=300)
+                                #st.subheader("",divider = 'gray')
+                                gauge_col1, gauge_col2, gauge_col3 = st.columns([3,3,3])
+                                with gauge_col1:
+                                    st.plotly_chart(create_gauge("Moving Average Consensus", ma_score))
+                                with gauge_col2:
+                                    st.plotly_chart(create_gauge("MACD Consensus", macd_score))
+                                with gauge_col3:
+                                    st.plotly_chart(create_gauge("RSI Consensus", rsi_score))
+                                
+                                st.plotly_chart(fig)
+                                st.plotly_chart(fig_rsi)
+                                ''
+                                ma_tcol1, ma_tcol2 = st.columns([3,3])
+                                with ma_tcol1:
+                                    st.write(get_signal(price, data['SMA20'][-1], 20))
+                                    st.write(get_signal(price, data['SMA50'][-1], 50))
+                                    st.write(get_signal(price, data['SMA200'][-1], 200))
+                                    if cross_20_50:
+                                        st.write(cross_20_50)
+                                    else:
+                                        st.write("🔵  No recent 20-50 SMAs crossover detected.")
+                                    if cross_50_200:
+                                        st.write(cross_50_200)
+                                    else:
+                                        st.write("🔵  No recent 50-200 SMAs crossover detected.")
+                                with ma_tcol2:
+                                    st.info("SMAs calculate the average price over a period, treating all past prices equally. If the current stock price is above the SMA, it suggests a buy signal, as the price is above the historical average for that period. A sell signal is suggested when the current price is below the SMA.")
+                                ''
+                                rsi_tcol1, rsi_tcol2 = st.columns([3,3])
+                                with rsi_tcol1:
+                                    st.write(rsi_signal)
+                                    st.write(trend_analysis)
+                                with rsi_tcol2:
+                                    st.info("If RSI > 70, it generally indicates an Overbought condition. If RSI < 30, it generally indicates an Oversold condition. If RSI is between 30 and 70, it indicates a Neutral condition.")
+                                st.subheader("",divider = 'gray')
+                                
+                                st.plotly_chart(fig_macd)
+                                md_tcol1, md_tcol2 = st.columns([3,3])
+                                with md_tcol1:
+                                    st.write(macd_signal)
+                                    st.write(crossover_signal)
+                                with md_tcol2:
+                                    st.info("The MACD Line is above the Signal Line, indicating a bullish crossover and the stock might be trending upward, so we interpret this as a Buy signal. When the MACD Line is below the Signal Line, it means bearish crossover and the stock might be trending downward, so we interpret this as a Sell signal.")
+                                st.subheader("",divider = 'gray')
+            
+                                st.plotly_chart(fig_bb)
+                                bb_col1, bb_col2 = st.columns([3,3])
+                                with bb_col1:
+                                    try:
+                                        current_price = data['Close'].iloc[-1]
+                                        upper_band = ta_data['BB_upper'].iloc[-1]
+                                        lower_band = ta_data['BB_lower'].iloc[-1]
+                                        if current_price >= upper_band:
+                                            bb_signal = f"🔴 Current price is above the upper band {upper_band:.2f}, suggesting OVERBOUGHT conditions."
+                                        elif current_price <= lower_band:
+                                            bb_signal = f"🟢 Current price is below the lower band {lower_band:.2f}, suggesting OVERSOLD conditions."
+                                        else:
+                                            bb_signal = f"🔵 Current price is within the bands ({lower_band:.2f} - {upper_band:.2f}), suggesting NEUTRAL conditions."
+                                    except Exception as e:
+                                        bb_signal=""
+                                    ''
+                                    ''
+                                    st.write(bb_signal)
+                                with bb_col2:
+                                    ''
+                                    ''
+                                    st.info("Bollinger Bands consist of a middle band (20-day SMA) and two outer bands (±2 standard deviations). When price moves outside these bands, it suggests potential overbought or oversold conditions. The bands also help identify volatility, as they widen during high volatility and narrow during low volatility periods.")
+                                st.subheader("",divider = 'gray')
+                                
+                                st.plotly_chart(fig_sr)
+                                sr_col1, sr_col2 = st.columns([3,3])
+                                with sr_col1:
+                                    msr_col1,msr_col2 = st.columns([3,3])
+                                    all_levels = [(date, level) for date, level in resistance_levels + support_levels]
+                                    all_levels = sorted(all_levels, key=lambda x: x[1], reverse=True)
+                                    with msr_col1:
+                                        ''
+                                        ''
+                                        st.subheader("Resistance Levels:")
+                                        resistance_count = 1
+                                        for date, level in all_levels:
+                                            if current_price < level: 
+                                                st.write(f"R{resistance_count}: ${level:.2f}")
+                                                resistance_count += 1
+                                    with msr_col2:
+                                        ''
+                                        ''
+                                        st.subheader("Support Levels:")
+                                        support_count = 1
+                                        for date, level in all_levels:
+                                            if current_price > level:  
+                                                st.write(f"S{support_count}: ${level:.2f}")
+                                                support_count += 1
+                                with sr_col2:
+                                    ''
+                                    ''
+                                    st.info("Support and Resistance levels are key price levels where the stock has historically found support (price stops falling) or resistance (price stops rising). These levels are important as they often act as psychological barriers and can indicate potential reversal points in price movement.")
+                                
+            except Exception as e: 
+                st.write(e)
+                st.warning("Failed to request historical price data.")
 
             ###Finviz picture
             # st.subheader("Price Data", divider ='gray')
