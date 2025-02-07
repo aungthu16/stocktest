@@ -35,7 +35,12 @@ def get_stock_data(ticker, apiKey=None):
     ##### Morning Star #####
     fair_value = fvDate = moat = moatDate = starRating = assessment = 'N/A'
     performance_id = None
-    if apiKey:
+    if apiKey:    
+                    if apiKey == 'admin':
+                        apiKey = st.secrets['RP_API']
+                    else: 
+                        apiKey = apiKey
+                        
                     try:
                         conn = http.client.HTTPSConnection("morning-star.p.rapidapi.com")
                         headers = {
@@ -77,6 +82,10 @@ def get_stock_data(ticker, apiKey=None):
     authors_strongsell_count = authors_strongbuy_count = authors_sell_count = authors_hold_count = authors_buy_count = authors_rating = authors_count = epsRevisionsGrade = dpsRevisionsGrade = dividendYieldGrade = divSafetyCategoryGrade = divGrowthCategoryGrade = divConsistencyCategoryGrade = sellSideRating = ticker_id = quant_rating = growth_grade = momentum_grade = profitability_grade = value_grade = yield_on_cost_grade = 'N/A'
     sk_targetprice = 'N/A'
     if apiKey:
+                    if apiKey == 'admin':
+                        apiKey = st.secrets['RP_API']
+                    else: 
+                        apiKey = apiKey
                     try:
                         conn = http.client.HTTPSConnection("seeking-alpha.p.rapidapi.com")
                         headers = {
