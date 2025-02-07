@@ -3820,7 +3820,7 @@ if st.button("Get Data"):
             except: st.warning("Failed to get news.")
             ''
         with ai_analysis:
-            try:
+            #try:
                 api_key = st.secrets["DEEPSEEK_API_KEY"]
                 client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
                 def analyze_stock():
@@ -3863,8 +3863,8 @@ if st.button("Get Data"):
                     analysis = analyze_stock()
                     st.write(f"### Analysis for {ticker}")
                     st.write(analysis)
-            except Exception as e:
-                st.error(e)
+            #except Exception as e:
+                #st.error(e)
             ''
     except Exception as e:
         st.error(f"Failed to fetch data. Please check your ticker again.")
