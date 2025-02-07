@@ -12,6 +12,7 @@ import datetime
 import re
 from dateutil.relativedelta import relativedelta
 import pytz
+from openai import OpenAI
 
 st.set_page_config(page_title='US Stock Analysis Tool', layout='wide', page_icon="./Image/logo.png")
 
@@ -545,7 +546,7 @@ if st.button("Get Data"):
 ############################################# Tabs #############################################
 #############################################      #############################################
 
-        overview_data, comparison_data, statements_data, guru_checklist, insider_trades, technicalAnalysis_data, news_data = st.tabs (["Overview","Comparisons","Financial Statements","Guru Checklist","Insider Trades","Technical Analysis","Top News"])
+        overview_data, comparison_data, statements_data, guru_checklist, insider_trades, technicalAnalysis_data, news_data, ai_analysis = st.tabs (["Overview","Comparisons","Financial Statements","Guru Checklist","Insider Trades","Technical Analysis","Top News", "AI Analysis"])
 
 #############################################               #############################################
 ############################################# Overview Data #############################################
@@ -3817,6 +3818,53 @@ if st.button("Get Data"):
                     if column_index == (num_columns - 1):
                         st.write("")
             except: st.warning("Failed to get news.")
+            ''
+        with ai_analysis:
+            try:
+                api_key = st.secrets["DEEPSEEK_API_KEY"]
+                client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
+                def analyze_stock():
+                    prompt = f"""
+                    Analyze the stock {ticker} for both long-term and short-term investment potential. Use the following financial data:
+                    - Historical price data: {extended_data_r}
+                    - Key financial metrics: 
+                    	⁃	Valuation: P/E Ratio = {peRatio}, P/B Ratio = {pbRatio}, EV/EBITDA = {ev_to_ebitda}
+                    	⁃	Profitability: Net profit margin = {profitmargin}, ROE = {roe}, ROA = {roa}, Gross margin = {grossmargin}
+                    	⁃	Growth: Revenue growth = {revenue_growth}, Earnings growth = {earnings_growth}
+                    	⁃	Financial health: Debt-to-equity = {deRatio}, Current ratio = {current_ratio}, Quick ratio = {quick_ratio}
+                    	⁃	Cash flow: Free cash flow = {fcf}, Operating cash flow margin = {operatingmargin}
+                    	⁃	Dividends: Dividend yield = {dividendYield}, Dividend payout ratio = {payoutRatio}
+                    - Income Statement data: {income_statement}
+    	            - Balance Sheet data: {balance_sheet}
+    	            - Cashflow Statement data: {cashflow_statement}
+                    - News/sentiment data: {news}
+                
+                    Provide:
+                    1	A summary of whether the stock is good to invest in or not.
+                	2	Key fundamental analysis metrics (e.g., P/E ratio, revenue growth, debt-to-equity).
+                	3	Key technical analysis insights (e.g., moving averages, RSI, support/resistance levels).
+                	4	Sentiment analysis based on news and social media.
+                	5	Recommendations for when to buy (e.g., based on technical indicators or valuation).
+                	6	Separate conclusions for long-term and short-term investment strategies."
+                    """
+                
+                    response = client.chat.completions.create(
+                        model="deepseek-chat",
+                        messages=[
+                            {"role": "system", "content": "You are a financial analyst."},
+                            {"role": "user", "content": prompt},
+                        ],
+                        stream=False
+                    )
+                
+                    return response.choices[0].message.content
+                st.title("Stock Analysis with DeepSeek API")
+                if ticker:
+                    analysis = analyze_stock()
+                    st.write(f"### Analysis for {ticker}")
+                    st.write(analysis)
+            except Exception as e:
+                st.error(e)
             ''
     except Exception as e:
         st.error(f"Failed to fetch data. Please check your ticker again.")
