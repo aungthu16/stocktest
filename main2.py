@@ -3858,7 +3858,7 @@ if st.button("Get Data"):
                     )
                 
                     return response.choices[0].message.content
-                st.title("Stock Analysis with DeepSeek API")
+                st.title("AI Stock Analysis")
                 if ticker:
                     analysis = analyze_stock()
                     st.write(f"### Analysis for {ticker}")
