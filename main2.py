@@ -3850,7 +3850,7 @@ if st.button("Get Data"):
                     """
                     
                     response = client.chat.completions.create(
-                        model="llama2-70b-4096",  # or any other Groq model you prefer
+                        model="llama-3.1-70b-versatile",
                         messages=[
                             {"role": "system", "content": "You are an experienced financial analyst with expertise in both fundamental and technical analysis."},
                             {"role": "user", "content": prompt}
