@@ -3823,7 +3823,7 @@ if st.button("Get Data"):
             try:
                 api_key = st.secrets["GROQ_API_KEY"]
                 client = Groq(api_key=api_key)
-                
+                @st.cache_data(ttl=3600, show_spinner=False)
                 def analyze_stock():
                     prompt = f"""
                     Analyze the stock {upper_ticker} for both long-term and short-term investment potential. Use the following financial data:
