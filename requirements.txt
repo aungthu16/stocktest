@@ -8,3 +8,4 @@ plotly
 matplotlib
 streamlit-option-menu
 openai
+groq
