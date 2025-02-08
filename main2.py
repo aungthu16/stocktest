@@ -460,8 +460,51 @@ def get_stock_data(ticker, apiKey=None):
     try:
         eps_yield = eps/price
     except: eps_yield = "N/A"
+
+    try:
+        api_key = st.secrets["GROQ_API_KEY"]
+        client = Groq(api_key=api_key)
+        def analyze_stock():
+            prompt = f"""
+            Analyze the stock {upper_ticker} for both long-term and short-term investment potential. Use the following financial data:
+            - Historical price data: {extended_data_r}
+            - Key financial metrics: 
+                - Valuation: P/E Ratio = {peRatio}, P/B Ratio = {pbRatio}, EV/EBITDA = {ev_to_ebitda}
+                - Profitability: Net profit margin = {profitmargin}, ROE = {roe}, ROA = {roa}, Gross margin = {grossmargin}
+                - Growth: Revenue growth = {revenue_growth}, Earnings growth = {earnings_growth}
+                - Financial health: Debt-to-equity = {deRatio}, Current ratio = {current_ratio}, Quick ratio = {quick_ratio}
+                - Cash flow: Free cash flow = {fcf}, Operating cash flow margin = {operatingmargin}
+                - Dividends: Dividend yield = {dividendYield}, Dividend payout ratio = {payoutRatio}
+            - Income Statement data: {income_statement}
+            - Balance Sheet data: {balance_sheet}
+            - Cashflow Statement data: {cashflow_statement}
+            - News/sentiment data: {news}
+                    
+            Provide:
+            1. A summary of whether the stock is good to invest in or not.
+            2. Key fundamental analysis metrics (e.g., P/E ratio, revenue growth, debt-to-equity).
+            3. Key technical analysis insights (e.g., moving averages, RSI, support/resistance levels).
+            4. Sentiment analysis based on news and social media.
+            5. Recommendations for when to buy (e.g., based on technical indicators or valuation).
+            6. Separate conclusions for long-term and short-term investment strategies.
+            """
+                    
+            response = client.chat.completions.create(
+                model="llama-3.3-70b-versatile",
+                messages=[
+                    {"role": "system", "content": "You are an experienced financial analyst with expertise in both fundamental and technical analysis."},
+                    {"role": "user", "content": prompt}
+                ],
+                max_tokens=2048,
+                temperature=0.7
+            )
+                    
+            return response.choices[0].message.content
+            analysis = analyze_stock()
+    except Exception as e:
+            st.error(f"Error in AI analysis: {str(e)}")
     
-    return ev_to_ebitda, earnings_growth, revenue_growth, quick_ratio, news, insider_mb, sa_growth_df, eps_yield, end_date, extended_data_r, macd_data_r, rsi_data_r, ta_data_r, matching_etf, yf_com, mb_alt_headers, sa_metrics_df2, sa_metrics_df, cashflow_statement_tb, quarterly_cashflow_statement_tb, balance_sheet_tb, quarterly_balance_sheet_tb, income_statement_tb, quarterly_income_statement_tb, mb_alt_df, mb_div_df, mb_com_df, mb_targetprice_value, mb_predicted_upside, mb_consensus_rating, mb_rating_score, sa_analysts_count, sa_analysts_consensus, sa_analysts_targetprice, sa_altmanz, sa_piotroski, sk_targetprice, authors_strongsell_count, authors_strongbuy_count, authors_sell_count, authors_hold_count, authors_buy_count, authors_rating, authors_count, epsRevisionsGrade, dpsRevisionsGrade, dividendYieldGrade, divSafetyCategoryGrade, divGrowthCategoryGrade, divConsistencyCategoryGrade, sellSideRating, ticker_id, quant_rating, growth_grade, momentum_grade, profitability_grade, value_grade, yield_on_cost_grade, performance_id, fair_value, fvDate, moat, moatDate, starRating, assessment, eps_trend, earnings_history, dividend_history, earningsDate, previous_close, current_ratio, fcf, revenue, exchange_value, upper_ticker, roa, ebitdamargin, operatingmargin, grossmargin, profitmargin, roe, revenue_growth_current, exDividendDate, pbRatio, deRatio, dividends, ticker, sharesOutstanding, institutionsPct, insiderPct, totalEsg, enviScore, socialScore, governScore, percentile, price, beta, name, sector, industry, employee, marketCap, longProfile, eps, pegRatio, picture_url, country, yf_targetprice, yf_consensus, yf_analysts_count, website, peRatio, forwardPe, dividendYield, payoutRatio, apiKey
+    return analysis, ev_to_ebitda, earnings_growth, revenue_growth, quick_ratio, news, insider_mb, sa_growth_df, eps_yield, end_date, extended_data_r, macd_data_r, rsi_data_r, ta_data_r, matching_etf, yf_com, mb_alt_headers, sa_metrics_df2, sa_metrics_df, cashflow_statement_tb, quarterly_cashflow_statement_tb, balance_sheet_tb, quarterly_balance_sheet_tb, income_statement_tb, quarterly_income_statement_tb, mb_alt_df, mb_div_df, mb_com_df, mb_targetprice_value, mb_predicted_upside, mb_consensus_rating, mb_rating_score, sa_analysts_count, sa_analysts_consensus, sa_analysts_targetprice, sa_altmanz, sa_piotroski, sk_targetprice, authors_strongsell_count, authors_strongbuy_count, authors_sell_count, authors_hold_count, authors_buy_count, authors_rating, authors_count, epsRevisionsGrade, dpsRevisionsGrade, dividendYieldGrade, divSafetyCategoryGrade, divGrowthCategoryGrade, divConsistencyCategoryGrade, sellSideRating, ticker_id, quant_rating, growth_grade, momentum_grade, profitability_grade, value_grade, yield_on_cost_grade, performance_id, fair_value, fvDate, moat, moatDate, starRating, assessment, eps_trend, earnings_history, dividend_history, earningsDate, previous_close, current_ratio, fcf, revenue, exchange_value, upper_ticker, roa, ebitdamargin, operatingmargin, grossmargin, profitmargin, roe, revenue_growth_current, exDividendDate, pbRatio, deRatio, dividends, ticker, sharesOutstanding, institutionsPct, insiderPct, totalEsg, enviScore, socialScore, governScore, percentile, price, beta, name, sector, industry, employee, marketCap, longProfile, eps, pegRatio, picture_url, country, yf_targetprice, yf_consensus, yf_analysts_count, website, peRatio, forwardPe, dividendYield, payoutRatio, apiKey
 
 ''
 ''
@@ -483,7 +526,7 @@ st.info('Data is sourced from Yahoo Finance, Morningstar, Seeking Alpha, Market 
 
 if st.button("Get Data"):
     try:
-        ev_to_ebitda, earnings_growth, revenue_growth, quick_ratio, news, insider_mb, sa_growth_df, eps_yield, end_date, extended_data_r, macd_data_r, rsi_data_r, ta_data_r, matching_etf, yf_com, mb_alt_headers, sa_metrics_df2, sa_metrics_df, cashflow_statement_tb, quarterly_cashflow_statement_tb, balance_sheet_tb, quarterly_balance_sheet_tb, income_statement_tb, quarterly_income_statement_tb, mb_alt_df, mb_div_df, mb_com_df, mb_targetprice_value, mb_predicted_upside, mb_consensus_rating, mb_rating_score, sa_analysts_count, sa_analysts_consensus, sa_analysts_targetprice, sa_altmanz, sa_piotroski, sk_targetprice, authors_strongsell_count, authors_strongbuy_count, authors_sell_count, authors_hold_count, authors_buy_count, authors_rating, authors_count, epsRevisionsGrade, dpsRevisionsGrade, dividendYieldGrade, divSafetyCategoryGrade, divGrowthCategoryGrade, divConsistencyCategoryGrade, sellSideRating, ticker_id, quant_rating, growth_grade, momentum_grade, profitability_grade, value_grade, yield_on_cost_grade, performance_id, fair_value, fvDate, moat, moatDate, starRating, assessment, eps_trend, earnings_history, dividend_history, earningsDate, previous_close, current_ratio, fcf, revenue, exchange_value, upper_ticker, roa, ebitdamargin, operatingmargin, grossmargin, profitmargin, roe, revenue_growth_current, exDividendDate, pbRatio, deRatio, dividends, ticker, sharesOutstanding, institutionsPct, insiderPct, totalEsg, enviScore, socialScore, governScore, percentile, price, beta, name, sector, industry, employee, marketCap, longProfile, eps, pegRatio, picture_url, country, yf_targetprice, yf_consensus, yf_analysts_count, website, peRatio, forwardPe, dividendYield, payoutRatio, apiKey = get_stock_data(ticker, apiKey if apiKey.strip() else None)
+        analysis, ev_to_ebitda, earnings_growth, revenue_growth, quick_ratio, news, insider_mb, sa_growth_df, eps_yield, end_date, extended_data_r, macd_data_r, rsi_data_r, ta_data_r, matching_etf, yf_com, mb_alt_headers, sa_metrics_df2, sa_metrics_df, cashflow_statement_tb, quarterly_cashflow_statement_tb, balance_sheet_tb, quarterly_balance_sheet_tb, income_statement_tb, quarterly_income_statement_tb, mb_alt_df, mb_div_df, mb_com_df, mb_targetprice_value, mb_predicted_upside, mb_consensus_rating, mb_rating_score, sa_analysts_count, sa_analysts_consensus, sa_analysts_targetprice, sa_altmanz, sa_piotroski, sk_targetprice, authors_strongsell_count, authors_strongbuy_count, authors_sell_count, authors_hold_count, authors_buy_count, authors_rating, authors_count, epsRevisionsGrade, dpsRevisionsGrade, dividendYieldGrade, divSafetyCategoryGrade, divGrowthCategoryGrade, divConsistencyCategoryGrade, sellSideRating, ticker_id, quant_rating, growth_grade, momentum_grade, profitability_grade, value_grade, yield_on_cost_grade, performance_id, fair_value, fvDate, moat, moatDate, starRating, assessment, eps_trend, earnings_history, dividend_history, earningsDate, previous_close, current_ratio, fcf, revenue, exchange_value, upper_ticker, roa, ebitdamargin, operatingmargin, grossmargin, profitmargin, roe, revenue_growth_current, exDividendDate, pbRatio, deRatio, dividends, ticker, sharesOutstanding, institutionsPct, insiderPct, totalEsg, enviScore, socialScore, governScore, percentile, price, beta, name, sector, industry, employee, marketCap, longProfile, eps, pegRatio, picture_url, country, yf_targetprice, yf_consensus, yf_analysts_count, website, peRatio, forwardPe, dividendYield, payoutRatio, apiKey = get_stock_data(ticker, apiKey if apiKey.strip() else None)
      
 #############################################         #############################################
 ############################################# Profile #############################################
@@ -3819,56 +3862,17 @@ if st.button("Get Data"):
                         st.write("")
             except: st.warning("Failed to get news.")
             ''
+            
+#############################################             #############################################
+############################################# AI Analysis #############################################
+#############################################             #############################################
+
         with ai_analysis:
-            try:
-                api_key = st.secrets["GROQ_API_KEY"]
-                client = Groq(api_key=api_key)
-                @st.cache_data(ttl=3600, show_spinner=False)
-                def analyze_stock():
-                    prompt = f"""
-                    Analyze the stock {upper_ticker} for both long-term and short-term investment potential. Use the following financial data:
-                    - Historical price data: {extended_data_r}
-                    - Key financial metrics: 
-                        - Valuation: P/E Ratio = {peRatio}, P/B Ratio = {pbRatio}, EV/EBITDA = {ev_to_ebitda}
-                        - Profitability: Net profit margin = {profitmargin}, ROE = {roe}, ROA = {roa}, Gross margin = {grossmargin}
-                        - Growth: Revenue growth = {revenue_growth}, Earnings growth = {earnings_growth}
-                        - Financial health: Debt-to-equity = {deRatio}, Current ratio = {current_ratio}, Quick ratio = {quick_ratio}
-                        - Cash flow: Free cash flow = {fcf}, Operating cash flow margin = {operatingmargin}
-                        - Dividends: Dividend yield = {dividendYield}, Dividend payout ratio = {payoutRatio}
-                    - Income Statement data: {income_statement}
-                    - Balance Sheet data: {balance_sheet}
-                    - Cashflow Statement data: {cashflow_statement}
-                    - News/sentiment data: {news}
-                    
-                    Provide:
-                    1. A summary of whether the stock is good to invest in or not.
-                    2. Key fundamental analysis metrics (e.g., P/E ratio, revenue growth, debt-to-equity).
-                    3. Key technical analysis insights (e.g., moving averages, RSI, support/resistance levels).
-                    4. Sentiment analysis based on news and social media.
-                    5. Recommendations for when to buy (e.g., based on technical indicators or valuation).
-                    6. Separate conclusions for long-term and short-term investment strategies.
-                    """
-                    
-                    response = client.chat.completions.create(
-                        model="llama-3.3-70b-versatile",
-                        messages=[
-                            {"role": "system", "content": "You are an experienced financial analyst with expertise in both fundamental and technical analysis."},
-                            {"role": "user", "content": prompt}
-                        ],
-                        max_tokens=2048,
-                        temperature=0.7
-                    )
-                    
-                    return response.choices[0].message.content
-        
                 st.subheader("AI Stock Analysis", divider ='gray')
                 if upper_ticker:
                     with st.spinner('Analyzing stock data...'):
-                        analysis = analyze_stock()
                         st.markdown(analysis)
                         st.caption("This analysis is AI-generated and should not be the sole basis for investment decisions.")
-            except Exception as e:
-                st.error(f"Error in AI analysis: {str(e)}")
     except Exception as e:
         st.error(f"Failed to fetch data. Please check your ticker again.")
         st.warning("This tool supports only tickers from the U.S. stock market. Please note that ETFs and cryptocurrencies are not available for analysis. If the entered ticker is valid but the tool does not display results, it may be due to missing data or a technical issue. Kindly try again later. If the issue persists, please contact the developer for further assistance.")
