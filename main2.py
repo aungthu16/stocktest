@@ -12,7 +12,7 @@ import datetime
 import re
 from dateutil.relativedelta import relativedelta
 import pytz
-from openai import OpenAI
+from groq import Groq
 
 st.set_page_config(page_title='US Stock Analysis Tool', layout='wide', page_icon="./Image/logo.png")
 
@@ -3820,52 +3820,56 @@ if st.button("Get Data"):
             except: st.warning("Failed to get news.")
             ''
         with ai_analysis:
-            #try:
-                api_key = st.secrets["DEEPSEEK_API_KEY"]
-                client = OpenAI(api_key=api_key, base_url="https://api.deepseek.com")
+            try:
+                api_key = st.secrets["GROQ_API_KEY"]
+                client = Groq(api_key=api_key)
+                
                 def analyze_stock():
                     prompt = f"""
                     Analyze the stock {ticker} for both long-term and short-term investment potential. Use the following financial data:
                     - Historical price data: {extended_data_r}
                     - Key financial metrics: 
-                    	⁃	Valuation: P/E Ratio = {peRatio}, P/B Ratio = {pbRatio}, EV/EBITDA = {ev_to_ebitda}
-                    	⁃	Profitability: Net profit margin = {profitmargin}, ROE = {roe}, ROA = {roa}, Gross margin = {grossmargin}
-                    	⁃	Growth: Revenue growth = {revenue_growth}, Earnings growth = {earnings_growth}
-                    	⁃	Financial health: Debt-to-equity = {deRatio}, Current ratio = {current_ratio}, Quick ratio = {quick_ratio}
-                    	⁃	Cash flow: Free cash flow = {fcf}, Operating cash flow margin = {operatingmargin}
-                    	⁃	Dividends: Dividend yield = {dividendYield}, Dividend payout ratio = {payoutRatio}
+                        - Valuation: P/E Ratio = {peRatio}, P/B Ratio = {pbRatio}, EV/EBITDA = {ev_to_ebitda}
+                        - Profitability: Net profit margin = {profitmargin}, ROE = {roe}, ROA = {roa}, Gross margin = {grossmargin}
+                        - Growth: Revenue growth = {revenue_growth}, Earnings growth = {earnings_growth}
+                        - Financial health: Debt-to-equity = {deRatio}, Current ratio = {current_ratio}, Quick ratio = {quick_ratio}
+                        - Cash flow: Free cash flow = {fcf}, Operating cash flow margin = {operatingmargin}
+                        - Dividends: Dividend yield = {dividendYield}, Dividend payout ratio = {payoutRatio}
                     - Income Statement data: {income_statement}
-    	            - Balance Sheet data: {balance_sheet}
-    	            - Cashflow Statement data: {cashflow_statement}
+                    - Balance Sheet data: {balance_sheet}
+                    - Cashflow Statement data: {cashflow_statement}
                     - News/sentiment data: {news}
-                
+                    
                     Provide:
-                    1	A summary of whether the stock is good to invest in or not.
-                	2	Key fundamental analysis metrics (e.g., P/E ratio, revenue growth, debt-to-equity).
-                	3	Key technical analysis insights (e.g., moving averages, RSI, support/resistance levels).
-                	4	Sentiment analysis based on news and social media.
-                	5	Recommendations for when to buy (e.g., based on technical indicators or valuation).
-                	6	Separate conclusions for long-term and short-term investment strategies."
+                    1. A summary of whether the stock is good to invest in or not.
+                    2. Key fundamental analysis metrics (e.g., P/E ratio, revenue growth, debt-to-equity).
+                    3. Key technical analysis insights (e.g., moving averages, RSI, support/resistance levels).
+                    4. Sentiment analysis based on news and social media.
+                    5. Recommendations for when to buy (e.g., based on technical indicators or valuation).
+                    6. Separate conclusions for long-term and short-term investment strategies.
                     """
-                
+                    
                     response = client.chat.completions.create(
-                        model="deepseek-chat",
+                        model="llama2-70b-4096",  # or any other Groq model you prefer
                         messages=[
-                            {"role": "system", "content": "You are a financial analyst."},
-                            {"role": "user", "content": prompt},
+                            {"role": "system", "content": "You are an experienced financial analyst with expertise in both fundamental and technical analysis."},
+                            {"role": "user", "content": prompt}
                         ],
-                        stream=False
+                        max_tokens=2048,
+                        temperature=0.7
                     )
-                
+                    
                     return response.choices[0].message.content
+        
                 st.title("AI Stock Analysis")
                 if ticker:
-                    analysis = analyze_stock()
-                    st.write(f"### Analysis for {ticker}")
-                    st.write(analysis)
-            #except Exception as e:
-                #st.error(e)
-                ''
+                    with st.spinner('Analyzing stock data...'):
+                        analysis = analyze_stock()
+                        st.write(f"### Analysis for {ticker}")
+                        st.markdown(analysis)
+                        st.caption("This analysis is AI-generated and should not be the sole basis for investment decisions.")
+            except Exception as e:
+                st.error(f"Error in AI analysis: {str(e)}")
     except Exception as e:
         st.error(f"Failed to fetch data. Please check your ticker again.")
         st.warning("This tool supports only tickers from the U.S. stock market. Please note that ETFs and cryptocurrencies are not available for analysis. If the entered ticker is valid but the tool does not display results, it may be due to missing data or a technical issue. Kindly try again later. If the issue persists, please contact the developer for further assistance.")
