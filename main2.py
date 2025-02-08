@@ -475,10 +475,9 @@ def get_stock_data(ticker, apiKey=None):
                 - Financial health: Debt-to-equity = {deRatio}, Current ratio = {current_ratio}, Quick ratio = {quick_ratio}
                 - Cash flow: Free cash flow = {fcf}, Operating cash flow margin = {operatingmargin}
                 - Dividends: Dividend yield = {dividendYield}, Dividend payout ratio = {payoutRatio}
-            - Income Statement data: {income_statement}
-            - Balance Sheet data: {balance_sheet}
-            - Cashflow Statement data: {cashflow_statement}
-            - News/sentiment data: {news}
+            - Income Statement data: {income_statement_tb}
+            - Balance Sheet data: {balance_sheet_tb}
+            - Cashflow Statement data: {cashflow_statement_tb}
                     
             Provide:
             1. A summary of whether the stock is good to invest in or not.
