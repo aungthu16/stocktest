@@ -3826,7 +3826,7 @@ if st.button("Get Data"):
                 
                 def analyze_stock():
                     prompt = f"""
-                    Analyze the stock {ticker} for both long-term and short-term investment potential. Use the following financial data:
+                    Analyze the stock {upper_ticker} for both long-term and short-term investment potential. Use the following financial data:
                     - Historical price data: {extended_data_r}
                     - Key financial metrics: 
                         - Valuation: P/E Ratio = {peRatio}, P/B Ratio = {pbRatio}, EV/EBITDA = {ev_to_ebitda}
