@@ -3861,11 +3861,10 @@ if st.button("Get Data"):
                     
                     return response.choices[0].message.content
         
-                st.title("AI Stock Analysis")
-                if ticker:
+                st.subheader("AI Stock Analysis", divider ='gray')
+                if upper_ticker:
                     with st.spinner('Analyzing stock data...'):
                         analysis = analyze_stock()
-                        st.write(f"### Analysis for {upper_ticker}")
                         st.markdown(analysis)
                         st.caption("This analysis is AI-generated and should not be the sole basis for investment decisions.")
             except Exception as e:
