@@ -2739,6 +2739,9 @@ if st.button("Get Data"):
                 #st.write(netincome_value)
                 #st.write(f'Longterm Debt: {lt_debt_result}')
                 # EPS
+                eps_select = ['Diluted EPS']
+                eps_values = income_statement.loc[eps_select].fillna(0).values.flatten()
+                eps_values = [float(eps_value) for eps_value in eps_values]
                 eps_current = float(eps_values[0])
                 no_negative_earnings = all(eps >= 0 for eps in eps_values)
                 generally_increasing = all(eps_values[i] >= eps_values[i+1] for i in range(len(eps_values) - 1))
@@ -3098,9 +3101,8 @@ if st.button("Get Data"):
                     st.image(guru_logo_url2,width=300)
                 with guru_col9:
                     st.dataframe(df_peterlynch.style.applymap(highlight_result, subset=['Result']),use_container_width=True, hide_index=True)
-            except Exception as e:
+            except:
                 st.warning("Guru checklist is currently unavailable.")
-                st.write(e)
 
 #############################################                #############################################
 ############################################# Insider Trades #############################################
