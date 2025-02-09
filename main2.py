@@ -1919,6 +1919,8 @@ if st.button("Get Data"):
             except: st.warning("Failed to get Income Statement.")
             st.caption("Data source: Yahoo Finance")
             ''
+            st.markdown(analysis['income'])
+            ''
 
 #Balance Sheet
             st.subheader("Balance Sheet (Financial Position)", divider ='gray')
