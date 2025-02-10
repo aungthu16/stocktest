@@ -580,58 +580,47 @@ def get_stock_data(ticker, apiKey=None):
         api_key = st.secrets["GROQ_API_KEY2"]
         client = Groq(api_key=api_key)
         income_statement_prompt = f"""
-            Analyze {income_statement_flipped} and check the following key financial questions:
-            - Revenue Growth: Does the revenue consistently grow year over year? Identify any fluctuations or trends.
-            - Gross Margin: Calculate the gross margin and determine if it is stable, expanding, or contracting. Explain the reasons behind any changes.
-            - Operating Expenses Breakdown: Identify the company's major operating expenses, including:
-            - Research & Development (R&D) expenses (if applicable).
-            - Selling & Marketing expenses (if applicable).
-            - Other significant operating expenses.
-            - Operating Margin: Calculate the operating margin and assess the company's efficiency in controlling operating costs.
-            - Non-Operating Expenses: Identify any non-operating expenses and their impact on profitability.
-            - Net Profit Margin: Determine the net profit margin and evaluate the company's overall profitability.
+            Analyze {income_statement_flipped} and address the following key financial questions:
+            - Revenue Growth: Does revenue consistently grow year over year? Identify trends or fluctuations.
+            - Gross Margin: Calculate and assess stability, expansion, or contraction. Explain changes.
+            - Operating Expenses: Break down major expenses (e.g., R&D, Selling & Marketing).
+            - Operating Margin: Calculate and evaluate cost control efficiency.
+            - Non-Operating Expenses: Identify and assess their impact on profitability.
+            - Net Profit Margin: Determine and evaluate overall profitability.
             
-            Provide:
-            Based on the analysis, provide a summarized final evaluation of whether the income statement indicates a strong, stable, or weak financial position for investment. Highlight any key risks or positive indicators. Use only 50 words.
+            Provide a concise summary of the company's financial position (strong, stable, or weak) for investment, highlighting key risks or positive indicators. **Strictly limit your response to 50 words.**
             """
         balance_sheet_prompt = f"""
-            Analyze {balance_sheet_flipped} and check the following key financial questions:
-            - Cash Reserves: How much cash does the company currently have?
-            - Accounts Receivable: Are there accounts receivables? If so, how much?
-            - Inventory: Does the company hold inventory? Provide the amount.
-            - Goodwill: Is there any goodwill recorded on the balance sheet? Specify the amount.
-            - Asset Breakdown: Identify the company’s biggest assets and analyze their composition.
-            - Deferred Revenue: Does the company have deferred revenue? If yes, provide details.
-            - Debt Analysis: Does the company have debt? If so, how much and what type (short-term vs. long-term)?
-            - Liabilities Breakdown: Identify the company’s largest liabilities and their impact on financial stability.
-            - Funding Sources: How has the company been funded? Analyze its equity vs. debt structure.
-            - Preferred Stock: Does the company have any preferred stock outstanding?
-            - Retained Earnings: Are retained earnings positive and growing over time?
-            - Treasury Stock: Does the company have treasury stock recorded on the balance sheet?
+            Analyze {balance_sheet_flipped} and address the following:
+            - Cash Reserves: Current cash amount.
+            - Accounts Receivable: Amount of receivables, if any.
+            - Inventory: Inventory amount, if applicable.
+            - Goodwill: Recorded goodwill amount, if any.
+            - Asset Breakdown: Identify and analyze the largest assets.
+            - Deferred Revenue: Details, if applicable.
+            - Debt Analysis: Total debt and type (short-term vs. long-term).
+            - Liabilities Breakdown: Largest liabilities and their impact.
+            - Funding Sources: Equity vs. debt structure.
+            - Preferred Stock: Outstanding preferred stock, if any.
+            - Retained Earnings: Growth and positivity over time.
+            - Treasury Stock: Presence and details, if applicable.
             
-            Provide:
-            Based on this analysis, provide a summarized final evaluation of the company's financial health, highlighting key strengths, risks, and whether the balance sheet reflects a strong position for investment. Use only 50 words.
+            Provide a concise summary of the company's financial health, highlighting key strengths, risks, and whether the balance sheet reflects a strong position for investment. **Strictly limit your response to 50 words.**
             """
         cashflow_statement_prompt = f"""
-            Analyze {cashflow_statement_flipped} and answer the following key financial questions:
-            - Net Income: Did the company generate positive net income?
-            - Depreciation & Non-Cash Charges:
-                - Is the company’s depreciation expense high or low?
-                - What are the biggest non-cash charges impacting cash flow?
-                - Is stock-based compensation high or low?
-            - Working Capital Impact: How do changes in working capital (accounts receivable, inventory, accounts payable, etc.) affect cash flow?
-            - Capital Expenditures: Are capital expenditures (CapEx) high or low?
-            - Free Cash Flow:
-                - Does the company generate positive free cash flow (FCF)?
-                - Do net income and free cash flow closely match each other? If not, explain the discrepancy.
-            - Use of Operating Income: How is the company utilizing its operating income (e.g., reinvestment, debt repayment, dividends, stock buybacks)?
-            - Debt Utilization: How is the company using debt? Is it increasing, decreasing, or being refinanced?
-            - Equity Transactions: Is the company issuing new stock or repurchasing shares?
-            - Dividend Policy: Does the company pay a dividend? If so, how much?
-            - Cash Balance Trends: Is the company’s cash balance rising or falling? What are the key reasons behind this trend?
+            Analyze {cashflow_statement_flipped} and address the following:
+            - Net Income: Is it positive?
+            - Depreciation & Non-Cash Charges: Level of depreciation, major non-cash charges, and stock-based compensation.
+            - Working Capital Impact: Effect of changes in receivables, inventory, and payables on cash flow.
+            - Capital Expenditures: Level of CapEx.
+            - Free Cash Flow: Is FCF positive? Compare FCF to net income.
+            - Use of Operating Income: Reinvestment, debt repayment, dividends, or buybacks.
+            - Debt Utilization: Trends in debt usage (increasing, decreasing, refinancing).
+            - Equity Transactions: Issuing new stock or repurchasing shares.
+            - Dividend Policy: Dividend payments, if any.
+            - Cash Balance Trends: Rising or falling, and reasons.
             
-            Provide:
-            Based on this analysis, provide a summarized final evaluation of the company’s cash flow strength, financial flexibility, and overall sustainability for investment. Highlight any risks or positive indicators. Use only 50 words.
+            Provide a concise summary of the company’s cash flow strength, financial flexibility, and sustainability for investment. Highlight key risks or positive indicators. **Strictly limit your response to 50 words.**
             """
 
         def analyze_stock2(prompt_text, tokens):
