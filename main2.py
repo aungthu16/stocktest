@@ -3588,15 +3588,16 @@ if st.button("Get Data"):
                                     is_resistance = current_price < level
                                     line_color = 'red' if is_resistance else 'green'
                                     label_prefix = 'R: ' if is_resistance else 'S: '
-                                    fig_sr.add_trace(go.Scatter(
-                                        x=[start_date, data.index[-1]],
-                                        y=[level, level],
-                                        mode='lines',
+                                    fig_sr.add_shape(
+                                        type='line',
+                                        x0=start_date,
+                                        x1=data.index[-1],
+                                        y0=level,
+                                        y1=level,
                                         line=dict(color=line_color, width=1, dash='dot'),
-                                        opacity=0.7,
-                                        showlegend=False,
-                                        name=f"{'Resistance' if is_resistance else 'Support'} {level:.2f}"
-                                    ))
+                                        opacity=0.7
+                                    )
+
                                     label_y = level
                                     while label_y in used_positions:
                                         label_y += label_spacing if is_resistance else -label_spacing
