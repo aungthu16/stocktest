@@ -551,23 +551,23 @@ def get_stock_data(ticker, apiKey=None):
             6. Separate conclusions for long-term and short-term investment strategies.
             """
         income_statement_prompt = f"""
-            Analyze the income statement stored in the {income_statement_flipped}. Identify trends, anomalies, and key financial insights, including revenue growth, profitability trends, operating expenses, and net income fluctuations. Check for any irregularities such as declining revenue, increasing expenses, or margin compression. Provide a summary of key findings and any potential concerns or strengths.
+            Analyze the income statement stored in the {income_statement_flipped}. Identify trends, anomalies, and key financial insights, including revenue growth, profitability trends, operating expenses, and net income fluctuations. Check for any irregularities such as declining revenue, increasing expenses, or margin compression. Provide a summary of key findings and any potential concerns or strengths. Describe all of them as a short note.
             """
         balance_sheet_prompt = f"""
-            Analyze the balance sheet stored in the {balance_sheet_flipped}. Identify key financial insights, including liquidity (current ratio, quick ratio), leverage (debt-to-equity ratio), and asset efficiency. Highlight any significant trends, such as increasing debt, declining cash reserves, or changes in working capital. Summarize the findings and highlight potential strengths or risks.
+            Analyze the balance sheet stored in the {balance_sheet_flipped}. Identify key financial insights, including liquidity (current ratio, quick ratio), leverage (debt-to-equity ratio), and asset efficiency. Highlight any significant trends, such as increasing debt, declining cash reserves, or changes in working capital. Summarize the findings and highlight potential strengths or risks. Describe all of them as a short note.
             """
         cashflow_statement_prompt = f"""
-            Analyze the cash flow statement stored in the {cashflow_statement_flipped}. Identify trends and key financial insights, including operating cash flow, investing cash flow, and financing cash flow. Highlight any significant changes, such as declining operating cash flow, high capital expenditures, or unusual financing activities. Summarize the findings and highlight potential strengths or risks.
+            Analyze the cash flow statement stored in the {cashflow_statement_flipped}. Identify trends and key financial insights, including operating cash flow, investing cash flow, and financing cash flow. Highlight any significant changes, such as declining operating cash flow, high capital expenditures, or unusual financing activities. Summarize the findings and highlight potential strengths or risks. Describe all of them as a short note.
             """
 
-        def analyze_stock(prompt_text):
+        def analyze_stock(prompt_text, tokens):
             response = client.chat.completions.create(
                 model="deepseek-r1-distill-llama-70b",
                 messages=[
                     {"role": "system", "content": "You are an experienced financial analyst with expertise in both fundamental and technical analysis."},
                     {"role": "user", "content": prompt_text}
                 ],
-                max_tokens=100000,
+                max_tokens= tokens,
                 temperature=0.7
             )
                     
@@ -577,10 +577,10 @@ def get_stock_data(ticker, apiKey=None):
             except: 
                 cleaned_response = raw_response
             return cleaned_response
-        summary_analysis = analyze_stock(summary_prompt)
-        income_statement_analysis = analyze_stock(income_statement_prompt)
-        balance_sheet_analysis = analyze_stock(balance_sheet_prompt)
-        cashflow_statement_analysis = analyze_stock(cashflow_statement_prompt)
+        summary_analysis = analyze_stock(summary_prompt,100000)
+        income_statement_analysis = analyze_stock(income_statement_prompt,1000)
+        balance_sheet_analysis = analyze_stock(balance_sheet_prompt,1000)
+        cashflow_statement_analysis = analyze_stock(cashflow_statement_prompt,1000)
 
         analysis = {
             'summary': summary_analysis,
