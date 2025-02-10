@@ -1094,7 +1094,9 @@ if st.button("Get Data"):
                             )
                             st.plotly_chart(figg, use_container_width=True)
                         except: st.write("Failed to get EPS trend.")
-            except: st.write("Failed to get earnings data.")
+            except Exception as e: 
+                st.write("Failed to get earnings data.")
+                st.write(e)
             st.caption("Data source: Yahoo Finance")
 
 #Estimate Data
@@ -3103,7 +3105,6 @@ if st.button("Get Data"):
                     st.dataframe(df_peterlynch.style.applymap(highlight_result, subset=['Result']),use_container_width=True, hide_index=True)
             except Exception as e:
                 st.warning("Guru checklist is currently unavailable.")
-                st.write(e)
 
 #############################################                #############################################
 ############################################# Insider Trades #############################################
