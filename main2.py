@@ -579,51 +579,45 @@ def get_stock_data(ticker, apiKey=None):
     try:
         api_key = st.secrets["GROQ_API_KEY2"]
         client = Groq(api_key=api_key)
-        income_statement_prompt = f"""
-            **Do not provide a step-by-step reasoning or analysis. Go directly to the final summary.**
-            Analyze {income_statement_flipped} and address the following key financial questions:
-            - Revenue Growth: Does revenue consistently grow year over year? Identify trends or fluctuations.
-            - Gross Margin: Calculate and assess stability, expansion, or contraction. Explain changes.
-            - Operating Expenses: Break down major expenses (e.g., R&D, Selling & Marketing).
-            - Operating Margin: Calculate and evaluate cost control efficiency.
-            - Non-Operating Expenses: Identify and assess their impact on profitability.
-            - Net Profit Margin: Determine and evaluate overall profitability.
+        income_statement_prompt = """
+            You are a financial analyst. Analyze {income_statement_flipped} and provide ONLY a 50-word summary of the company's financial position.
+            Focus on:
+            - Revenue trends
+            - Margins (Gross, Operating, Net)
+            - Key expenses
+            - Overall financial health
             
-            Provide a concise summary of the company's financial position (strong, stable, or weak) for investment, highlighting key risks or positive indicators. **Strictly limit your response to 50 words.**
+            STRICT RULES:
+            1. Maximum 50 words
+            2. No step-by-step analysis
+            3. No detailed calculations
+            4. One concise paragraph only
             """
         balance_sheet_prompt = f"""
-            **Do not provide a step-by-step reasoning or analysis. Go directly to the final summary.**
-            Analyze {balance_sheet_flipped} and address the following:
-            - Cash Reserves: Current cash amount.
-            - Accounts Receivable: Amount of receivables, if any.
-            - Inventory: Inventory amount, if applicable.
-            - Goodwill: Recorded goodwill amount, if any.
-            - Asset Breakdown: Identify and analyze the largest assets.
-            - Deferred Revenue: Details, if applicable.
-            - Debt Analysis: Total debt and type (short-term vs. long-term).
-            - Liabilities Breakdown: Largest liabilities and their impact.
-            - Funding Sources: Equity vs. debt structure.
-            - Preferred Stock: Outstanding preferred stock, if any.
-            - Retained Earnings: Growth and positivity over time.
-            - Treasury Stock: Presence and details, if applicable.
+            You are a financial analyst. Analyze {balance_sheet_flipped} and provide ONLY a 50-word summary focusing on:
+            - Cash position
+            - Asset quality
+            - Debt levels
+            - Overall financial health
             
-            Provide a concise summary of the company's financial health, highlighting key strengths, risks, and whether the balance sheet reflects a strong position for investment. **Strictly limit your response to 50 words.**
+            STRICT RULES:
+            1. Maximum 50 words
+            2. No calculations or detailed breakdowns
+            3. One concise paragraph only
+            4. Focus on investment relevance
             """
         cashflow_statement_prompt = f"""
-            **Do not provide a step-by-step reasoning or analysis. Go directly to the final summary.**
-            Analyze {cashflow_statement_flipped} and address the following:
-            - Net Income: Is it positive?
-            - Depreciation & Non-Cash Charges: Level of depreciation, major non-cash charges, and stock-based compensation.
-            - Working Capital Impact: Effect of changes in receivables, inventory, and payables on cash flow.
-            - Capital Expenditures: Level of CapEx.
-            - Free Cash Flow: Is FCF positive? Compare FCF to net income.
-            - Use of Operating Income: Reinvestment, debt repayment, dividends, or buybacks.
-            - Debt Utilization: Trends in debt usage (increasing, decreasing, refinancing).
-            - Equity Transactions: Issuing new stock or repurchasing shares.
-            - Dividend Policy: Dividend payments, if any.
-            - Cash Balance Trends: Rising or falling, and reasons.
+            You are a financial analyst. Analyze {cashflow_statement_flipped} and provide ONLY a 50-word summary focusing on:
+            - Operating cash flow
+            - Free cash flow
+            - Capital allocation
+            - Financial sustainability
             
-            Provide a concise summary of the company’s cash flow strength, financial flexibility, and sustainability for investment. Highlight key risks or positive indicators. **Strictly limit your response to 50 words.**
+            STRICT RULES:
+            1. Maximum 50 words
+            2. No detailed breakdowns
+            3. One concise paragraph only
+            4. Focus on investment implications
             """
 
         def analyze_stock2(prompt_text, tokens):
