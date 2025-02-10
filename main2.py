@@ -580,6 +580,7 @@ def get_stock_data(ticker, apiKey=None):
         api_key = st.secrets["GROQ_API_KEY2"]
         client = Groq(api_key=api_key)
         income_statement_prompt = f"""
+            **Do not provide a step-by-step reasoning or analysis. Go directly to the final summary.**
             Analyze {income_statement_flipped} and address the following key financial questions:
             - Revenue Growth: Does revenue consistently grow year over year? Identify trends or fluctuations.
             - Gross Margin: Calculate and assess stability, expansion, or contraction. Explain changes.
@@ -591,6 +592,7 @@ def get_stock_data(ticker, apiKey=None):
             Provide a concise summary of the company's financial position (strong, stable, or weak) for investment, highlighting key risks or positive indicators. **Strictly limit your response to 50 words.**
             """
         balance_sheet_prompt = f"""
+            **Do not provide a step-by-step reasoning or analysis. Go directly to the final summary.**
             Analyze {balance_sheet_flipped} and address the following:
             - Cash Reserves: Current cash amount.
             - Accounts Receivable: Amount of receivables, if any.
@@ -608,6 +610,7 @@ def get_stock_data(ticker, apiKey=None):
             Provide a concise summary of the company's financial health, highlighting key strengths, risks, and whether the balance sheet reflects a strong position for investment. **Strictly limit your response to 50 words.**
             """
         cashflow_statement_prompt = f"""
+            **Do not provide a step-by-step reasoning or analysis. Go directly to the final summary.**
             Analyze {cashflow_statement_flipped} and address the following:
             - Net Income: Is it positive?
             - Depreciation & Non-Cash Charges: Level of depreciation, major non-cash charges, and stock-based compensation.
