@@ -577,8 +577,8 @@ def get_stock_data(ticker, apiKey=None):
 
     #
     try:
-        api_key2 = st.secrets["GROQ_API_KEY2"]
-        client2 = Groq(api_key=api_key2)
+        api_key = st.secrets["GROQ_API_KEY2"]
+        client = Groq(api_key=api_key)
         income_statement_prompt = f"""
             Analyze the income statement stored in the {income_statement_flipped}. Identify trends, anomalies, and key financial insights, including revenue growth, profitability trends, operating expenses, and net income fluctuations. Check for any irregularities such as declining revenue, increasing expenses, or margin compression. Provide a summary of key findings and any potential concerns or strengths. Describe all of them as a short note.
             """
@@ -589,23 +589,23 @@ def get_stock_data(ticker, apiKey=None):
             Analyze the cash flow statement stored in the {cashflow_statement_flipped}. Identify trends and key financial insights, including operating cash flow, investing cash flow, and financing cash flow. Highlight any significant changes, such as declining operating cash flow, high capital expenditures, or unusual financing activities. Summarize the findings and highlight potential strengths or risks. Describe all of them as a short note.
             """
 
-        def analyze_stock2(prompt_text2, tokens2):
-            response2 = client2.chat.completions.create(
+        def analyze_stock2(prompt_text, tokens):
+            response = client.chat.completions.create(
                 model="deepseek-r1-distill-llama-70b",
-                messages2=[
+                messages=[
                     {"role": "system", "content": "You are an experienced financial analyst with expertise in both fundamental and technical analysis."},
-                    {"role": "user", "content": prompt_text2}
+                    {"role": "user", "content": prompt_text}
                 ],
-                max_tokens= tokens2,
+                max_tokens= tokens,
                 temperature=0.7
             )
                     
-            raw_response2 = response2.choices[0].message2.content
+            raw_response = response.choices[0].message.content
             try:
-                cleaned_response2 = re.sub(r'<think>.*?</think>', '', raw_response2, flags=re.DOTALL).strip()
+                cleaned_response = re.sub(r'<think>.*?</think>', '', raw_response, flags=re.DOTALL).strip()
             except: 
-                cleaned_response2 = raw_response2
-            return cleaned_response2
+                cleaned_response = raw_response
+            return cleaned_response
         income_statement_analysis = analyze_stock2(income_statement_prompt,1000)
         balance_sheet_analysis = analyze_stock2(balance_sheet_prompt,1000)
         cashflow_statement_analysis = analyze_stock2(cashflow_statement_prompt,1000)
