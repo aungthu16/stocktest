@@ -3101,7 +3101,7 @@ if st.button("Get Data"):
                     st.image(guru_logo_url2,width=300)
                 with guru_col9:
                     st.dataframe(df_peterlynch.style.applymap(highlight_result, subset=['Result']),use_container_width=True, hide_index=True)
-            except:
+            except Exception as e:
                 st.warning("Guru checklist is currently unavailable.")
                 st.write(e)
 
