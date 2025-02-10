@@ -600,12 +600,12 @@ def get_stock_data(ticker, apiKey=None):
                 temperature=0.7
             )
                     
-            raw_response2 = response2.choices[0].message.content
+            raw_response2 = response2.choices[0].message2.content
             try:
                 cleaned_response2 = re.sub(r'<think>.*?</think>', '', raw_response2, flags=re.DOTALL).strip()
             except: 
                 cleaned_response2 = raw_response2
-            return cleaned_response
+            return cleaned_response2
         income_statement_analysis = analyze_stock2(income_statement_prompt,1000)
         balance_sheet_analysis = analyze_stock2(balance_sheet_prompt,1000)
         cashflow_statement_analysis = analyze_stock2(cashflow_statement_prompt,1000)
