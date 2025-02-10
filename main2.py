@@ -590,8 +590,9 @@ def get_stock_data(ticker, apiKey=None):
             - Operating Margin: Calculate the operating margin and assess the company's efficiency in controlling operating costs.
             - Non-Operating Expenses: Identify any non-operating expenses and their impact on profitability.
             - Net Profit Margin: Determine the net profit margin and evaluate the company's overall profitability.
-            Final Assessment:
-            Based on the analysis, provide a summarized final evaluation of whether the income statement indicates a strong, stable, or weak financial position for investment. Highlight any key risks or positive indicators.
+            
+            Provide:
+            Based on the analysis, provide a summarized final evaluation of whether the income statement indicates a strong, stable, or weak financial position for investment. Highlight any key risks or positive indicators. Use only 50 words.
             """
         balance_sheet_prompt = f"""
             Analyze {balance_sheet_flipped} and check the following key financial questions:
@@ -607,8 +608,9 @@ def get_stock_data(ticker, apiKey=None):
             - Preferred Stock: Does the company have any preferred stock outstanding?
             - Retained Earnings: Are retained earnings positive and growing over time?
             - Treasury Stock: Does the company have treasury stock recorded on the balance sheet?
-            Final Assessment:
-            Based on this analysis, provide a summarized final evaluation of the company's financial health, highlighting key strengths, risks, and whether the balance sheet reflects a strong position for investment.
+            
+            Provide:
+            Based on this analysis, provide a summarized final evaluation of the company's financial health, highlighting key strengths, risks, and whether the balance sheet reflects a strong position for investment. Use only 50 words.
             """
         cashflow_statement_prompt = f"""
             Analyze {cashflow_statement_flipped} and answer the following key financial questions:
@@ -627,8 +629,9 @@ def get_stock_data(ticker, apiKey=None):
             - Equity Transactions: Is the company issuing new stock or repurchasing shares?
             - Dividend Policy: Does the company pay a dividend? If so, how much?
             - Cash Balance Trends: Is the company’s cash balance rising or falling? What are the key reasons behind this trend?
-            Final Assessment:
-            Based on this analysis, provide a summarized final evaluation of the company’s cash flow strength, financial flexibility, and overall sustainability for investment. Highlight any risks or positive indicators.
+            
+            Provide:
+            Based on this analysis, provide a summarized final evaluation of the company’s cash flow strength, financial flexibility, and overall sustainability for investment. Highlight any risks or positive indicators. Use only 50 words.
             """
 
         def analyze_stock2(prompt_text, tokens):
