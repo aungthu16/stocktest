@@ -579,7 +579,7 @@ def get_stock_data(ticker, apiKey=None):
     try:
         api_key = st.secrets["GROQ_API_KEY2"]
         client = Groq(api_key=api_key)
-        income_statement_prompt = """
+        income_statement_prompt = f"""
             You are a financial analyst. Analyze {income_statement_flipped} and provide ONLY a 50-word summary of the company's financial position.
             Focus on:
             - Revenue trends
