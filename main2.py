@@ -952,23 +952,23 @@ if st.button("Get Data"):
                 earnings_data = earnings_data[~earnings_data.index.duplicated(keep='first')]
                 with ecol1:
                     if 'epsEstimate' in earnings_data.columns and 'epsActual' in earnings_data.columns:
-                        df = earnings_data.reset_index().melt(id_vars=['index'], value_vars=['epsEstimate', 'epsActual'], var_name='variable', value_name='value')
-                        df['index'] = df['index'].dt.strftime('%Y-%m-%d')
+                        df = earnings_data.reset_index().melt(id_vars=['quarter'], value_vars=['epsEstimate', 'epsActual'], var_name='variable', value_name='value')
+                        df['quarter'] = pd.to_datetime(df['quarter']).dt.strftime('%Y-%m-%d')
                         actual_data = df[df['variable'] == 'epsActual']
                         estimate_data = df[df['variable'] == 'epsEstimate']
                         bar = go.Bar(
-                            x=actual_data['index'],  
+                            x=actual_data['quarter'],  
                             y=actual_data['value'],
                             name='Actual',
                             marker=dict(color='#FFCE54'),
                         )
                         estimate = go.Scatter(
-                            x=estimate_data['index'],
+                            x=estimate_data['quarter'], 
                             y=estimate_data['value'],
                             mode='markers+lines',
                             name='Estimate',
-                            marker=dict(color='red', size=10), 
-                            line=dict(width=3) 
+                            marker=dict(color='red', size=10),
+                            line=dict(width=3)
                         )
                         fig = go.Figure(data=[bar, estimate])
                         fig.update_layout(
