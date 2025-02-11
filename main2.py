@@ -672,7 +672,7 @@ def get_stock_data(ticker, apiKey=None):
             - Cashflow Statement data: {cashflow_statement_tb}
                     
             Provide ONLY these 5 numbers in the exact format below (no other text):
-            stock_current_value:X
+            stock_current_price_valuation:X
             future_performance:X
             past_performance:X
             company_health:X
@@ -739,24 +739,6 @@ if st.button("Get Data"):
 #############################################         #############################################
 
         st.header(f'{name}', divider='gray')
-
-        st.write(analysis3['snowflakes'])
-        response_text = analysis3['snowflakes']
-        ratings_dict = {}
-        for line in response_text.strip().split('\n'):
-            if ':' in line:
-                category, value = line.split(':')
-                ratings_dict[category.strip()] = int(value.strip())
-        stock_current_value = ratings_dict.get('stock_current_value', 0)
-        future_performance = ratings_dict.get('future_performance', 0)
-        past_performance = ratings_dict.get('past_performance', 0)
-        company_health = ratings_dict.get('company_health', 0)
-        dividend = ratings_dict.get('dividend', 0)
-        st.write(stock_current_value)
-        st.write(future_performance)
-        st.write(past_performance)
-        st.write(company_health)
-        st.write(dividend)
     
         col1, col2, col3, col4 = st.columns([2, 1, 1, 3])
         with col1:
@@ -1548,6 +1530,42 @@ if st.button("Get Data"):
                 st.caption("Social Risk: This measures the company’s relationships with employees, suppliers, customers, and the community. e.g. human rights, labor practices, diversity, and community engagement.")
                 st.caption("Governance Risk: this focuses on the company’s leadership, audit practices, internal controls, and shareholder rights. e.g. transparent financial reporting and strong board oversight.")
             st.caption("Data source: Yahoo Finance")
+
+#Radarchart
+            ''
+            st.subheader("Summary", divider = 'gray')
+            
+            response_text = analysis3['snowflakes']
+            ratings_dict = {}
+            for line in response_text.strip().split('\n'):
+                if ':' in line:
+                    category, value = line.split(':')
+                    ratings_dict[category.strip()] = int(value.strip())
+            stock_current_value = ratings_dict.get('stock_current_price_valuation', 0)
+            future_performance = ratings_dict.get('future_performance', 0)
+            past_performance = ratings_dict.get('past_performance', 0)
+            company_health = ratings_dict.get('company_health', 0)
+            dividend = ratings_dict.get('dividend', 0)
+            
+            radfig = go.Figure()
+            radfig.add_trace(go.Scatterpolar(
+                r=[stock_current_value, future_performance, past_performance, company_health, dividend],
+                theta=['Stock Current Value', 'Future Performance', 'Past Performance', 'Company Health', 'Dividend'],
+                fill='toself',
+                name='Stock Analysis'
+            ))
+            radfig.update_layout(
+                polar=dict(
+                    radialaxis=dict(
+                        visible=True,
+                        range=[0, 5]  # Set range from 0 to 5
+                    )
+                ),
+                showlegend=False,
+                title='Stock Analysis Ratings'
+            )
+            st.plotly_chart(radfig)
+            
 
 #############################################            #############################################
 ############################################# Comparison #############################################
