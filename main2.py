@@ -741,6 +741,22 @@ if st.button("Get Data"):
         st.header(f'{name}', divider='gray')
 
         st.write(analysis3['snowflakes'])
+        response_text = analysis3['snowflakes']
+        ratings_dict = {}
+        for line in response_text.strip().split('\n'):
+            if ':' in line:
+                category, value = line.split(':')
+                ratings_dict[category.strip()] = int(value.strip())
+        stock_current_value = ratings_dict.get('stock_current_value', 0)
+        future_performance = ratings_dict.get('future_performance', 0)
+        past_performance = ratings_dict.get('past_performance', 0)
+        company_health = ratings_dict.get('company_health', 0)
+        dividend = ratings_dict.get('dividend', 0)
+        st.write(stock_current_value)
+        st.write(future_performance)
+        st.write(past_performance)
+        st.write(company_health)
+        st.write(dividend)
     
         col1, col2, col3, col4 = st.columns([2, 1, 1, 3])
         with col1:
