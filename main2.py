@@ -703,7 +703,7 @@ def get_stock_data(ticker, apiKey=None):
             except: 
                 cleaned_response = raw_response
             return cleaned_response
-        snowflake_analysis = analyze_stock3(snowflake_prompt,10)
+        snowflake_analysis = analyze_stock3(snowflake_prompt,1000)
         analysis3 = {
             'snowflakes': snowflake_analysis,
         }
