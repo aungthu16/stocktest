@@ -3903,7 +3903,7 @@ if st.button("Get Data"):
                 news_url = f'https://stockanalysis.com/stocks/{ticker}/'
                 news_page = requests.get(news_url)
                 soup = BeautifulSoup(news_page.text, "html.parser")
-                img_elements = soup.findAll("img", attrs={"class": "h-full w-full rounded object-cover"})
+                img_elements = soup.findAll("img", attrs={"class": "w-full rounded object-cover"})
                 img_urls = [img.get('src') for img in img_elements]
                 titles = soup.findAll("h3", attrs={"class":"mb-2 mt-3 text-xl font-bold leading-snug sm:order-2 sm:mt-0 sm:leading-tight"})
                 links = [title.find('a').get('href') for title in titles]
