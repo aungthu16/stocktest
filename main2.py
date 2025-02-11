@@ -4038,6 +4038,36 @@ if st.button("Get Data"):
 
         with ai_analysis:
                 st.subheader("AI Stock Analysis", divider ='gray')
+                response_text = analysis3['snowflakes']
+                ratings_dict = {}
+                for line in response_text.strip().split('\n'):
+                    if ':' in line:
+                        category, value = line.split(':')
+                        ratings_dict[category.strip()] = int(value.strip())
+                stock_current_value = ratings_dict.get('stock_current_value', 0)
+                future_performance = ratings_dict.get('future_performance', 0)
+                past_performance = ratings_dict.get('past_performance', 0)
+                company_health = ratings_dict.get('company_health', 0)
+                dividend = ratings_dict.get('dividend', 0)
+                radfig = go.Figure()
+                radfig.add_trace(go.Scatterpolar(
+                    r=[stock_current_value, future_performance, past_performance, company_health, dividend],
+                    theta=['Stock Current Value', 'Future Performance', 'Past Performance', 'Company Health', 'Dividend'],
+                    fill='toself',
+                    name='Stock Analysis'
+                ))
+                radfig.update_layout(
+                    polar=dict(
+                        radialaxis=dict(
+                            visible=True,
+                            range=[0, 5]  # Set range from 0 to 5
+                        )
+                    ),
+                    showlegend=False,
+                    title='Stock Analysis Ratings'
+                )
+                st.plotly_chart(radfig)
+                
                 if upper_ticker:
                     with st.spinner('Analyzing stock data...'):
                         cleaned_text = analysis['summary'].replace('\\n', '\n').replace('\\', '')
