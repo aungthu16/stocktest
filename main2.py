@@ -885,7 +885,7 @@ if st.button("Get Data"):
                         annotation_text = f"{grossmargin_value * 100:.1f}%"
                     fig = go.Figure(go.Pie(
                         values=pie_values,
-                        labels=["Operating Margin", "Remaining"],
+                        labels=["Gross Margin", "Remaining"],
                         hole=0.7,
                         marker=dict(colors=["#4FC1E9", "#d3d3d3"]),
                         textinfo="none",
@@ -957,7 +957,7 @@ if st.button("Get Data"):
                         annotation_text = f"{profitmargin_value * 100:.1f}%"
                     fig = go.Figure(go.Pie(
                         values=pie_values,
-                        labels=["Operating Margin", "Remaining"],
+                        labels=["Profit Margin", "Remaining"],
                         hole=0.7,
                         marker=dict(colors=["#FFCE54", "#d3d3d3"]),
                         textinfo="none",
@@ -993,7 +993,7 @@ if st.button("Get Data"):
                         annotation_text = f"{fcfmargin_value * 100:.1f}%"
                     fig = go.Figure(go.Pie(
                         values=pie_values,
-                        labels=["Operating Margin", "Remaining"],
+                        labels=["FCF Margin", "Remaining"],
                         hole=0.7,
                         marker=dict(colors=["#ED5565", "#d3d3d3"]),
                         textinfo="none",
@@ -1530,43 +1530,7 @@ if st.button("Get Data"):
                 st.caption("Social Risk: This measures the company’s relationships with employees, suppliers, customers, and the community. e.g. human rights, labor practices, diversity, and community engagement.")
                 st.caption("Governance Risk: this focuses on the company’s leadership, audit practices, internal controls, and shareholder rights. e.g. transparent financial reporting and strong board oversight.")
             st.caption("Data source: Yahoo Finance")
-
-#Radarchart
-            ''
-            st.subheader("Summary", divider = 'gray')
             
-            response_text = analysis3['snowflakes']
-            ratings_dict = {}
-            for line in response_text.strip().split('\n'):
-                if ':' in line:
-                    category, value = line.split(':')
-                    ratings_dict[category.strip()] = int(value.strip())
-            stock_current_value = ratings_dict.get('stock_current_price_valuation', 0)
-            future_performance = ratings_dict.get('future_performance', 0)
-            past_performance = ratings_dict.get('past_performance', 0)
-            company_health = ratings_dict.get('company_health', 0)
-            dividend = ratings_dict.get('dividend', 0)
-            
-            radfig = go.Figure()
-            radfig.add_trace(go.Scatterpolar(
-                r=[stock_current_value, future_performance, past_performance, company_health, dividend],
-                theta=['Stock Current Value', 'Future Performance', 'Past Performance', 'Company Health', 'Dividend'],
-                fill='toself',
-                name='Stock Analysis'
-            ))
-            radfig.update_layout(
-                polar=dict(
-                    radialaxis=dict(
-                        visible=True,
-                        range=[0, 5]  # Set range from 0 to 5
-                    )
-                ),
-                showlegend=False,
-                title='Stock Analysis Ratings'
-            )
-            st.plotly_chart(radfig)
-            
-
 #############################################            #############################################
 ############################################# Comparison #############################################
 #############################################            #############################################
@@ -4077,16 +4041,20 @@ if st.button("Get Data"):
                         st.write("")
                     ''
                     ai_subcol = st.columns(2)
-                    ai_subcol[0].metric(label='Current Price',value=f'${price:,.2f}',delta=f'{change_dollar:,.2f} ({change_percent:.2f}%)',delta_color='normal')
+                    ai_subcol[0].metric(label='Current Price',value=f'${price:,.2f}')
                     ai_subcol[1].metric(label='PE Ratio',value=pe_value)
                     
                     ai_subcol2 = st.columns(2)
                     ai_subcol2[0].metric(label='EPS (ttm)',value=eps_value)
-                    ai_subcol2[1].metric(label='Beta',value=beta_value)
+                    ai_subcol2[1].metric(label='DE Ratio',value=deRatio_value)
         
                     ai_subcol3 = st.columns(2)
                     ai_subcol3[0].metric(label='ROE',value=roe_value)
                     ai_subcol3[1].metric(label='Revenue Growth',value=revenue_growth_current_value)
+
+                    ai_subcol4 = st.columns(2)
+                    ai_subcol4[0].metric(label='Gross Margin',value=f"{grossmargin_value * 100:.1f}%")
+                    ai_subcol4[1].metric(label='Profit Margin',value=f"{profitmargin_value * 100:.1f}%")
                     
                 with aicol1:
                     try:
