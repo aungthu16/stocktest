@@ -4038,7 +4038,7 @@ if st.button("Get Data"):
 
         with ai_analysis:
                 st.subheader("AI Stock Analysis", divider ='gray')
-                aicol1, aicol2 = st.columns([3,1])
+                aicol1, aicol2 = st.columns([3,2])
                 with aicol2:
                     try:
                         response_text = analysis3['snowflakes']
@@ -4064,12 +4064,12 @@ if st.button("Get Data"):
                                 radialaxis=dict(
                                     visible=False,
                                     range=[0, 5]
-                                )
-                                #bgcolor='rgba(0,0,0,0)'
+                                ),
+                                bgcolor='rgba(0,0,0,0)'
                             ),
                             showlegend=False,
-                            #title='Stock Analysis Ratings',
-                            paper_bgcolor='rgba(0,0,0,0)'
+                            #title='Stock Analysis Ratings'
+                            #paper_bgcolor='rgba(0,0,0,0)'
                         )
                         st.plotly_chart(radfig)
                     except Exception as e:
