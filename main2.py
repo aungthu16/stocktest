@@ -642,9 +642,9 @@ def get_stock_data(ticker, apiKey=None):
             except: 
                 cleaned_response = raw_response
             return cleaned_response
-        income_statement_analysis = analyze_stock2(income_statement_prompt,1000)
-        balance_sheet_analysis = analyze_stock2(balance_sheet_prompt,1000)
-        cashflow_statement_analysis = analyze_stock2(cashflow_statement_prompt,1000)
+        income_statement_analysis = analyze_stock2(income_statement_prompt,2000)
+        balance_sheet_analysis = analyze_stock2(balance_sheet_prompt,2000)
+        cashflow_statement_analysis = analyze_stock2(cashflow_statement_prompt,2000)
 
         analysis2 = {
             'income': income_statement_analysis,
