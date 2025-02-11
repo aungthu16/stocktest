@@ -4064,8 +4064,8 @@ if st.button("Get Data"):
                                 radialaxis=dict(
                                     visible=False,
                                     range=[0, 5]
-                                ),
-                                bgcolor='rgba(0,0,0,0)'
+                                )
+                                #bgcolor='rgba(0,0,0,0)'
                             ),
                             showlegend=False,
                             #title='Stock Analysis Ratings',
