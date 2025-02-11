@@ -4062,8 +4062,9 @@ if st.button("Get Data"):
                         radfig.update_layout(
                             polar=dict(
                                 radialaxis=dict(
-                                    visible=False,
-                                    range=[0, 5]
+                                    visible=True,
+                                    range=[0, 5],
+                                    showticklabels=False,
                                 ),
                                 bgcolor='rgba(0,0,0,0)'
                             ),
@@ -4074,7 +4075,19 @@ if st.button("Get Data"):
                         st.plotly_chart(radfig)
                     except Exception as e:
                         st.write("")
-
+                    ''
+                    ai_subcol = st.columns(2)
+                    ai_subcol[0].metric(label='Current Price',value=f'${price:,.2f}',delta=f'{change_dollar:,.2f} ({change_percent:.2f}%)',delta_color='normal')
+                    ai_subcol[1].metric(label='PE Ratio',value=pe_value)
+                    
+                    ai_subcol2 = st.columns(2)
+                    ai_subcol2[0].metric(label='EPS (ttm)',value=eps_value)
+                    ai_subcol2[1].metric(label='Beta',value=beta_value)
+        
+                    ai_subcol3 = st.columns(2)
+                    ai_subcol3[0].metric(label='ROE',value=roe_value)
+                    ai_subcol3[1].metric(label='Revenue Growth',value=revenue_growth_current_value)
+                    
                 with aicol1:
                     try:
                         if upper_ticker:
