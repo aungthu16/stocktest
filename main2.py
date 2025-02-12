@@ -724,10 +724,10 @@ def get_stock_data(ticker, apiKey=None):
 
 main_col1, main_col2 = st.columns([3,1])
 with main_col1:
-    st.title("US Stock Analysis Tool")
+    st.title("US Stock Analysis Tool (Beta Version)")
     input_col1, input_col2, input_col3 = st.columns([1, 3, 1])
     with input_col1:
-        ticker = st.text_input("Enter US Stock Ticker:", "AAPL")
+        ticker = st.text_input("US Stock Ticker:", "AAPL")
     with input_col2:
         apiKey = st.text_input("Enter your RapidAPI Key (optional):", "")
 
@@ -4037,8 +4037,9 @@ if st.button("Get Data"):
                                 bgcolor='rgba(0,0,0,0)'
                             ),
                             showlegend=False,
-                            #title='Stock Analysis Ratings'
-                            #paper_bgcolor='rgba(0,0,0,0)'
+                            #title='Stock Analysis Ratings',
+                            #paper_bgcolor='rgba(0,0,0,0)',
+                            margin=dict(t=10, b=10, l=30, r=30),
                         )
                         st.plotly_chart(radfig)
                     except Exception as e:
