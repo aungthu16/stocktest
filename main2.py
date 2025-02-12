@@ -4022,8 +4022,8 @@ if st.button("Get Data"):
                         dividend = ratings_dict.get('dividend', 0)
                         radfig = go.Figure()
                         radfig.add_trace(go.Scatterpolar(
-                            r=[stock_current_value, future_performance, past_performance, company_health, dividend],
-                            theta=['Stock Current Value', 'Future Performance', 'Past Performance', 'Company Health', 'Dividend'],
+                            r=[dividend, future_performance, past_performance, company_health, stock_current_value ],
+                            theta=['Dividend', 'Future Performance', 'Past Performance', 'Company Health', 'Stock Current Value'],
                             fill='toself',
                             name='Stock Analysis'
                         ))
