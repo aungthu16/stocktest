@@ -498,8 +498,12 @@ def get_stock_data(ticker, apiKey=None):
         exDate = datetime.datetime.fromtimestamp(exDividendDate)
         exDividendDate_value = exDate.strftime('%Y-%m-%d')
     eps_yield_value = 'N/A' if eps_yield == 'N/A' else f'{eps_yield * 100:.2f}%'
-    sa_piotroski_value = 'N/A' if sa_piotroski == 'N/A' else float(sa_piotroski)
-    sa_altmanz_value = 'N/A' if sa_altmanz == 'N/A' else float(sa_altmanz)
+    try:
+        sa_piotroski_value = 'N/A' if sa_piotroski == 'N/A' else float(sa_piotroski)
+    except: sa_piotroski_value = 'N/A'
+    try:
+        sa_altmanz_value = 'N/A' if sa_altmanz == 'N/A' else float(sa_altmanz)
+    except: sa_altmanz_value = 'N/A'
     totalEsg_value = 0.00 if totalEsg == 'N/A' else totalEsg
     try: 
         income_statement = income_statement_tb  
