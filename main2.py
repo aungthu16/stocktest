@@ -4046,21 +4046,33 @@ if st.button("Get Data"):
                     ''
                     al1, al2 = st.columns([1,3])
                     with al2:
-                        ai_subcol = st.columns(2)
-                        ai_subcol[0].metric(label='Current Price',value=f'${price:,.2f}')
-                        ai_subcol[1].metric(label='PE Ratio',value=pe_value)
+                        aisubcol1, aisubcol2 = st.columns([3,3])
+                        with aisubcol1:
+                            st.metric(label='Current Price',value=f'${price:,.2f}')
+                            st.metric(label='EPS (ttm)',value=eps_value)
+                            st.metric(label='ROE',value=roe_value)
+                            st.metric(label='Gross Margin',value=f"{grossmargin_value * 100:.1f}%")
+                        with aisubcol2:
+                            st.metric(label='PE Ratio',value=pe_value)
+                            st.metric(label='DE Ratio',value=deRatio_value)
+                            st.metric(label='Revenue Growth',value=revenue_growth_current_value)
+                            st.metric(label='Profit Margin',value=f"{profitmargin_value * 100:.1f}%")
+                            
+                        # ai_subcol = st.columns(2)
+                        # ai_subcol[0].metric(label='Current Price',value=f'${price:,.2f}')
+                        # ai_subcol[1].metric(label='PE Ratio',value=pe_value)
                         
-                        ai_subcol2 = st.columns(2)
-                        ai_subcol2[0].metric(label='EPS (ttm)',value=eps_value)
-                        ai_subcol2[1].metric(label='DE Ratio',value=deRatio_value)
+                        # ai_subcol2 = st.columns(2)
+                        # ai_subcol2[0].metric(label='EPS (ttm)',value=eps_value)
+                        # ai_subcol2[1].metric(label='DE Ratio',value=deRatio_value)
             
-                        ai_subcol3 = st.columns(2)
-                        ai_subcol3[0].metric(label='ROE',value=roe_value)
-                        ai_subcol3[1].metric(label='Revenue Growth',value=revenue_growth_current_value)
+                        # ai_subcol3 = st.columns(2)
+                        # ai_subcol3[0].metric(label='ROE',value=roe_value)
+                        # ai_subcol3[1].metric(label='Revenue Growth',value=revenue_growth_current_value)
     
-                        ai_subcol4 = st.columns(2)
-                        ai_subcol4[0].metric(label='Gross Margin',value=f"{grossmargin_value * 100:.1f}%")
-                        ai_subcol4[1].metric(label='Profit Margin',value=f"{profitmargin_value * 100:.1f}%")
+                        # ai_subcol4 = st.columns(2)
+                        # ai_subcol4[0].metric(label='Gross Margin',value=f"{grossmargin_value * 100:.1f}%")
+                        # ai_subcol4[1].metric(label='Profit Margin',value=f"{profitmargin_value * 100:.1f}%")
                     
                 with aicol1:
                     try:
