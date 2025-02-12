@@ -4022,10 +4022,12 @@ if st.button("Get Data"):
                         dividend = ratings_dict.get('dividend', 0)
                         radfig = go.Figure()
                         radfig.add_trace(go.Scatterpolar(
-                            r=[dividend, future_performance, past_performance, company_health, stock_current_value ],
+                            r=[dividend, future_performance, past_performance, company_health, stock_current_value],
                             theta=['Dividend', 'Future Performance', 'Past Performance', 'Company Health', 'Stock Current Value'],
                             fill='toself',
-                            name='Stock Analysis'
+                            name='Stock Analysis',
+                            line_color='#FFA500', 
+                            fillcolor='rgba(255, 165, 0, 0.2)',
                         ))
                         radfig.update_layout(
                             polar=dict(
@@ -4056,22 +4058,6 @@ if st.button("Get Data"):
                         st.metric(label='DE Ratio',value=deRatio_value)
                         st.metric(label='Revenue Growth',value=revenue_growth_current_value)
                         st.metric(label='Profit Margin',value=f"{profitmargin_value * 100:.1f}%")
-                            
-                        # ai_subcol = st.columns(2)
-                        # ai_subcol[0].metric(label='Current Price',value=f'${price:,.2f}')
-                        # ai_subcol[1].metric(label='PE Ratio',value=pe_value)
-                        
-                        # ai_subcol2 = st.columns(2)
-                        # ai_subcol2[0].metric(label='EPS (ttm)',value=eps_value)
-                        # ai_subcol2[1].metric(label='DE Ratio',value=deRatio_value)
-            
-                        # ai_subcol3 = st.columns(2)
-                        # ai_subcol3[0].metric(label='ROE',value=roe_value)
-                        # ai_subcol3[1].metric(label='Revenue Growth',value=revenue_growth_current_value)
-    
-                        # ai_subcol4 = st.columns(2)
-                        # ai_subcol4[0].metric(label='Gross Margin',value=f"{grossmargin_value * 100:.1f}%")
-                        # ai_subcol4[1].metric(label='Profit Margin',value=f"{profitmargin_value * 100:.1f}%")
                     
                 with aicol1:
                     try:
