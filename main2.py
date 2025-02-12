@@ -4039,7 +4039,7 @@ if st.button("Get Data"):
                             showlegend=False,
                             #title='Stock Analysis Ratings',
                             #paper_bgcolor='rgba(0,0,0,0)',
-                            margin=dict(t=50, b=50, l=50, r=50),
+                            margin=dict(t=80, b=80, l=80, r=80),
                         )
                         st.plotly_chart(radfig)
                     except Exception as e:
