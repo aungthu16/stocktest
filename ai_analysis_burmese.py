@@ -159,7 +159,7 @@ def get_stock_data(ticker, apiKey=None):
         client = Groq(api_key=api_key)
         summary_prompt = f"""
             long-term and short-term investment တွေအတွက် ဒီ {upper_ticker} stock ကိုစိစစ်ပေးပါ။ အောက်မှာဖော်ပြထားတဲ့အချက်အလက်တွေကိုသုံးပါ -
-            - Historical price data: {extended_data_r}
+            - အတိတ်ကဈေးနှုန်းအချက်အလက်: {extended_data_r}
             - Key financial metrics: 
                 - Valuation: P/E Ratio = {peRatio}, P/B Ratio = {pbRatio}, EV/EBITDA = {ev_to_ebitda}
                 - Profitability: Net profit margin = {profitmargin}, ROE = {roe}, ROA = {roa}, Gross margin = {grossmargin}
@@ -167,9 +167,9 @@ def get_stock_data(ticker, apiKey=None):
                 - Financial health: Debt-to-equity = {deRatio}, Current ratio = {current_ratio}, Quick ratio = {quick_ratio}
                 - Cash flow: Free cash flow = {fcf}, Operating cash flow margin = {operatingmargin}
                 - Dividends: Dividend yield = {dividendYield}, Dividend payout ratio = {payoutRatio}
-            - Income Statement data: {income_statement_tb}
-            - Balance Sheet data: {balance_sheet_tb}
-            - Cashflow Statement data: {cashflow_statement_tb}
+            - Income Statement အချက်အလက်: {income_statement_tb}
+            - Balance Sheet အချက်အလက်: {balance_sheet_tb}
+            - Cashflow Statement အချက်အလက်: {cashflow_statement_tb}
                     
             အောက်ပါအချက်အလက်တွေကို ဖြေကြားပေးပါ။
             1. ဒီ stock မှာရင်းနှီးမြှုပ်နှံမှုလုပ်သင့် မလုပ်သင့်။
