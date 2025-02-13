@@ -208,14 +208,14 @@ def get_stock_data(ticker, apiKey=None):
         api_key = st.secrets["GROQ_API_KEY2"]
         client = Groq(api_key=api_key)
         trans_prompt = f"""
-            Translate this, {analysis} into Burmese language.
+            Translate this, {analysis} into Burmese language. You can use English for words that are difficult to translate into Burmese.
             """
 
         def analyze_stock2(prompt_text, tokens):
             response = client.chat.completions.create(
                 model="deepseek-r1-distill-llama-70b",
                 messages=[
-                    {"role": "system", "content": "You are an experienced financial analyst with expertise in both fundamental and technical analysis."},
+                    {"role": "system", "content": "You are an experienced Burmese translator."},
                     {"role": "user", "content": prompt_text}
                 ],
                 max_tokens= tokens,
