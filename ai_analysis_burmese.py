@@ -158,8 +158,8 @@ def get_stock_data(ticker, apiKey=None):
         api_key = st.secrets["GROQ_API_KEY"]
         client = Groq(api_key=api_key)
         summary_prompt = f"""
-            long-term and short-term investment တွေအတွက် ဒီ {upper_ticker} stock ကိုစိစစ်ပေးပါ။ အောက်မှာဖော်ပြထားတဲ့အချက်အလက်တွေကိုသုံးပါ -
-            - အတိတ်ကဈေးနှုန်းအချက်အလက်: {extended_data_r}
+            Analyze the stock {upper_ticker} for both long-term and short-term investment potential. Use the following financial data:
+            - Historical price data: {extended_data_r}
             - Key financial metrics: 
                 - Valuation: P/E Ratio = {peRatio}, P/B Ratio = {pbRatio}, EV/EBITDA = {ev_to_ebitda}
                 - Profitability: Net profit margin = {profitmargin}, ROE = {roe}, ROA = {roa}, Gross margin = {grossmargin}
@@ -167,17 +167,17 @@ def get_stock_data(ticker, apiKey=None):
                 - Financial health: Debt-to-equity = {deRatio}, Current ratio = {current_ratio}, Quick ratio = {quick_ratio}
                 - Cash flow: Free cash flow = {fcf}, Operating cash flow margin = {operatingmargin}
                 - Dividends: Dividend yield = {dividendYield}, Dividend payout ratio = {payoutRatio}
-            - Income Statement အချက်အလက်: {income_statement_tb}
-            - Balance Sheet အချက်အလက်: {balance_sheet_tb}
-            - Cashflow Statement အချက်အလက်: {cashflow_statement_tb}
+            - Income Statement data: {income_statement_tb}
+            - Balance Sheet data: {balance_sheet_tb}
+            - Cashflow Statement data: {cashflow_statement_tb}
                     
-            အောက်ပါအချက်အလက်တွေကို ဖြေကြားပေးပါ။
-            1. ဒီ stock မှာရင်းနှီးမြှုပ်နှံမှုလုပ်သင့် မလုပ်သင့်။
-            2. အဓိကကျတဲ့ fundamental analysis metrics (ဥပမာ, P/E ratio, revenue growth, debt-to-equity)။
-            3. အဓိကကျတဲ့ technical analysis insights (ဥပမာ, moving averages, RSI, support/resistance levels)။
-            4. သတင်းနဲ့ social media အချက်အလက်တွေပေါ်အခြေခံပြီး ဈေးကွက်သုံးသပ်ချက်။
-            5. ဘယ်အချိန်မှာစပြီး ဝယ်သင့်သလဲ (ဥပမာ, technical indicators ဒါမှမဟုတ် valuation ပေါ်အခြေခံထားတဲ့သုံးသပ်ချက်)။
-            6. ဒီ stock အတွက် long-term and short-term investment strategies တွေကိုအကြံပြုပေးပါ။
+            Provide:
+            1. A summary of whether the stock is good to invest in or not.
+            2. Key fundamental analysis metrics (e.g., P/E ratio, revenue growth, debt-to-equity).
+            3. Key technical analysis insights (e.g., moving averages, RSI, support/resistance levels).
+            4. Sentiment analysis based on news and social media.
+            5. Recommendations for when to buy (e.g., based on technical indicators or valuation).
+            6. Separate conclusions for long-term and short-term investment strategies.
             """
 
         def analyze_stock(prompt_text, tokens):
@@ -203,6 +203,38 @@ def get_stock_data(ticker, apiKey=None):
         }
     except Exception as e:
         analysis = ""
+
+    try:
+        api_key = st.secrets["GROQ_API_KEY2"]
+        client = Groq(api_key=api_key)
+        trans_prompt = f"""
+            Translate this, {analysis} into Burmese language.
+            """
+
+        def analyze_stock2(prompt_text, tokens):
+            response = client.chat.completions.create(
+                model="deepseek-r1-distill-llama-70b",
+                messages=[
+                    {"role": "system", "content": "You are an experienced financial analyst with expertise in both fundamental and technical analysis."},
+                    {"role": "user", "content": prompt_text}
+                ],
+                max_tokens= tokens,
+                temperature=0.7
+            )
+                    
+            raw_response = response.choices[0].message.content
+            try:
+                cleaned_response = re.sub(r'<think>.*?</think>', '', raw_response, flags=re.DOTALL).strip()
+            except: 
+                cleaned_response = raw_response
+            return cleaned_response
+        trans = analyze_stock2(income_statement_prompt,100000)
+
+        analysis2 = {
+            'trans1': trans,
+        }
+    except Exception as e:
+        analysis2 = ""
 
     try:
         api_key = st.secrets["GROQ_API_KEY3"]
@@ -260,7 +292,7 @@ def get_stock_data(ticker, apiKey=None):
     except Exception as e:
         analysis3 = ""
     
-    return analysis3, analysis, cashflow_statement_flipped, balance_sheet_flipped, income_statement_flipped, eps_yield_value, exDividendDate_value, payoutRatio_value, dividendYield_value, dividends_value, profitmargin_value, operatingmargin_value, grossmargin_value, fcf_margin, revenue_growth_current_value, deRatio_value, pbRatio_value, forwardPe_value, pe_value, roe_value, beta_value, pegRatio_value, eps_value, sharesOutstanding_value, marketCap_value, employee_value, eps_yield, change_percent, change_dollar,extended_data_r, news, ev_to_ebitda, earnings_growth, revenue_growth, quick_ratio, current_ratio, roa, revenue, fcf, ebitdamargin, operatingmargin, grossmargin, profitmargin, revenue_growth_current, roe, exDividendDate, dividends, deRatio, pbRatio, sharesOutstanding, payoutRatio, dividendYield, forwardPe, peRatio, website, yf_analysts_count, lowercase_ticker, upper_ticker, price, picture_url, exchange, name, sector, industry, employee, marketCap, beta, longProfile, eps, pegRatio, country, yf_targetprice, yf_consensus
+    return analysis3, analysis2, analysis, cashflow_statement_flipped, balance_sheet_flipped, income_statement_flipped, eps_yield_value, exDividendDate_value, payoutRatio_value, dividendYield_value, dividends_value, profitmargin_value, operatingmargin_value, grossmargin_value, fcf_margin, revenue_growth_current_value, deRatio_value, pbRatio_value, forwardPe_value, pe_value, roe_value, beta_value, pegRatio_value, eps_value, sharesOutstanding_value, marketCap_value, employee_value, eps_yield, change_percent, change_dollar,extended_data_r, news, ev_to_ebitda, earnings_growth, revenue_growth, quick_ratio, current_ratio, roa, revenue, fcf, ebitdamargin, operatingmargin, grossmargin, profitmargin, revenue_growth_current, roe, exDividendDate, dividends, deRatio, pbRatio, sharesOutstanding, payoutRatio, dividendYield, forwardPe, peRatio, website, yf_analysts_count, lowercase_ticker, upper_ticker, price, picture_url, exchange, name, sector, industry, employee, marketCap, beta, longProfile, eps, pegRatio, country, yf_targetprice, yf_consensus
 
 ''
 ''
@@ -280,7 +312,7 @@ st.info('အချက်အလက်များကို Yahoo Finance မှ�
 
 if st.button("AIဖြင့်စိစစ်ရန်"):
     try:
-        analysis3, analysis, cashflow_statement_flipped, balance_sheet_flipped, income_statement_flipped, eps_yield_value, exDividendDate_value, payoutRatio_value, dividendYield_value, dividends_value, profitmargin_value, operatingmargin_value, grossmargin_value, fcf_margin, revenue_growth_current_value, deRatio_value, pbRatio_value, forwardPe_value, pe_value, roe_value, beta_value, pegRatio_value, eps_value, sharesOutstanding_value, marketCap_value, employee_value, eps_yield, change_percent, change_dollar,extended_data_r, news, ev_to_ebitda, earnings_growth, revenue_growth, quick_ratio, current_ratio, roa, revenue, fcf, ebitdamargin, operatingmargin, grossmargin, profitmargin, revenue_growth_current, roe, exDividendDate, dividends, deRatio, pbRatio, sharesOutstanding, payoutRatio, dividendYield, forwardPe, peRatio, website, yf_analysts_count, lowercase_ticker, upper_ticker, price, picture_url, exchange, name, sector, industry, employee, marketCap, beta, longProfile, eps, pegRatio, country, yf_targetprice, yf_consensus = get_stock_data(ticker)
+        analysis3, analysis2, analysis, cashflow_statement_flipped, balance_sheet_flipped, income_statement_flipped, eps_yield_value, exDividendDate_value, payoutRatio_value, dividendYield_value, dividends_value, profitmargin_value, operatingmargin_value, grossmargin_value, fcf_margin, revenue_growth_current_value, deRatio_value, pbRatio_value, forwardPe_value, pe_value, roe_value, beta_value, pegRatio_value, eps_value, sharesOutstanding_value, marketCap_value, employee_value, eps_yield, change_percent, change_dollar,extended_data_r, news, ev_to_ebitda, earnings_growth, revenue_growth, quick_ratio, current_ratio, roa, revenue, fcf, ebitdamargin, operatingmargin, grossmargin, profitmargin, revenue_growth_current, roe, exDividendDate, dividends, deRatio, pbRatio, sharesOutstanding, payoutRatio, dividendYield, forwardPe, peRatio, website, yf_analysts_count, lowercase_ticker, upper_ticker, price, picture_url, exchange, name, sector, industry, employee, marketCap, beta, longProfile, eps, pegRatio, country, yf_targetprice, yf_consensus = get_stock_data(ticker)
     
         st.header(f'{name}', divider='gray')
         st.subheader("AI Stock Analysis", divider ='gray')
@@ -341,7 +373,7 @@ if st.button("AIဖြင့်စိစစ်ရန်"):
             try:
                 if upper_ticker:
                     with st.spinner('Analyzing stock data...'):
-                        cleaned_text = analysis['summary'].replace('\\n', '\n').replace('\\', '')
+                        cleaned_text = analysis2['trans1'].replace('\\n', '\n').replace('\\', '')
                         special_chars = ['$', '>', '<', '`', '|', '[', ']', '(', ')', '+', '{', '}', '!', '&']
                         for char in special_chars:
                             cleaned_text = cleaned_text.replace(char, f"\\{char}")
