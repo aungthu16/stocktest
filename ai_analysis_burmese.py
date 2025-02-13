@@ -173,13 +173,13 @@ def get_stock_data(ticker, apiKey=None):
                     
             Provide a detailed analysis in formal Burmese language covering these points:
             1. ရင်းနှီးမြှုပ်နှံရန် သင့်/မသင့် အကျဉ်းချုပ်သုံးသပ်ချက်
-            2. အခြေခံအချက်အလက်များ၏ ခွဲခြမ်းစိတ်ဖြာမှု (P/E ratio, revenue growth, debt-to-equity စသည်)
-            3. နည်းပညာပိုင်းဆိုင်ရာ ခွဲခြမ်းစိတ်ဖြာမှု (moving averages, RSI, support/resistance levels)
+            2. အခြေခံအချက်အလက်များ စိစစ်ခြင်း (P/E ratio, revenue growth, debt-to-equity စသည်)
+            3. Technical Analysis ခွဲခြမ်းစိတ်ဖြာမှု (moving averages, RSI, support/resistance levels)
             4. သတင်းများနှင့် လူမှုကွန်ယက်များပေါ်မှ သုံးသပ်ချက်များ
             5. ရှယ်ယာဝယ်ယူရန် အချိန်ကာလအကြံပြုချက်
             6. ရေတိုနှင့် ရေရှည်ရင်းနှီးမြှုပ်နှံမှုအတွက် နိဂုံးချုပ်သုံးသပ်ချက်များ
         
-            Use formal Burmese language and financial terms. Ensure the analysis is clear and easy to understand.
+            Use formal Burmese language and financial terms. Ensure the analysis is clear and easy to understand. You can use English for words that are difficult to translate into Burmese.
             """
 
         def analyze_stock(prompt_text, tokens):
