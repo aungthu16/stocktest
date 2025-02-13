@@ -13,7 +13,7 @@ from groq import Groq
 st.set_page_config(page_title='AI Stock Analysis', layout='wide', page_icon="./Image/logo.png")
 
 @st.cache_data(ttl=3600)
-def get_stock_data(ticker, apiKey=None):
+def get_stock_data(ticker):
 
     stock = yf.Ticker(ticker)
     lowercase_ticker = ticker.lower()
