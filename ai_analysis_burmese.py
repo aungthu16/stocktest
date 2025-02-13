@@ -228,7 +228,7 @@ def get_stock_data(ticker, apiKey=None):
             except: 
                 cleaned_response = raw_response
             return cleaned_response
-        trans = analyze_stock2(income_statement_prompt,100000)
+        trans = analyze_stock2(trans_prompt,100000)
 
         analysis2 = {
             'trans1': trans,
