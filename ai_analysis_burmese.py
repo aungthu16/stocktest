@@ -158,7 +158,7 @@ def get_stock_data(ticker, apiKey=None):
         api_key = st.secrets["GROQ_API_KEY"]
         client = Groq(api_key=api_key)
         summary_prompt = f"""
-            Analyze the stock {upper_ticker} for both long-term and short-term investment potential. Use the following financial data:
+            long-term and short-term investment တွေအတွက် ဒီ {upper_ticker} stock ကိုစိစစ်ပေးပါ။ အောက်မှာဖော်ပြထားတဲ့အချက်အလက်တွေကိုသုံးပါ -
             - Historical price data: {extended_data_r}
             - Key financial metrics: 
                 - Valuation: P/E Ratio = {peRatio}, P/B Ratio = {pbRatio}, EV/EBITDA = {ev_to_ebitda}
@@ -171,13 +171,13 @@ def get_stock_data(ticker, apiKey=None):
             - Balance Sheet data: {balance_sheet_tb}
             - Cashflow Statement data: {cashflow_statement_tb}
                     
-            Provide the following information in Myanmar(Burmese) language:
-            1. A summary of whether the stock is good to invest in or not.
-            2. Key fundamental analysis metrics (e.g., P/E ratio, revenue growth, debt-to-equity).
-            3. Key technical analysis insights (e.g., moving averages, RSI, support/resistance levels).
-            4. Sentiment analysis based on news and social media.
-            5. Recommendations for when to buy (e.g., based on technical indicators or valuation).
-            6. Separate conclusions for long-term and short-term investment strategies.
+            အောက်ပါအချက်အလက်တွေကို ဖြေကြားပေးပါ။
+            1. ဒီ stock မှာရင်းနှီးမြှုပ်နှံမှုလုပ်သင့် မလုပ်သင့်။
+            2. အဓိကကျတဲ့ fundamental analysis metrics (ဥပမာ, P/E ratio, revenue growth, debt-to-equity)။
+            3. အဓိကကျတဲ့ technical analysis insights (ဥပမာ, moving averages, RSI, support/resistance levels)။
+            4. သတင်းနဲ့ social media အချက်အလက်တွေပေါ်အခြေခံပြီး ဈေးကွက်သုံးသပ်ချက်။
+            5. ဘယ်အချိန်မှာစပြီး ဝယ်သင့်သလဲ (ဥပမာ, technical indicators ဒါမှမဟုတ် valuation ပေါ်အခြေခံထားတဲ့သုံးသပ်ချက်)။
+            6. ဒီ stock အတွက် long-term and short-term investment strategies တွေကိုအကြံပြုပေးပါ။
             """
 
         def analyze_stock(prompt_text, tokens):
