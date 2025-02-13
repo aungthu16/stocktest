@@ -1,17 +1,13 @@
 import streamlit as st
 import yfinance as yf
-import requests
-from bs4 import BeautifulSoup
 import math
 import numpy as np
-import http.client
 import json
 import pandas as pd
 import plotly.graph_objects as go
 import datetime
 import re
 from dateutil.relativedelta import relativedelta
-import pytz
 from groq import Groq
 
 st.set_page_config(page_title='AI Stock Analysis', layout='wide', page_icon="./Image/logo.png")
