@@ -739,7 +739,7 @@ with main_col1:
 st.write("This analysis dashboard is designed to enable beginner investors to analyze stocks effectively and with ease. Please note that the information in this page is intended for educational purposes only and it does not constitute investment advice or a recommendation to buy or sell any security. We are not responsible for any losses resulting from trading decisions based on this information.")
 st.info('Data is sourced from Yahoo Finance, Morningstar, Seeking Alpha, Market Beat, Stockanalysis.com and Alpha Spread. Certain sections require API keys to operate. Users are advised to subscribe to the Morningstar and Seeking Alpha APIs provided by Api Dojo through rapidapi.com.')
 
-aicheck1, aicheck2 = st.columns([2,3])
+aicheck1, aicheck2 = st.columns([1,3])
 with aicheck1:
     use_ai = st.checkbox("Analyze using AI", value=True)
 with aicheck2:
