@@ -1241,7 +1241,7 @@ if st.button("Get Data"):
 
 #Estimate Data
             st.subheader('Growth Estimation', divider='gray')
-            st.write(sa_growth_df)
+            st.table(sa_growth_df)
             gcol1, gcol2= st.columns([3, 2])
             with gcol1:
                 try:
