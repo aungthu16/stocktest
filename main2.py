@@ -1274,7 +1274,7 @@ if st.button("Get Data"):
                         )
                         st.plotly_chart(fig_growth, use_container_width=True)
                 except Exception as e:
-                        st.warning(f'{name} has no growth estimates data.')
+                        st.warning(f'{name} has no growth estimates data. {e}')
             
             with gcol2:
                 try:
