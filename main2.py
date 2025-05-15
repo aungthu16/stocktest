@@ -3287,6 +3287,7 @@ if st.button("Get Data"):
 ############################################# Insider Trades #############################################
 #############################################                ############################################# 
         with insider_trades:
+            st.write(insider_mb)
             def highlight_insider_trades(val):
                 if val == 'Buy':
                     bscolor = 'green'
@@ -3314,6 +3315,7 @@ if st.button("Get Data"):
                     st.warning("Insider information is not available.")
             except Exception as e:
                 st.warning("Insider information is not available.")
+                st.write(e)
 
 #############################################                         #############################################
 ############################################# Technical Analysis Data #############################################
