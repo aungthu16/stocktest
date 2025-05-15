@@ -318,6 +318,28 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
     except: sa_metrics_df2 = ""
 
     ##### Market Beat insider trades #####
+    insider_mb_url = f'https://www.marketbeat.com/stocks/{exchange_value}/{upper_ticker}/insider-trades/'
+    response = requests.get(insider_mb_url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    tables = soup.find_all('table')
+    if tables and len(tables) > 0:
+        table = tables[0]
+        headers = []
+        rows = []
+        for th in table.find_all('th'):
+            headers.append(th.text.strip())
+        for tr in table.find_all('tr')[1:]:
+            row = []
+            for td in tr.find_all('td'):
+                row.append(td.text.strip())
+            if row: 
+                rows.append(row)
+        insider_mb = pd.DataFrame(rows, columns=headers)
+        if insider_mb.empty:
+            insider_mb = pd.DataFrame()
+    else:    
+        insider_mb = pd.DataFrame()
+            
     try:
         insider_mb_url = f'https://www.marketbeat.com/stocks/{exchange_value}/{upper_ticker}/insider-trades/'
         response = requests.get(insider_mb_url)
