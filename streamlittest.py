@@ -25,8 +25,10 @@ try:
     if len(tables) >= 0:
         insider_mb = pd.read_html(str(tables[0]))[0]
     else:    
-        insider_mb = pd.DataFrame()
-except: insider_mb = pd.DataFrame()
+        insider_mb = ""
+except: insider_mb = ""
+
+st.write(insider_mb)
 
 def highlight_insider_trades(val):
     if val == 'Buy':
@@ -36,8 +38,6 @@ def highlight_insider_trades(val):
     else:
         bscolor ='#AAB2BD'
     return f'background-color: {bscolor}; color: white'
-
-st.write(insider_mb)
 
 try:
     if not insider_mb.empty:  
