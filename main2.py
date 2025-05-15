@@ -138,19 +138,23 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
         r = requests.get(url)
         soup = BeautifulSoup(r.text,"lxml")
         table = soup.find("table",class_ = "sticky-column-table w-full border-separate border-spacing-0 whitespace-nowrap text-right text-sm sm:text-base")
-        rows = table.find_all("tr")
-        headers = []
-        data = []
-        for row in rows:
-            cols = row.find_all(["th", "td"])
-            cols_text = [col.text.strip() for col in cols]
-            if not headers:
-                headers = cols_text
-            else:
-                data.append(cols_text)
-        sa_growth_df = pd.DataFrame(data, columns=headers)
-        sa_growth_df = sa_growth_df.iloc[1:, :-1].reset_index(drop=True)
-    except: sa_growth_df = ""
+        if table is None:
+            sa_growth_df = pd.DataFrame()
+        else:
+            rows = table.find_all("tr")
+            headers = []
+            data = []
+            for row in rows:
+                cols = row.find_all(["th", "td"])
+                cols_text = [col.text.strip() for col in cols]
+                if not headers:
+                    headers = cols_text
+                else:
+                    data.append(cols_text)
+            sa_growth_df = pd.DataFrame(data, columns=headers)
+            sa_growth_df = sa_growth_df.iloc[1:, :-1].reset_index(drop=True)
+    except Exception as e:
+        sa_growth_df = pd.DataFrame()
     
     ##### SA scores #####
     try:
@@ -1248,6 +1252,7 @@ if st.button("Get Data"):
             gcol1, gcol2= st.columns([3, 2])
             with gcol1:
                 try:
+                    if not isinstance(sa_growth_df, str) and not sa_growth_df.empty:
                         growth_metrics = ['Revenue Growth', 'EPS Growth']
                         sa_growth_df_filtered = sa_growth_df[sa_growth_df['Fiscal Year'].isin(growth_metrics)]
                         sa_growth_metrics_df_melted = sa_growth_df_filtered.melt(id_vars=['Fiscal Year'], var_name='Year', value_name='Value')
@@ -1277,6 +1282,8 @@ if st.button("Get Data"):
                             height=400
                         )
                         st.plotly_chart(fig_growth, use_container_width=True)
+                    else:
+                        st.warning(f'{ticker} has no growth estimates data.')
                 except Exception as e:
                         st.warning(f'{ticker} has no growth estimates data. {e}')
             
