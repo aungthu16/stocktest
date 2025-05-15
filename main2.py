@@ -150,7 +150,7 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
                 data.append(cols_text)
         sa_growth_df = pd.DataFrame(data, columns=headers)
         sa_growth_df = sa_growth_df.iloc[1:, :-1].reset_index(drop=True)
-except Exception as e: 
+    except Exception as e: 
         sa_growth_df = ""
     
     ##### SA scores #####
