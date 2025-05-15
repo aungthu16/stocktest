@@ -51,4 +51,6 @@ try:
     ]
     st.dataframe(filtered_insider_mb.style.applymap(highlight_insider_trades, subset=['Buy/Sell']), use_container_width=True, hide_index=True, height = 600)
     st.caption("Data source: Market Beat")
-except Exception as e: st.warning("Insider information is not available. {e}")
+except Exception as e: 
+    st.warning("Insider information is not available.")
+    st.write(e)
