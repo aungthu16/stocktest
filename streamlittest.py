@@ -20,24 +20,20 @@ try:
         url = f'https://stockanalysis.com/stocks/{ticker}/forecast/'
         r = requests.get(url)
         soup = BeautifulSoup(r.text,"lxml")
-        table = soup.find("table",class_ = "sticky-column-table w-full border-separate border-spacing-0 whitespace-nowrap text-right text-sm sm:text-base")
-        if table is None:
-            sa_growth_df = pd.DataFrame()
-        else:
-            rows = table.find_all("tr")
-            headers = []
-            data = []
-            for row in rows:
-                cols = row.find_all(["th", "td"])
-                cols_text = [col.text.strip() for col in cols]
-                if not headers:
-                    headers = cols_text
-                else:
-                    data.append(cols_text)
-            sa_growth_df = pd.DataFrame(data, columns=headers)
-            sa_growth_df = sa_growth_df.iloc[1:, :-1].reset_index(drop=True)
-except Exception as e:
-        sa_growth_df = pd.DataFrame()
+        table = soup.find("table",class_ = "w-full whitespace-nowrap border border-gray-200 text-right text-sm dark:border-dark-700 sm:text-base")
+        rows = table.find_all("tr")
+        headers = []
+        data = []
+        for row in rows:
+            cols = row.find_all(["th", "td"])
+            cols_text = [col.text.strip() for col in cols]
+            if not headers:
+                headers = cols_text
+            else:
+                data.append(cols_text)
+        sa_growth_df = pd.DataFrame(data, columns=headers)
+        sa_growth_df = sa_growth_df.iloc[1:, :-1].reset_index(drop=True)
+    except: sa_growth_df = ""
 
 st.write(sa_growth_df)
 
