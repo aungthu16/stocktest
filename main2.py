@@ -323,11 +323,26 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
         response = requests.get(insider_mb_url)
         soup = BeautifulSoup(response.text, 'html.parser')
         tables = soup.find_all('table')
-        if len(tables) >= 0:
-            insider_mb = pd.read_html(str(tables[0]))[0]
+        if tables and len(tables) > 0:
+            table = tables[0]
+            headers = []
+            rows = []
+            for th in table.find_all('th'):
+                headers.append(th.text.strip())
+            for tr in table.find_all('tr')[1:]:
+                row = []
+                for td in tr.find_all('td'):
+                    row.append(td.text.strip())
+                if row: 
+                    rows.append(row)
+            insider_mb = pd.DataFrame(rows, columns=headers)
+            if insider_mb.empty:
+                insider_mb = pd.DataFrame()
         else:    
-            insider_mb = ""
-    except: insider_mb = ""
+            insider_mb = pd.DataFrame()
+    except Exception as e:
+        st.warning(f"Failed to fetch data: {e}")
+        insider_mb = pd.DataFrame()
     
     name = stock.info.get('longName', 'N/A')
     sector = stock.info.get('sector', 'N/A')
