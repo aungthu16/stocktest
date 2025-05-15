@@ -3296,20 +3296,24 @@ if st.button("Get Data"):
                     bscolor ='#AAB2BD'
                 return f'background-color: {bscolor}; color: white'
             try:
-                insider_mb = pd.DataFrame(insider_mb).iloc[:, :-2]
-                def is_valid_date(value):
-                    try:
-                        pd.to_datetime(value)
-                        return True
-                    except ValueError:
-                        return False
-                unwanted_string = "Get Insider Trades Delivered To Your InboxEnter your email address below to receive a concise daily summary of insider buying activity, insider selling activity and changes in hedge fund holdings."
-                filtered_insider_mb = insider_mb[
-                    insider_mb["Transaction Date"].apply(lambda x: is_valid_date(x) and x != unwanted_string)
-                ]
-                st.dataframe(filtered_insider_mb.style.applymap(highlight_insider_trades, subset=['Buy/Sell']), use_container_width=True, hide_index=True, height = 600)
-                st.caption("Data source: Market Beat")
-            except: st.warning("Insider information is not available.")
+                if not insider_mb.empty:  # Check if DataFrame is not empty
+                    insider_mb = insider_mb.iloc[:, :-2]
+                    def is_valid_date(value):
+                        try:
+                            pd.to_datetime(value)
+                            return True
+                        except ValueError:
+                            return False
+                    unwanted_string = "Get Insider Trades Delivered To Your InboxEnter your email address below to receive a concise daily summary of insider buying activity, insider selling activity and changes in hedge fund holdings."
+                    filtered_insider_mb = insider_mb[
+                        insider_mb["Transaction Date"].apply(lambda x: is_valid_date(x) and x != unwanted_string)
+                    ]
+                    st.dataframe(filtered_insider_mb.style.applymap(highlight_insider_trades, subset=['Buy/Sell']), use_container_width=True, hide_index=True, height = 600)
+                    st.caption("Data source: Market Beat")
+                else:
+                    st.warning("Insider information is not available.")
+            except Exception as e:
+                st.warning("Insider information is not available.")
 
 #############################################                         #############################################
 ############################################# Technical Analysis Data #############################################
