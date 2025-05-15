@@ -25,8 +25,8 @@ try:
     if len(tables) >= 0:
         insider_mb = pd.read_html(str(tables[0]))[0]
     else:    
-        insider_mb = ""
-except: insider_mb = ""
+        insider_mb = pd.DataFrame()
+except: insider_mb = pd.DataFrame()
 
 def highlight_insider_trades(val):
     if val == 'Buy':
@@ -55,3 +55,4 @@ try:
         st.warning("Insider information is not available.")
 except Exception as e:
     st.warning("Insider information is not available.")
+    st.write(e)
