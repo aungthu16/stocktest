@@ -23,7 +23,13 @@ try:
     soup = BeautifulSoup(response.text, 'html.parser')
     tables = soup.find_all('table')
     if len(tables) >= 0:
-        insider_mb = pd.read_html(str(tables[0]))[0]
+        try:
+            insider_mb = pd.read_html(str(tables[0]))[0]
+            if insider_mb.empty:
+                insider_mb = pd.DataFrame()
+        except Exception as e:
+            st.warning(f"Failed to parse table: {e}")
+            insider_mb = pd.DataFrame()
     else:    
         insider_mb = ""
 except: insider_mb = ""
