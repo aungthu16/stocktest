@@ -36,8 +36,11 @@ def highlight_insider_trades(val):
     else:
         bscolor ='#AAB2BD'
     return f'background-color: {bscolor}; color: white'
+
+st.write(insider_mb)
+
 try:
-    if not insider_mb.empty:  # Check if DataFrame is not empty
+    if not insider_mb.empty:  
         insider_mb = insider_mb.iloc[:, :-2]
         def is_valid_date(value):
             try:
