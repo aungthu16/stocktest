@@ -37,6 +37,7 @@ def highlight_insider_trades(val):
         bscolor ='#AAB2BD'
     return f'background-color: {bscolor}; color: white'
 try:
+    st.write(insider_mb)
     insider_mb = pd.DataFrame(insider_mb).iloc[:, :-2]
     def is_valid_date(value):
         try:
@@ -50,4 +51,4 @@ try:
     ]
     st.dataframe(filtered_insider_mb.style.applymap(highlight_insider_trades, subset=['Buy/Sell']), use_container_width=True, hide_index=True, height = 600)
     st.caption("Data source: Market Beat")
-except: st.warning("Insider information is not available.")
+except Exception as e: st.warning("Insider information is not available. {e}")
