@@ -281,8 +281,8 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
     try:
         url = f'https://stockanalysis.com/stocks/{ticker}/financials/ratios/'
         r = requests.get(url)
-        soup = BeautifulSoup(r.text,"lxml")
-        table = soup.find("table",class_ = "w-full border-separate border-spacing-0 text-sm sm:text-base [&_tbody]:sm:whitespace-nowrap [&_thead]:whitespace-nowrap")
+        soup = BeautifulSoup(r.text,"html.parser")
+        table = soup.find("table",class_ = "styled-scrollbar bottom-scrollbar-reversed sticky-column-table overflow-x-auto overflow-y-visible border border-gray-300 dark:border-dark-600")
         rows = table.find_all("tr")
         headers = []
         data = []
