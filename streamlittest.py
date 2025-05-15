@@ -19,8 +19,8 @@ ticker = "AAPL"
 try:
         url = f'https://stockanalysis.com/stocks/{ticker}/forecast/'
         r = requests.get(url)
-        soup = BeautifulSoup(r.text,"lxml")
-        table = soup.find("table",class_ = "w-full whitespace-nowrap border border-gray-200 text-right text-sm dark:border-dark-700 sm:text-base")
+        soup = BeautifulSoup(r.text,"html.parser")
+        table = soup.find("table",class_ = "sticky-column-table w-full border-separate border-spacing-0 whitespace-nowrap text-right text-sm sm:text-base")
         rows = table.find_all("tr")
         headers = []
         data = []
