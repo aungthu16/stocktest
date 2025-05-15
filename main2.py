@@ -3298,7 +3298,6 @@ if st.button("Get Data"):
                 return f'background-color: {bscolor}; color: white'
             
             try:
-                try:
                 insider_mb = pd.DataFrame(insider_mb).iloc[:, :-2]
                 def is_valid_date(value):
                     try:
