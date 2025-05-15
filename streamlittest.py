@@ -30,7 +30,7 @@ try:
         except Exception as e:
             st.warning(f"Failed to parse table: {e}")
             insider_mb = pd.DataFrame()
-   else:    
+    else:    
         insider_mb = pd.DataFrame()
 except Exception as e:
     st.warning(f"Failed to fetch data: {e}")
