@@ -14,61 +14,40 @@ from dateutil.relativedelta import relativedelta
 import pytz
 from groq import Groq
 
-ticker = "AAPL"
+upper_ticker = "AAPL"
+exchange_value = "NASDAQ"
 
 try:
-        url = f'https://stockanalysis.com/stocks/{ticker}/forecast/'
-        r = requests.get(url)
-        soup = BeautifulSoup(r.text,"html.parser")
-        table = soup.find("table",class_ = "sticky-column-table w-full border-separate border-spacing-0 whitespace-nowrap text-right text-sm sm:text-base")
-        rows = table.find_all("tr")
-        headers = []
-        data = []
-        for row in rows:
-            cols = row.find_all(["th", "td"])
-            cols_text = [col.text.strip() for col in cols]
-            if not headers:
-                headers = cols_text
-            else:
-                data.append(cols_text)
-        sa_growth_df = pd.DataFrame(data, columns=headers)
-        sa_growth_df = sa_growth_df.iloc[1:, :-1].reset_index(drop=True)
-except Exception as e: 
-        sa_growth_df = ""
-        st.write(e)
+    insider_mb_url = f'https://www.marketbeat.com/stocks/{exchange_value}/{upper_ticker}/insider-trades/'
+    response = requests.get(insider_mb_url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    tables = soup.find_all('table')
+    if len(tables) >= 0:
+        insider_mb = pd.read_html(str(tables[0]))[0]
+    else:    
+        insider_mb = ""
+except: insider_mb = ""
 
-st.write(sa_growth_df)
-
+def highlight_insider_trades(val):
+    if val == 'Buy':
+        bscolor = 'green'
+    elif val == 'Sell':
+        bscolor = 'red'
+    else:
+        bscolor ='#AAB2BD'
+    return f'background-color: {bscolor}; color: white'
 try:
-        if not isinstance(sa_growth_df, str) and not sa_growth_df.empty:
-            growth_metrics = ['Revenue Growth', 'EPS Growth']
-            sa_growth_df_filtered = sa_growth_df[sa_growth_df['Fiscal Year'].isin(growth_metrics)]
-            sa_growth_metrics_df_melted = sa_growth_df_filtered.melt(id_vars=['Fiscal Year'], var_name='Year', value_name='Value')
-            growth_unique_years = sa_growth_metrics_df_melted['Year'].unique()
-            growth_unique_years_sorted = sorted([year for year in growth_unique_years if year != 'Current'])
-            if 'Current' in growth_unique_years:
-                growth_unique_years_sorted.append('Current')
-            fig_growth = go.Figure()
-            for fiscal_year in sa_growth_metrics_df_melted['Fiscal Year'].unique():
-                filtered_data = sa_growth_metrics_df_melted[sa_growth_metrics_df_melted['Fiscal Year'] == fiscal_year]
-                fig_growth.add_trace(go.Scatter(
-                    x=filtered_data['Year'],
-                    y=filtered_data['Value'],
-                    mode='lines+markers',
-                    name=str(fiscal_year)
-                ))
-            fig_growth.update_layout(
-                title={"text":"Growth Data", "font": {"size": 20}},
-                title_y=1,  
-                title_x=0, 
-                margin=dict(t=30, b=30, l=40, r=30),
-                xaxis_title=None,
-                yaxis_title='Value (%)',
-                xaxis=dict(tickmode='array', tickvals=growth_unique_years_sorted,showgrid=True),
-                yaxis=dict(showgrid=True),
-                legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.010),
-                height=400
-            )
-            st.plotly_chart(fig_growth, use_container_width=True)
-except Exception as e:
-            st.warning(f'{ticker} has no growth estimates data.')
+    insider_mb = pd.DataFrame(insider_mb).iloc[:, :-2]
+    def is_valid_date(value):
+        try:
+            pd.to_datetime(value)
+            return True
+        except ValueError:
+            return False
+    unwanted_string = "Get Insider Trades Delivered To Your InboxEnter your email address below to receive a concise daily summary of insider buying activity, insider selling activity and changes in hedge fund holdings."
+    filtered_insider_mb = insider_mb[
+        insider_mb["Transaction Date"].apply(lambda x: is_valid_date(x) and x != unwanted_string)
+    ]
+    st.dataframe(filtered_insider_mb.style.applymap(highlight_insider_trades, subset=['Buy/Sell']), use_container_width=True, hide_index=True, height = 600)
+    st.caption("Data source: Market Beat")
+except: st.warning("Insider information is not available.")
