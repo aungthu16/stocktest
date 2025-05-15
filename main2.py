@@ -136,7 +136,7 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
     try:
         url = f'https://stockanalysis.com/stocks/{ticker}/forecast/'
         r = requests.get(url)
-        soup = BeautifulSoup(r.text,"lxml")
+        soup = BeautifulSoup(r.text,"html.parser")
         table = soup.find("table",class_ = "sticky-column-table w-full border-separate border-spacing-0 whitespace-nowrap text-right text-sm sm:text-base")
         if table is None:
             sa_growth_df = pd.DataFrame()
