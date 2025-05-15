@@ -341,7 +341,7 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
         else:    
             insider_mb = pd.DataFrame()
     except Exception as e:
-        insider_mb = ""
+        insider_mb = pd.DataFrame()
     
     name = stock.info.get('longName', 'N/A')
     sector = stock.info.get('sector', 'N/A')
