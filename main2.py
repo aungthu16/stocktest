@@ -2027,8 +2027,10 @@ if st.button("Get Data"):
             st.info("Notes: An income statement or profit and loss account shows the company's revenues and expenses during a particular period. It indicates how the revenues (also known as the “top line”) are transformed into the net income or net profit (the result after all revenues and expenses have been accounted for). The purpose of the income statement is to show managers and investors whether the company made money (profit) or lost money (loss) during the period being reported. It provides insight into a company’s operations, efficiency, management, and performance relative to others in the same sector.")
             
             def format_numbers(val):
+                if pd.isna(val):
+                    return "N/A"
                 if isinstance(val, (int, float)):
-                    return '{:,.0f}'.format(val)
+                    return '{:,.2f}'.format(val)
                 return val
             
             try:
