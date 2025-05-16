@@ -768,7 +768,7 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
                 "Quick ratio": quick_ratio,
                 "Free cash flow": fcf,
                 "Operating cash flow margin": operatingmargin_value,
-                "Dividend yield": dividendYield,
+                "Dividend yield": dividendYield_value,
                 "Dividend payout ratio": payoutRatio,
             }])
         except Exception as e:
