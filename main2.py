@@ -713,7 +713,7 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
                 company_health:X
                 dividend:X
     
-                Each rating must be an integer between 1 and 5, where:
+                Each rating for future_performance, past_performance, company_health and dividend must be an integer between 1 and 5, where:
                 5 = Excellent
                 4 = Good
                 3 = Average
@@ -4108,6 +4108,11 @@ if st.button("Get Data"):
                             margin=dict(t=100, b=100, l=100, r=100),
                         )
                         st.plotly_chart(radfig)
+                        st.write(stock_current_value)
+                        st.write(future_performance)
+                        st.write(past_performance)
+                        st.write(company_health)
+                        st.write(dividend)
                     except Exception as e:
                         st.write("")
                     ''
