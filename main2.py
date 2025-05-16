@@ -498,6 +498,7 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
     forwardPe_value = 'N/A' if forwardPe == 'N/A' else f'{forwardPe:.2f}'
     pbRatio_value = 'N/A' if pbRatio == 'N/A' else f'{pbRatio:.2f}'
     deRatio_value = 'N/A' if deRatio == 'N/A' else f'{deRatio/100:.2f}'
+    earnings_growth_value = 'N/A' if earnings_growth == 'N/A' else f'{earnings_growth*100:.2f}%'
     revenue_growth_current_value = 'N/A' if revenue_growth_current == 'N/A' else f'{revenue_growth_current*100:.2f}%'
     if fcf == 'N/A' or revenue == 'N/A': fcf_margin = 'N/A'
     else: fcf_margin = (fcf/revenue)
@@ -761,8 +762,8 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
                 "Roe": roe_value,
                 "Roa": roa_value,
                 "Gross margin": grossmargin_value,
-                "Revenue growth": revenue_growth,
-                "Earnings growth": earnings_growth,
+                "Revenue growth": revenue_growth_current_value,
+                "Earnings growth": earnings_growth_value,
                 "DE": deRatio_value,
                 "Current ratio": current_ratio,
                 "Quick ratio": quick_ratio,
