@@ -752,26 +752,24 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
         except Exception as e:
             analysis3 = ""
         try:
-            datachecking = pd.DataFrame(
-                {
-                    "PE" : peRatio,
-                    "PB" : pbRatio,
-                    "EV/EBITDA" : ev_to_ebitda,
-                    "Net profit margin" : profitmargin,
-                    "Roe" : roe,
-                    "Roa" : roa,
-                    "Gross margin" : grossmargin,
-                    "Revenue growth" : revenue_growth,
-                    "Earnings growth" : earnings_growth,
-                    "DE" : deRatio_value,
-                    "Current ratio" : current_ratio,
-                    "Quick ratio" : quick_ratio,
-                    "Free cash flow" : fcf,
-                    "Operating cash flow margin" : operatingmargin,
-                    "Dividend yield" : dividendYield,
-                    "Dividend payout ratio" : payoutRatio,
-                }
-            )
+            datachecking = pd.DataFrame([{
+                "PE": peRatio,
+                "PB": pbRatio,
+                "EV/EBITDA": ev_to_ebitda,
+                "Net profit margin": profitmargin,
+                "Roe": roe,
+                "Roa": roa,
+                "Gross margin": grossmargin,
+                "Revenue growth": revenue_growth,
+                "Earnings growth": earnings_growth,
+                "DE": deRatio_value,
+                "Current ratio": current_ratio,
+                "Quick ratio": quick_ratio,
+                "Free cash flow": fcf,
+                "Operating cash flow margin": operatingmargin,
+                "Dividend yield": dividendYield,
+                "Dividend payout ratio": payoutRatio,
+            }])
         except Exception as e:
             datachecking = e
     
