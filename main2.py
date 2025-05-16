@@ -4108,11 +4108,6 @@ if st.button("Get Data"):
                             margin=dict(t=100, b=100, l=100, r=100),
                         )
                         st.plotly_chart(radfig)
-                        st.write(stock_current_value)
-                        st.write(future_performance)
-                        st.write(past_performance)
-                        st.write(company_health)
-                        st.write(dividend)
                     except Exception as e:
                         st.write("")
                     ''
