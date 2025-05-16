@@ -719,6 +719,13 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
                 3 = Average
                 2 = Below Average
                 1 = Poor
+
+                For stock_current_price_valuation, use these ratings, where:
+                5 = Very Cheap
+                4 = Cheap
+                3 = Average
+                2 = Expensive
+                1 = Very Expensive
                 """
     
             def analyze_stock3(prompt_text, tokens):
