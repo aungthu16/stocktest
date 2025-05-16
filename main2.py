@@ -2025,10 +2025,18 @@ if st.button("Get Data"):
 #Income Statement
             st.subheader("Income Statement (P&L)", divider ='gray')
             st.info("Notes: An income statement or profit and loss account shows the company's revenues and expenses during a particular period. It indicates how the revenues (also known as the “top line”) are transformed into the net income or net profit (the result after all revenues and expenses have been accounted for). The purpose of the income statement is to show managers and investors whether the company made money (profit) or lost money (loss) during the period being reported. It provides insight into a company’s operations, efficiency, management, and performance relative to others in the same sector.")
+            
+            def format_numbers(val):
+                if isinstance(val, (int, float)):
+                    return '{:,.0f}'.format(val)
+                return val
+            
             try:
                 formatted_columns = [col.strftime('%Y-%m-%d') if isinstance(col, pd.Timestamp) else col for col in income_statement_flipped.columns]
                 income_statement_flipped.columns = formatted_columns
-                st.dataframe(income_statement_flipped,use_container_width=True)
+                #st.dataframe(income_statement_flipped,use_container_width=True)
+                income_statement_formatted_df = income_statement_flipped.applymap(format_numbers)
+                st.dataframe(income_statement_formatted_df,use_container_width=True)
                 #chart_setup
                 income_items = ['Total Revenue', 'Gross Profit', 'Operating Income', 'Net Income', 'EBITDA']
                 income_bar_data = income_statement_flipped.loc[income_items].transpose()
@@ -2105,7 +2113,9 @@ if st.button("Get Data"):
             try:
                 formatted_columns2 = [col.strftime('%Y-%m-%d') if isinstance(col, pd.Timestamp) else col for col in balance_sheet_flipped.columns]
                 balance_sheet_flipped.columns = formatted_columns2
-                st.dataframe(balance_sheet_flipped,use_container_width=True)
+                #st.dataframe(balance_sheet_flipped,use_container_width=True)
+                balance_sheet_formatted_df = balance_sheet_flipped.applymap(format_numbers)
+                st.dataframe(balance_sheet_formatted_df,use_container_width=True)
                 #chart_setup
                 balance_items = ['Cash And Cash Equivalents','Total Assets', 'Total Liabilities Net Minority Interest', 'Stockholders Equity']
                 balance_bar_data = balance_sheet_flipped.loc[balance_items].transpose()
@@ -2180,7 +2190,9 @@ if st.button("Get Data"):
             try:
                 formatted_columns3 = [col.strftime('%Y-%m-%d') if isinstance(col, pd.Timestamp) else col for col in cashflow_statement_flipped.columns]
                 cashflow_statement_flipped.columns = formatted_columns3
-                st.dataframe(cashflow_statement_flipped,use_container_width=True)
+                #st.dataframe(cashflow_statement_flipped,use_container_width=True)
+                cashflow_statement_formatted_df = cashflow_statement_flipped.applymap(format_numbers)
+                st.dataframe(cashflow_statement_formatted_df,use_container_width=True)
                 #chart_setup
                 cashflow_items = ['Operating Cash Flow', 'Investing Cash Flow', 'Financing Cash Flow', 'Free Cash Flow']
                 cashflow_bar_data = cashflow_statement_flipped.loc[cashflow_items].transpose()
