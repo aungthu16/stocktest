@@ -707,7 +707,7 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
                 - Cashflow Statement data: {cashflow_statement_tb}
                         
                 Provide ONLY these 5 numbers in the exact format below (no other text):
-                stock_current_price_valuation:X
+                stock_current_value:X
                 future_performance:X
                 past_performance:X
                 company_health:X
