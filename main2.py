@@ -493,6 +493,7 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
     except: pegRatio_value = 'N/A'
     beta_value = 'N/A' if beta == 'N/A' else f'{beta:.2f}'
     roe_value = 'N/A' if roe == 'N/A' else f'{roe*100:.2f}%'
+    roa_value = 'N/A' if roa == 'N/A' else f'{roa*100:.2f}%'
     pe_value = 'N/A' if peRatio == 'N/A' else f'{peRatio:.2f}'
     forwardPe_value = 'N/A' if forwardPe == 'N/A' else f'{forwardPe:.2f}'
     pbRatio_value = 'N/A' if pbRatio == 'N/A' else f'{pbRatio:.2f}'
@@ -756,17 +757,17 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
                 "PE": peRatio,
                 "PB": pbRatio,
                 "EV/EBITDA": ev_to_ebitda,
-                "Net profit margin": profitmargin,
-                "Roe": roe,
-                "Roa": roa,
-                "Gross margin": grossmargin,
+                "Net profit margin": profitmargin_value,
+                "Roe": roe_value,
+                "Roa": roa_value,
+                "Gross margin": grossmargin_value,
                 "Revenue growth": revenue_growth,
                 "Earnings growth": earnings_growth,
                 "DE": deRatio_value,
                 "Current ratio": current_ratio,
                 "Quick ratio": quick_ratio,
                 "Free cash flow": fcf,
-                "Operating cash flow margin": operatingmargin,
+                "Operating cash flow margin": operatingmargin_value,
                 "Dividend yield": dividendYield,
                 "Dividend payout ratio": payoutRatio,
             }])
