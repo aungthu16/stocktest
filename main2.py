@@ -301,7 +301,7 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
     try:
         url2 = f'https://stockanalysis.com/stocks/{ticker}/financials/'
         r2 = requests.get(url2)
-        soup2 = BeautifulSoup(r2.text,"lxml")
+        soup2 = BeautifulSoup(r2.text,"html.parser")
         table2 = soup2.find("table",class_ = "w-full border-separate border-spacing-0 text-sm sm:text-base [&_tbody]:sm:whitespace-nowrap [&_thead]:whitespace-nowrap")
         rows2 = table2.find_all("tr")
         headers2 = []
