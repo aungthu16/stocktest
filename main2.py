@@ -573,11 +573,11 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
                 - Historical price data: {extended_data_r}
                 - Key financial metrics: 
                     - Valuation: P/E Ratio = {peRatio}, P/B Ratio = {pbRatio}, EV/EBITDA = {ev_to_ebitda}
-                    - Profitability: Net profit margin = {profitmargin}, ROE = {roe}, ROA = {roa}, Gross margin = {grossmargin}
-                    - Growth: Revenue growth = {revenue_growth}, Earnings growth = {earnings_growth}
+                    - Profitability: Net profit margin = {profitmargin_pct}, ROE = {roe_value}, ROA = {roa_value}, Gross margin = {grossmargin_pct}
+                    - Growth: Revenue growth = {revenue_growth_value}, Earnings growth = {earnings_growth_value}
                     - Financial health: Debt-to-equity = {deRatio_value}, Current ratio = {current_ratio}, Quick ratio = {quick_ratio}
-                    - Cash flow: Free cash flow = {fcf}, Operating cash flow margin = {operatingmargin}
-                    - Dividends: Dividend yield = {dividendYield}, Dividend payout ratio = {payoutRatio}
+                    - Cash flow: Free cash flow = {fcf}, Operating cash flow margin = {operatingmargin_pct}
+                    - Dividends: Dividend yield = {dividendYield_value}, Dividend payout ratio = {payoutRatio}
                 - Income Statement data: {income_statement_tb}
                 - Balance Sheet data: {balance_sheet_tb}
                 - Cashflow Statement data: {cashflow_statement_tb}
