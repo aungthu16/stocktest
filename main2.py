@@ -499,6 +499,7 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
     pbRatio_value = 'N/A' if pbRatio == 'N/A' else f'{pbRatio:.2f}'
     deRatio_value = 'N/A' if deRatio == 'N/A' else f'{deRatio/100:.2f}'
     earnings_growth_value = 'N/A' if earnings_growth == 'N/A' else f'{earnings_growth*100:.2f}%'
+    revenue_growth_value = 'N/A' if revenue_growth == 'N/A' else f'{revenue_growth*100:.2f}%'
     revenue_growth_current_value = 'N/A' if revenue_growth_current == 'N/A' else f'{revenue_growth_current*100:.2f}%'
     if fcf == 'N/A' or revenue == 'N/A': fcf_margin = 'N/A'
     else: fcf_margin = (fcf/revenue)
@@ -518,6 +519,9 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
     else:
         try: fcfmargin_value = float(fcf_margin)
         except ValueError: fcfmargin_value = 'N/A'
+    grossmargin_pct = 'N/A' if grossmargin_value == 'N/A' else f'{grossmargin_value*100:.2f}%'
+    operatingmargin_pct = 'N/A' if operatingmargin_value == 'N/A' else f'{operatingmargin_value*100:.2f}%'
+    profitmargin_pct = 'N/A' if profitmargin_value == 'N/A' else f'{profitmargin_value*100:.2f}%'
     dividends_value = 'N/A' if dividends == 'N/A' else f'${dividends:,.2f}'
     dividendYield_value = 'N/A' if dividendYield == 'N/A' else f'{dividendYield*100:.2f}%'
     payoutRatio_value = 'N/A' if payoutRatio == 'N/A' else f'{payoutRatio:.2f}'
@@ -758,17 +762,17 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
                 "PE": peRatio,
                 "PB": pbRatio,
                 "EV/EBITDA": ev_to_ebitda,
-                "Net profit margin": profitmargin_value,
+                "Net profit margin": profitmargin_pct,
                 "Roe": roe_value,
                 "Roa": roa_value,
-                "Gross margin": grossmargin_value,
-                "Revenue growth": revenue_growth_current_value,
+                "Gross margin": grossmargin_pct,
+                "Revenue growth": revenue_growth_value,
                 "Earnings growth": earnings_growth_value,
                 "DE": deRatio_value,
                 "Current ratio": current_ratio,
                 "Quick ratio": quick_ratio,
                 "Free cash flow": fcf,
-                "Operating cash flow margin": operatingmargin_value,
+                "Operating cash flow margin": operatingmargin_pct,
                 "Dividend yield": dividendYield_value,
                 "Dividend payout ratio": payoutRatio,
             }])
