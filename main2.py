@@ -520,68 +520,106 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
     ########################
 
     ##### Basic Data Processing #####
+    # Change Dollar
     try: change_dollar = price - previous_close
     except: change_dollar = 'N/A'
+    # Change Percent
     try: change_percent = (change_dollar / previous_close) * 100
     except: change_percent = 'N/A'
+    # YF Mos
     try: yf_mos = ((yf_targetprice - price)/yf_targetprice) * 100
     except: yf_mos = 'N/A'
+    # EPS Yield
     try: eps_yield = eps/price
     except: eps_yield = 'N/A'
+    # Employee Value
     employee_value = 'N/A' if employee == 'N/A' else f'{employee:,}'
+    # Market Value
     marketCap_value = 'N/A' if marketCap == 'N/A' else f'${marketCap/1000000:,.2f}'
+    # Share Outstanding Value
     sharesOutstanding_value = 'N/A' if sharesOutstanding == 'N/A' else f'{sharesOutstanding/1000000000:,.2f}B'
+    # Insider Pct Value
     insiderPct_value = 'N/A' if insiderPct == 'N/A' else f'{insiderPct*100:,.2f}%'
+    # Institutions Pct Value
     institutionsPct_value = 'N/A' if institutionsPct == 'N/A' else f'{institutionsPct*100:,.2f}%'
+    # EPS Value
     eps_value = 'N/A' if eps == 'N/A' else f'{eps:,.2f}'
+    # PEG Ratio Value
     try: pegRatio_value = 'N/A' if pegRatio == 'N/A' else f'{pegRatio:,.2f}'
     except: pegRatio_value = 'N/A'
+    # Beta Value
     beta_value = 'N/A' if beta == 'N/A' else f'{beta:.2f}'
+    # ROE Value
     roe_value = 'N/A' if roe == 'N/A' else f'{roe*100:.2f}%'
+    # ROA Value
     roa_value = 'N/A' if roa == 'N/A' else f'{roa*100:.2f}%'
+    # PE Value
     pe_value = 'N/A' if peRatio == 'N/A' else f'{peRatio:.2f}'
+    # Forward PE Value
     forwardPe_value = 'N/A' if forwardPe == 'N/A' else f'{forwardPe:.2f}'
+    # PB Value
     pbRatio_value = 'N/A' if pbRatio == 'N/A' else f'{pbRatio:.2f}'
+    # DE Value
     deRatio_value = 'N/A' if deRatio == 'N/A' else f'{deRatio/100:.2f}'
+    # Earnings Growth Value
     earnings_growth_value = 'N/A' if earnings_growth == 'N/A' else f'{earnings_growth*100:.2f}%'
+    # Revenue Growth Value
     revenue_growth_value = 'N/A' if revenue_growth == 'N/A' else f'{revenue_growth*100:.2f}%'
+    # Revenue Grwoth Current Value
     revenue_growth_current_value = 'N/A' if revenue_growth_current == 'N/A' else f'{revenue_growth_current*100:.2f}%'
+    # FCF Margin
     if fcf == 'N/A' or revenue == 'N/A': fcf_margin = 'N/A'
     else: fcf_margin = (fcf/revenue)
+    # Gross Margin Value
     if grossmargin is None or grossmargin == 'N/A': grossmargin_value = 'N/A'
     else:
         try: grossmargin_value = float(grossmargin)
         except ValueError: grossmargin_value = 'N/A'
+    # Operating Margin Value
     if operatingmargin is None or operatingmargin == 'N/A': operatingmargin_value = 'N/A'
     else:
         try: operatingmargin_value = float(operatingmargin)
         except ValueError: operatingmargin_value = 'N/A'
+    # Profit Margin Value
     if profitmargin is None or profitmargin == 'N/A': profitmargin_value = 'N/A'
     else:
         try: profitmargin_value = float(profitmargin)
         except ValueError: profitmargin_value = 'N/A'
+    # FCF Margin Value
     if fcf_margin is None or fcf_margin == 'N/A': fcfmargin_value = 'N/A'
     else:
         try: fcfmargin_value = float(fcf_margin)
         except ValueError: fcfmargin_value = 'N/A'
+    # Gross Margin Pct
     grossmargin_pct = 'N/A' if grossmargin_value == 'N/A' else f'{grossmargin_value*100:.2f}%'
+    # Operating Margin Pct
     operatingmargin_pct = 'N/A' if operatingmargin_value == 'N/A' else f'{operatingmargin_value*100:.2f}%'
+    # Profit Margin Pct
     profitmargin_pct = 'N/A' if profitmargin_value == 'N/A' else f'{profitmargin_value*100:.2f}%'
+    # Dividend Value
     dividends_value = 'N/A' if dividends == 'N/A' else f'${dividends:,.2f}'
+    # Dividend Yield Value
     dividendYield_value = 'N/A' if dividendYield == 'N/A' else f'{dividendYield:.2f}%'
+    # Payout Ratio Value
     payoutRatio_value = 'N/A' if payoutRatio == 'N/A' else f'{payoutRatio:.2f}'
+    # Ex Dividend Date
     if exDividendDate == 'N/A': exDividendDate_value = 'N/A'
     else: 
         exDate = datetime.datetime.fromtimestamp(exDividendDate)
         exDividendDate_value = exDate.strftime('%Y-%m-%d')
+    # EPS Yield Value
     eps_yield_value = 'N/A' if eps_yield == 'N/A' else f'{eps_yield * 100:.2f}%'
+    # F score Value
     try:
         sa_piotroski_value = 'N/A' if sa_piotroski == 'N/A' else float(sa_piotroski)
     except: sa_piotroski_value = 'N/A'
+    # Z score Value
     try:
         sa_altmanz_value = 'N/A' if sa_altmanz == 'N/A' else float(sa_altmanz)
     except: sa_altmanz_value = 'N/A'
+    # Total ESG Value
     totalEsg_value = 0.00 if totalEsg == 'N/A' else totalEsg
+    # Income Statement
     try: 
         income_statement = income_statement_tb  
         quarterly_income_statement = quarterly_income_statement_tb
@@ -589,6 +627,7 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
         income_statement.insert(0, 'TTM', ttm)
         income_statement_flipped = income_statement.iloc[::-1]
     except: income_statement_flipped =''
+    # Balance Sheet Statement
     try:
         balance_sheet = balance_sheet_tb
         quarterly_balance_sheet = quarterly_balance_sheet_tb
@@ -596,6 +635,7 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
         balance_sheet.insert(0, 'TTM', ttm)
         balance_sheet_flipped = balance_sheet.iloc[::-1]
     except: balance_sheet_flipped = ''
+    # Cash Flow Statement
     try:
         cashflow_statement = cashflow_statement_tb
         quarterly_cashflow_statement = quarterly_cashflow_statement_tb
