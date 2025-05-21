@@ -869,47 +869,26 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
     # performance_id, fair_value, fvDate, moat, moatDate, starRating, assessment, \
     # apiKey 
 
-    return '''Profile''' 
-    price, beta, name, sector, industry, employee, marketCap, longProfile, website, ticker, picture_url, country, sharesOutstanding, exchange_value, upper_ticker, previous_close, beta_value, sharesOutstanding_value, employee_value, marketCap_value, change_percent, change_dollar, apiKey, \
-    '''Earnings''' 
+    return price, beta, name, sector, industry, employee, marketCap, longProfile, website, ticker, picture_url, country, sharesOutstanding, exchange_value, upper_ticker, previous_close, beta_value, sharesOutstanding_value, employee_value, marketCap_value, change_percent, change_dollar, apiKey, \
     eps, pegRatio, revenue, eps_yield_value, eps_value, pegRatio_value, eps_yield, eps_trend, earnings_history, earningsDate, \
-    '''Target Price'''
     yf_targetprice, yf_consensus, yf_analysts_count, yf_mos, \
-    '''Valuation'''
     peRatio, forwardPe, pbRatio, pe_value, forwardPe_value, pbRatio_value, ev_to_ebitda, \
-    '''Dividends'''
     dividendYield, payoutRatio, dividends, dividends_value, dividendYield_value, payoutRatio_value, exDividendDate_value, dividend_history, exDividendDate, \
-    '''Financial Health'''
     deRatio, sa_piotroski_value, sa_altmanz_value, deRatio_value, quick_ratio, current_ratio, \
-    '''Profitability'''
     roe, roa, roe_value, \
-    '''Margins'''
     ebitdamargin, operatingmargin, grossmargin, profitmargin, fcf_margin, grossmargin_value, operatingmargin_value, profitmargin_value, fcfmargin_value, \
-    '''Cash Flow'''
     fcf, \
-    '''Growth'''
     revenue_growth_current, revenue_growth_current_value, earnings_growth, revenue_growth, \
-    '''Holdings'''
     institutionsPct, insiderPct, insiderPct_value, institutionsPct_value, \
-    '''Sustainability'''
     totalEsg, enviScore, socialScore, governScore, percentile, totalEsg_value, \
-    '''Financial Statements'''
     income_statement_flipped, balance_sheet_flipped, cashflow_statement_flipped, cashflow_statement_tb, quarterly_cashflow_statement_tb, balance_sheet_tb, quarterly_balance_sheet_tb, income_statement_tb, quarterly_income_statement_tb, \
-    '''News'''
     news, \
-    '''Comparisons'''
     matching_etf, yf_com, \
-    '''Morningstar'''
     performance_id, fair_value, fvDate, moat, moatDate, starRating, assessment, \
-    '''Seeking_Alpha'''
     quant_rating, growth_grade, momentum_grade, profitability_grade, value_grade, yield_on_cost_grade, ticker_id, sk_targetprice, authors_strongsell_count, authors_strongbuy_count, authors_sell_count, authors_hold_count, authors_buy_count, authors_rating, authors_count, epsRevisionsGrade, dpsRevisionsGrade, dividendYieldGrade, divSafetyCategoryGrade, divGrowthCategoryGrade, divConsistencyCategoryGrade, sellSideRating, \
-    '''SA'''
     sa_growth_df, sa_metrics_df2, sa_metrics_df, sa_analysts_count, sa_analysts_consensus, sa_analysts_targetprice, sa_altmanz, sa_piotroski, \
-    '''MB'''
     insider_mb, mb_alt_headers, mb_alt_df, mb_div_df, mb_com_df, mb_targetprice_value, mb_predicted_upside, mb_consensus_rating, mb_rating_score, \
-    '''Technical_Analysis'''
     end_date, extended_data_r, macd_data_r, rsi_data_r, ta_data_r, \
-    '''AI_Analysis'''
     analysis3, analysis2, analysis
 
 ''
@@ -935,47 +914,26 @@ use_ai = st.checkbox("Analyze using AI (The system will use the deepseek-r1-dist
 st.caption("This tool is developed by Invest IQ Central.")
 if st.button("Get Data"):
     try:
-        '''Profile''' 
         price, beta, name, sector, industry, employee, marketCap, longProfile, website, ticker, picture_url, country, sharesOutstanding, exchange_value, upper_ticker, previous_close, beta_value, sharesOutstanding_value, employee_value, marketCap_value, change_percent, change_dollar, apiKey, \
-        '''Earnings''' 
         eps, pegRatio, revenue, eps_yield_value, eps_value, pegRatio_value, eps_yield, eps_trend, earnings_history, earningsDate, \
-        '''Target Price'''
         yf_targetprice, yf_consensus, yf_analysts_count, yf_mos, \
-        '''Valuation'''
         peRatio, forwardPe, pbRatio, pe_value, forwardPe_value, pbRatio_value, ev_to_ebitda, \
-        '''Dividends'''
         dividendYield, payoutRatio, dividends, dividends_value, dividendYield_value, payoutRatio_value, exDividendDate_value, dividend_history, exDividendDate, \
-        '''Financial Health'''
         deRatio, sa_piotroski_value, sa_altmanz_value, deRatio_value, quick_ratio, current_ratio, \
-        '''Profitability'''
         roe, roa, roe_value, \
-        '''Margins'''
         ebitdamargin, operatingmargin, grossmargin, profitmargin, fcf_margin, grossmargin_value, operatingmargin_value, profitmargin_value, fcfmargin_value, \
-        '''Cash Flow'''
         fcf, \
-        '''Growth'''
         revenue_growth_current, revenue_growth_current_value, earnings_growth, revenue_growth, \
-        '''Holdings'''
         institutionsPct, insiderPct, insiderPct_value, institutionsPct_value, \
-        '''Sustainability'''
         totalEsg, enviScore, socialScore, governScore, percentile, totalEsg_value, \
-        '''Financial Statements'''
         income_statement_flipped, balance_sheet_flipped, cashflow_statement_flipped, cashflow_statement_tb, quarterly_cashflow_statement_tb, balance_sheet_tb, quarterly_balance_sheet_tb, income_statement_tb, quarterly_income_statement_tb, \
-        '''News'''
         news, \
-        '''Comparisons'''
         matching_etf, yf_com, \
-        '''Morningstar'''
         performance_id, fair_value, fvDate, moat, moatDate, starRating, assessment, \
-        '''Seeking_Alpha'''
         quant_rating, growth_grade, momentum_grade, profitability_grade, value_grade, yield_on_cost_grade, ticker_id, sk_targetprice, authors_strongsell_count, authors_strongbuy_count, authors_sell_count, authors_hold_count, authors_buy_count, authors_rating, authors_count, epsRevisionsGrade, dpsRevisionsGrade, dividendYieldGrade, divSafetyCategoryGrade, divGrowthCategoryGrade, divConsistencyCategoryGrade, sellSideRating, \
-        '''SA'''
         sa_growth_df, sa_metrics_df2, sa_metrics_df, sa_analysts_count, sa_analysts_consensus, sa_analysts_targetprice, sa_altmanz, sa_piotroski, \
-        '''MB'''
         insider_mb, mb_alt_headers, mb_alt_df, mb_div_df, mb_com_df, mb_targetprice_value, mb_predicted_upside, mb_consensus_rating, mb_rating_score, \
-        '''Technical_Analysis'''
         end_date, extended_data_r, macd_data_r, rsi_data_r, ta_data_r, \
-        '''AI_Analysis'''
         analysis3, analysis2, analysis = get_stock_data(ticker, apiKey if apiKey.strip() else None, use_ai)
 
 #############################################         #############################################
