@@ -847,65 +847,27 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
             analysis3 = ""
     
     
-    #return analysis3, analysis2, analysis, income_statement_flipped, balance_sheet_flipped, cashflow_statement_flipped, totalEsg_value, sa_piotroski_value, sa_altmanz_value, dividends_value, dividendYield_value, payoutRatio_value, exDividendDate_value, eps_yield_value, fcf_margin, grossmargin_value, operatingmargin_value, profitmargin_value, fcfmargin_value, eps_value, pegRatio_value, beta_value, roe_value, pe_value, forwardPe_value, pbRatio_value, deRatio_value, revenue_growth_current_value, sharesOutstanding_value, insiderPct_value, institutionsPct_value, employee_value, marketCap_value, yf_mos, change_percent, change_dollar, ev_to_ebitda, earnings_growth, revenue_growth, quick_ratio, news, insider_mb, sa_growth_df, eps_yield, end_date, extended_data_r, macd_data_r, rsi_data_r, ta_data_r, matching_etf, yf_com, mb_alt_headers, sa_metrics_df2, sa_metrics_df, cashflow_statement_tb, quarterly_cashflow_statement_tb, balance_sheet_tb, quarterly_balance_sheet_tb, income_statement_tb, quarterly_income_statement_tb, mb_alt_df, mb_div_df, mb_com_df, mb_targetprice_value, mb_predicted_upside, mb_consensus_rating, mb_rating_score, sa_analysts_count, sa_analysts_consensus, sa_analysts_targetprice, sa_altmanz, sa_piotroski, sk_targetprice, authors_strongsell_count, authors_strongbuy_count, authors_sell_count, authors_hold_count, authors_buy_count, authors_rating, authors_count, epsRevisionsGrade, dpsRevisionsGrade, dividendYieldGrade, divSafetyCategoryGrade, divGrowthCategoryGrade, divConsistencyCategoryGrade, sellSideRating, ticker_id, quant_rating, growth_grade, momentum_grade, profitability_grade, value_grade, yield_on_cost_grade, performance_id, fair_value, fvDate, moat, moatDate, starRating, assessment, eps_trend, earnings_history, dividend_history, earningsDate, previous_close, current_ratio, fcf, revenue, exchange_value, upper_ticker, roa, ebitdamargin, operatingmargin, grossmargin, profitmargin, roe, revenue_growth_current, exDividendDate, pbRatio, deRatio, dividends, ticker, sharesOutstanding, institutionsPct, insiderPct, totalEsg, enviScore, socialScore, governScore, percentile, price, beta, name, sector, industry, employee, marketCap, longProfile, eps, pegRatio, picture_url, country, yf_targetprice, yf_consensus, yf_analysts_count, website, peRatio, forwardPe, dividendYield, payoutRatio, apiKey
-
-    return price, beta, name, sector, industry, employee, marketCap, longProfile, \
-    website, ticker, picture_url, country, sharesOutstanding, exchange_value, \
-    upper_ticker, previous_close, beta_value, sharesOutstanding_value, \
-    employee_value, marketCap_value, change_percent, change_dollar, apiKey, \
-
-    eps, pegRatio, revenue, eps_yield_value, eps_value, pegRatio_value, \
-    eps_yield, eps_trend, earnings_history, earningsDate, \
-    
-    yf_targetprice, yf_consensus, yf_analysts_count, yf_mos, \
-    
-    peRatio, forwardPe, pbRatio, pe_value, forwardPe_value, pbRatio_value, ev_to_ebitda, \
-    
-    dividendYield, payoutRatio, dividends, dividends_value, dividendYield_value, \
-    payoutRatio_value, exDividendDate_value, dividend_history, exDividendDate, \
-    
-    deRatio, sa_piotroski_value, sa_altmanz_value, deRatio_value, quick_ratio, current_ratio, \
-    
-    roe, roa, roe_value, \
-    
-    ebitdamargin, operatingmargin, grossmargin, profitmargin, fcf_margin, \
-    grossmargin_value, operatingmargin_value, profitmargin_value, fcfmargin_value, \
-    
-    fcf, \
-    
-    revenue_growth_current, revenue_growth_current_value, earnings_growth, \
-    revenue_growth, \
-    
-    institutionsPct, insiderPct, insiderPct_value, institutionsPct_value, \
-    
+    return analysis, analysis2, analysis3, \
+    ticker, price, beta, name, beta_value, sector, website, industry, employee, sharesOutstanding, sharesOutstanding_value, employee_value, marketCap_value, marketCap, longProfile, picture_url, country, exchange_value, upper_ticker, change_percent, change_dollar, previous_close, \
+    revenue, eps, pegRatio, eps_yield_value, eps_value, pegRatio_value, eps_yield, eps_trend, earnings_history, earningsDate, \
+    income_statement_tb, quarterly_income_statement_tb, income_statement_flipped, balance_sheet_flipped, cashflow_statement_flipped, cashflow_statement_tb, quarterly_cashflow_statement_tb, balance_sheet_tb, quarterly_balance_sheet_tb, \
     totalEsg, enviScore, socialScore, governScore, percentile, totalEsg_value, \
-    
-    income_statement_flipped, balance_sheet_flipped, cashflow_statement_flipped, \
-    cashflow_statement_tb, quarterly_cashflow_statement_tb, balance_sheet_tb, \
-    quarterly_balance_sheet_tb, income_statement_tb, quarterly_income_statement_tb, \
-    
+    sa_analysts_count, sa_analysts_consensus, sa_analysts_targetprice, sa_altmanz, sa_piotroski, sa_piotroski_value, sa_altmanz_value, sa_growth_df, sa_metrics_df2, sa_metrics_df, \
+    dividendYield, payoutRatio, dividends, exDividendDate, dividends_value, dividendYield_value, payoutRatio_value, exDividendDate_value, dividend_history, \
+    operatingmargin, grossmargin, profitmargin, fcf, fcf_margin, grossmargin_value, operatingmargin_value, profitmargin_value, fcfmargin_value, ebitdamargin, \
+    roe, roa, roe_value, \
+    peRatio, forwardPe, pbRatio, pe_value, forwardPe_value, pbRatio_value, ev_to_ebitda, \
+    deRatio, deRatio_value, quick_ratio, current_ratio, \
+    revenue_growth_current, earnings_growth, revenue_growth, revenue_growth_current_value, \
+    institutionsPct, insiderPct, insiderPct_value, institutionsPct_value, \
+    yf_targetprice, yf_consensus, yf_analysts_count, yf_mos, \
     news, \
-    
-    matching_etf, yf_com, \
-    
-    performance_id, fair_value, fvDate, moat, moatDate, starRating, assessment, \
-    
-    quant_rating, growth_grade, momentum_grade, profitability_grade, value_grade, \
-    yield_on_cost_grade, ticker_id, sk_targetprice, authors_strongsell_count, \
-    authors_strongbuy_count, authors_sell_count, authors_hold_count, authors_buy_count, \
-    authors_rating, authors_count, epsRevisionsGrade, dpsRevisionsGrade, \
-    dividendYieldGrade, divSafetyCategoryGrade, divGrowthCategoryGrade, \
-    divConsistencyCategoryGrade, sellSideRating, \
-    
-    sa_growth_df, sa_metrics_df2, sa_metrics_df, sa_analysts_count, \
-    sa_analysts_consensus, sa_analysts_targetprice, sa_altmanz, sa_piotroski, \
-    
-    insider_mb, mb_alt_headers, mb_alt_df, mb_div_df, mb_com_df, \
-    mb_targetprice_value, mb_predicted_upside, mb_consensus_rating, mb_rating_score, \
-    
+    mb_consensus_rating, mb_rating_score, mb_alt_df, mb_div_df, mb_com_df, mb_targetprice_value, mb_predicted_upside, insider_mb, mb_alt_headers, \
     end_date, extended_data_r, macd_data_r, rsi_data_r, ta_data_r, \
-    
-    analysis3, analysis2, analysis
+    matching_etf, yf_com, \
+    sk_targetprice, authors_strongsell_count, authors_strongbuy_count, authors_sell_count, authors_hold_count, authors_buy_count, authors_rating, authors_count, epsRevisionsGrade, dpsRevisionsGrade, dividendYieldGrade, divSafetyCategoryGrade, divGrowthCategoryGrade, divConsistencyCategoryGrade, sellSideRating, ticker_id, quant_rating, growth_grade, momentum_grade, profitability_grade, value_grade, yield_on_cost_grade, \
+    performance_id, fair_value, fvDate, moat, moatDate, starRating, assessment, \
+    apiKey 
 
 ''
 ''
