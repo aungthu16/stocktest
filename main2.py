@@ -1745,7 +1745,7 @@ if st.button("Get Data"):
                                     line=dict(color=custom_colors.get(ticker, '#1f77b4'), shape='spline', smoothing=1.3),
                                     showlegend=True,
                                     hoverinfo="text",
-                                    text=[f"{date}: {ret:.2f}%" for date, ret in zip(df_ticker['Date'], df_ticker['Relative Return'])]
+                                    text=[f"{date}: {ret*100:.2f}%" for date, ret in zip(df_ticker['Date'], df_ticker['Relative Return'])]
                                 )
                             )
                         fig.update_layout(
@@ -1769,15 +1769,15 @@ if st.button("Get Data"):
                     last_values = yf_com_df_melted.groupby('Ticker').last()
                     st.metric(
                         label=upper_ticker,
-                        value=f"{last_values.loc[upper_ticker, 'Relative Return']:.2f}%"
+                        value=f"{last_values.loc[upper_ticker, 'Relative Return']*100:.2f}%"
                     )
                     st.metric(
                         label="Sector",
-                        value=f"{last_values.loc['Sector', 'Relative Return']:.2f}%"
+                        value=f"{last_values.loc['Sector', 'Relative Return']*100:.2f}%"
                     )
                     st.metric(
                         label="S&P500",
-                        value=f"{last_values.loc['S&P500', 'Relative Return']:.2f}%"
+                        value=f"{last_values.loc['S&P500', 'Relative Return']*100:.2f}%"
                     )
                     stock_return = last_values.loc[upper_ticker, 'Relative Return']
                     sector_return = last_values.loc['Sector', 'Relative Return']
@@ -1785,11 +1785,11 @@ if st.button("Get Data"):
                     
                     performance_text = f"{upper_ticker} has "
                     if stock_return > sector_return and stock_return > sp500_return:
-                        performance_text += f"outperformed both its sector ({sector_return:.2f}%) and S&P500 ({sp500_return:.2f}%) with a return of {stock_return:.2f}%"
+                        performance_text += f"outperformed both its sector ({sector_return*100:.2f}%) and S&P500 ({sp500_return*100:.2f}%) with a return of {stock_return*100:.2f}%"
                     elif stock_return < sector_return and stock_return < sp500_return:
-                        performance_text += f"underperformed both its sector ({sector_return:.2f}%) and S&P500 ({sp500_return:.2f}%) with a return of {stock_return:.2f}%"
+                        performance_text += f"underperformed both its sector ({sector_return*100:.2f}%) and S&P500 ({sp500_return*100:.2f}%) with a return of {stock_return*100:.2f}%"
                     else:
-                        performance_text += f"shown mixed performance with a return of {stock_return:.2f}% compared to its sector ({sector_return:.2f}%) and S&P500 ({sp500_return:.2f}%)"
+                        performance_text += f"shown mixed performance with a return of {stock_return*100:.2f}% compared to its sector ({sector_return*100:.2f}%) and S&P500 ({sp500_return*100:.2f}%)"
                     
                     st.write("")
                     st.caption(performance_text)
