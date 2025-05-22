@@ -964,33 +964,6 @@ if st.button("Get Data"):
 
         with col6:
             st.write(hist_fig)
-            hist_fig = go.Figure()
-            hist_fig.add_trace(
-                go.Scatter(
-                    x=hist_price.index,
-                    y=hist_price['Close'],
-                    name='Close Price',
-                    line=dict(color='blue', width=2)
-                )
-            )
-            
-            # Update layout
-            hist_fig.update_layout(
-                title=dict(
-                    text=f'{ticker} Stock Price - Last 5 Years',
-                    x=0.5,
-                    xanchor='center'
-                ),
-                xaxis_title='Date',
-                yaxis_title='Price (USD)',
-                hovermode='x unified',
-                template='plotly_white',
-                showlegend=True,
-                plot_bgcolor='white'
-            )
-            hist_fig.update_xaxes(showgrid=True, gridwidth=1, gridcolor='lightgray')
-            hist_fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='lightgray')
-            st.plotly_chart(hist_fig, use_container_width=True)
         
         ''
         st.caption("Data source: Yahoo Finance")
