@@ -964,6 +964,9 @@ if st.button("Get Data"):
 
         with col6:
             try:
+                hist_price_melted = hist_price.reset_index().melt(id_vars='Date', value_name='Price')
+                hover_text = [f"Date: {date.strftime('%Y-%m-%d')}<br>Price: ${price:.2f}" 
+                              for date, price in zip(hist_price_melted['Date'], hist_price_melted['Price'])]
                 hist_fig = go.Figure()
                 hist_fig.add_trace(
                     go.Scatter(
@@ -971,9 +974,10 @@ if st.button("Get Data"):
                         y=hist_price_melted['Price'],
                         mode='lines',
                         name=ticker,
-                        line=dict(color='#5E9BEB', shape='spline', smoothing=1.3),
+                        line=dict(color='#1f77b4', shape='spline', smoothing=1.3),
                         showlegend=False,
-                        hovertemplate='Date: %{x|%Y-%m-%d}<br>Price: $%{y:.2f}<extra></extra>',
+                        hoverinfo="text",
+                        text=hover_text,
                     )
                 )
                 hist_fig.update_layout(
