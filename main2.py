@@ -644,6 +644,13 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
         cashflow_statement_flipped = cashflow_statement.iloc[::-1]
     except: cashflow_statement_flipped = ''
     ##### Data Processing End #####
+
+    ##### Historical Data Processing #####
+    try:
+        end_date_hp = datetime.datetime.today()
+        start_date_hp = end_date_hp - relativedelta(years=5)
+        hist_price = yf.download(ticker, start_date_hp.strftime('%Y-%m-%d'), end_date_hp.strftime('%Y-%m-%d'))['Close'])
+    except: hist_price = ""
     
     ##### AI Analysis #####
     analysis = ""
@@ -866,6 +873,7 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
     sa_growth_df, sa_metrics_df2, sa_metrics_df, sa_analysts_count, sa_analysts_consensus, sa_analysts_targetprice, sa_altmanz, sa_piotroski, \
     insider_mb, mb_alt_headers, mb_alt_df, mb_div_df, mb_com_df, mb_targetprice_value, mb_predicted_upside, mb_consensus_rating, mb_rating_score, \
     end_date, extended_data_r, macd_data_r, rsi_data_r, ta_data_r, \
+    hist_price, \
     analysis3, analysis2, analysis
 
 ''
@@ -911,6 +919,7 @@ if st.button("Get Data"):
         sa_growth_df, sa_metrics_df2, sa_metrics_df, sa_analysts_count, sa_analysts_consensus, sa_analysts_targetprice, sa_altmanz, sa_piotroski, \
         insider_mb, mb_alt_headers, mb_alt_df, mb_div_df, mb_com_df, mb_targetprice_value, mb_predicted_upside, mb_consensus_rating, mb_rating_score, \
         end_date, extended_data_r, macd_data_r, rsi_data_r, ta_data_r, \
+        hist_price, \
         analysis3, analysis2, analysis = get_stock_data(ticker, apiKey if apiKey.strip() else None, use_ai)
 
 #############################################         #############################################
@@ -934,11 +943,6 @@ if st.button("Get Data"):
             st.metric(label='Owned by Insiders', value=insiderPct_value)
             st.metric(label='Owned by Institutions', value=institutionsPct_value)
 
-        st.markdown(f"<div style='text-align: justify;'>{longProfile}</div>", unsafe_allow_html=True)
-        ''
-        st.caption("Data source: Yahoo Finance")
-        st.caption("Company logo source: Stockanalysis.com")
-
         with col4:
              st.markdown(f"""
              <div style='float: left; width: 100%;'>
@@ -953,6 +957,33 @@ if st.button("Get Data"):
                  </table>
              </div>
              """, unsafe_allow_html=True)
+             
+        col5, col6 = st.columns([3,2])     
+        with col5:
+            st.markdown(f"<div style='text-align: justify;'>{longProfile}</div>", unsafe_allow_html=True)
+
+        with col6:
+            hist_fig = go.Figure()
+            hist_fig.add_trace(
+                go.Scatter(
+                    x=hist_price.index,
+                    y=hist_price.values,
+                    name='Close Price',
+                    line=dict(color='blue')
+                )
+            )
+            hist_fig.update_layout(
+                title=f'{ticker} Stock Price - Last 5 Years',
+                xaxis_title='Date',
+                yaxis_title='Price (USD)',
+                hovermode='x unified',
+                template='plotly_white'
+            )
+            st.plotly_chart(hist_fig, use_container_width=True)
+        
+        ''
+        st.caption("Data source: Yahoo Finance")
+        st.caption("Company logo source: Stockanalysis.com")
         ''
         ''
 #############################################      #############################################
