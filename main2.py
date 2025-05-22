@@ -3488,9 +3488,9 @@ if st.button("Get Data"):
         with insider_trades:
             def highlight_insider_trades(val):
                 if val == 'Buy':
-                    bscolor = 'green'
+                    bscolor = '#37BC9B'
                 elif val == 'Sell':
-                    bscolor = 'red'
+                    bscolor = '#DA4453'
                 else:
                     bscolor ='#AAB2BD'
                 return f'background-color: {bscolor}; color: white'
@@ -3507,6 +3507,7 @@ if st.button("Get Data"):
                 filtered_insider_mb = insider_mb[
                     insider_mb["Transaction Date"].apply(lambda x: is_valid_date(x) and x != unwanted_string)
                 ]
+                filtered_insider_mb['Transaction Date'] = pd.to_datetime(filtered_insider_mb['Transaction Date']).dt.strftime('%Y-%m-%d')
                 st.dataframe(filtered_insider_mb.style.applymap(highlight_insider_trades, subset=['Buy/Sell']), use_container_width=True, hide_index=True, height = 600)
                 st.caption("Data source: Market Beat")
             except Exception as e:
