@@ -965,6 +965,28 @@ if st.button("Get Data"):
         with col6:
             hist_price_melted = hist_price.reset_index().melt(id_vars='Date', value_name='Price')
             years_sorted = hist_price_melted['Date'].dt.year.unique()
+
+            hist_fig = go.Figure()
+            hist_fig.add_trace(
+                go.Scatter(
+                    x=hist_price_melted['Date'],
+                    y=hist_price_melted['Price'],
+                    mode='lines',
+                    name=ticker,
+                    line=dict(color=custom_colors.get(ticker, '#1f77b4'), shape='spline', smoothing=1.3),
+                    showlegend=True,
+                    hoverinfo="text",
+                )
+            )
+            hist_fig.update_layout(
+                title={"text":f'{upper_ticker} Price ', "font": {"size": 22}},
+                title_y=1,  
+                title_x=0, 
+                xaxis=dict(title=None, showticklabels=show_labels, showgrid=True), 
+                yaxis=dict(title="Cumulative Relative Return", showgrid=True),
+                height=500,
+            )
+            st.plotly_chart(hist_fig, use_container_width=True)
             
             st.write(hist_price)
             st.write(hist_price_melted)
