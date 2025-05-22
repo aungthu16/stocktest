@@ -959,10 +959,10 @@ if st.button("Get Data"):
              """, unsafe_allow_html=True)
              
         col5, col6 = st.columns([3,3])     
-        with col5:
+        with col6:
             st.markdown(f"<div style='text-align: justify;'>{longProfile}</div>", unsafe_allow_html=True)
 
-        with col6:
+        with col5:
             try:
                 hist_price_melted = hist_price.reset_index().melt(id_vars='Date', value_name='Price')
                 hover_text = [f"Date: {date.strftime('%Y-%m-%d')}<br>Price: ${price:.2f}" 
@@ -981,7 +981,7 @@ if st.button("Get Data"):
                     )
                 )
                 hist_fig.update_layout(
-                    title={"text":f'{upper_ticker} Price ', "font": {"size": 18}},
+                    title={"text":f'{upper_ticker} Price Data', "font": {"size": 18}},
                     title_y=1,  
                     title_x=0,
                     margin=dict(t=30, b=40, l=80, r=30),
