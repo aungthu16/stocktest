@@ -1027,7 +1027,7 @@ if st.button("Get Data"):
                 cols1[4].metric(label='Revenue Growth',value=revenue_growth_current_value)
     
                 st.caption("Data source: Yahoo Finance")
-            ''
+                ''
  #Morning Star Research           
             else:
                 st.subheader('Stock Performance', divider='gray')
