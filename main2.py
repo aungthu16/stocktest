@@ -2669,9 +2669,9 @@ if st.button("Get Data"):
 
             def highlight_result(val):
                 if val == 'GOOD':
-                    color = 'green'
+                    color = '#37BC9B'
                 elif val == 'BAD':
-                    color = 'red'
+                    color = '#DA4453'
                 else:
                     color ='#AAB2BD'
                 return f'background-color: {color}; color: white'
