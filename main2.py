@@ -917,111 +917,6 @@ if st.button("Get Data"):
 ############################################# Profile #############################################
 #############################################         #############################################
         
-        st.write(f"**Price:** {price}") 
-        st.write(f"**Beta:** {beta}") 
-        st.write(f"**Name:** {name}") 
-        st.write(f"**Sector:** {sector}") 
-        st.write(f"**Industry:** {industry}") 
-        st.write(f"**Employee:** {employee}") 
-        st.write(f"**MarketCap:** {marketCap}") 
-        #longProfile, 
-        #website, 
-        #ticker, 
-        #picture_url, 
-        st.write(f"**Country:** {country}") 
-        st.write(f"**ShareOutstanding:** {sharesOutstanding}") 
-        #exchange_value, 
-        #upper_ticker, 
-        #previous_close, 
-        st.write(f"**Beta_v:** {beta_value}") 
-        st.write(f"**ShareOutstanding_v:** {sharesOutstanding_value}") 
-        st.write(f"**Employee_v:** {employee_value}") 
-        st.write(f"**MarketCap_v:** {marketCap_value}") 
-        st.write(f"**ChangePct:** {change_percent}") 
-        st.write(f"**ChangeDollar:** {change_dollar}") 
-        #apiKey,
-        st.write(f"**EPS:** {eps}") 
-        st.write(f"**PEGratio:** {pegRatio}") 
-        st.write(f"**Revenue:** {revenue}") 
-        st.write(f"**EPSYield_v:** {eps_yield_value}") 
-        st.write(f"**EPS_v:** {eps_value}") 
-        st.write(f"**PEGratio_v:** {pegRatio_value}") 
-        st.write(f"**EPSYield:** {eps_yield}") 
-        #eps_trend, 
-        #earnings_history, 
-        st.write(f"**EarningsDate:** {earningsDate}")
-        st.write(f"**YFTargetPrice:** {yf_targetprice}") 
-        st.write(f"**YFConsensus:** {yf_consensus}") 
-        st.write(f"**YFAnalystsCount:** {yf_analysts_count}") 
-        st.write(f"**YFMos:** {yf_mos}") 
-        st.write(f"**PEratio:** {peRatio}") 
-        st.write(f"**ForwardPE:** {forwardPe}") 
-        st.write(f"**PBratio:** {pbRatio}") 
-        st.write(f"**PE_v:** {pe_value}") 
-        st.write(f"**ForwardPE_v:** {forwardPe_value}") 
-        st.write(f"**PBratio_v:** {pbRatio_value}") 
-        st.write(f"**EVtoEBITDA:** {ev_to_ebitda}")
-        st.write(f"**DividendYield:** {dividendYield}") 
-        st.write(f"**PayoutRatio:** {payoutRatio}") 
-        st.write(f"**Dividends:** {dividends}") 
-        st.write(f"**Dividends_v:** {dividends_value}") 
-        st.write(f"**DividendYield_v:** {dividendYield_value}") 
-        st.write(f"**PayoutRatio_v:** {payoutRatio_value}") 
-        st.write(f"**exDividendDate_v:** {exDividendDate_value}") 
-        #dividend_history, 
-        st.write(f"**exDividendDate:** {exDividendDate}")
-        st.write(f"**DEratio:** {deRatio}") 
-        st.write(f"**Piotroski:** {sa_piotroski_value}") 
-        st.write(f"**Altmanz:** {sa_altmanz_value}") 
-        st.write(f"**DEratio_v:** {deRatio_value}") 
-        st.write(f"**QuickRatio:** {quick_ratio}") 
-        st.write(f"**CurrentRatio:** {current_ratio}")
-        st.write(f"**ROE:** {roe}") 
-        st.write(f"**ROA:** {roa}") 
-        st.write(f"**ROE_v:** {roe_value}")
-        st.write(f"**EBITDAmargin:** {ebitdamargin}") 
-        st.write(f"**OperatingMargin:** {operatingmargin}") 
-        st.write(f"**GrossMargin:** {grossmargin}") 
-        st.write(f"**ProfitMargin:** {profitmargin}") 
-        st.write(f"**FCFMargin:** {fcf_margin}") 
-        st.write(f"**GrossMargin_v:** {grossmargin_value}") 
-        st.write(f"**OperatingMargin_v:** {operatingmargin_value}") 
-        st.write(f"**ProfitMargin_v:** {profitmargin_value}") 
-        st.write(f"**FCFmargin_v:** {fcfmargin_value}")
-        st.write(f"**FCF:** {fcf}")
-        st.write(f"**RevenueGrowthCurrent:** {revenue_growth_current}") 
-        st.write(f"**RevenueGrowthCurrent_v:** {revenue_growth_current_value}") 
-        st.write(f"**EarningsGrowth:** {earnings_growth}") 
-        st.write(f"**RevenueGrowth:** {revenue_growth}")
-        st.write(f"**InstitutionPct:** {institutionsPct}") 
-        st.write(f"**InsiderPct:** {insiderPct}") 
-        st.write(f"**InsiderPct_v:** {insiderPct_value}") 
-        st.write(f"**InstitutionsPct_v:** {institutionsPct_value}")
-        st.write(f"**TotalESG:** {totalEsg}") 
-        st.write(f"**EnviScare:** {enviScore}") 
-        st.write(f"**SocialScore:** {socialScore}") 
-        st.write(f"**GovernScore:** {governScore}") 
-        st.write(f"**Percentile:** {percentile}") 
-        st.write(f"**TotalESG_v:** {totalEsg_value}")
-        #income_statement_flipped, 
-        #balance_sheet_flipped, 
-        #cashflow_statement_flipped, 
-        #cashflow_statement_tb, 
-        #quarterly_cashflow_statement_tb, 
-        #balance_sheet_tb, 
-        #quarterly_balance_sheet_tb, 
-        #income_statement_tb, 
-        #quarterly_income_statement_tb,
-        #news,
-        #matching_etf, 
-        #yf_com, 
-        #performance_id, fair_value, fvDate, moat, moatDate, starRating, assessment, \
-        #quant_rating, growth_grade, momentum_grade, profitability_grade, value_grade, yield_on_cost_grade, ticker_id, sk_targetprice, authors_strongsell_count, authors_strongbuy_count, authors_sell_count, authors_hold_count, authors_buy_count, authors_rating, authors_count, epsRevisionsGrade, dpsRevisionsGrade, dividendYieldGrade, divSafetyCategoryGrade, divGrowthCategoryGrade, divConsistencyCategoryGrade, sellSideRating, \
-        #sa_growth_df, sa_metrics_df2, sa_metrics_df, sa_analysts_count, sa_analysts_consensus, sa_analysts_targetprice, sa_altmanz, sa_piotroski, \
-        #insider_mb, mb_alt_headers, mb_alt_df, mb_div_df, mb_com_df, mb_targetprice_value, mb_predicted_upside, mb_consensus_rating, mb_rating_score, \
-        #end_date, extended_data_r, macd_data_r, rsi_data_r, ta_data_r, \
-        #analysis3, analysis2, analysis
-        
         st.header(f'{name}', divider='gray')
     
         col1, col2, col3, col4 = st.columns([2, 1, 1, 3])
@@ -1594,7 +1489,6 @@ if st.button("Get Data"):
                     except: three_yr_earnings_value = 'N/A'
                     sub_gcol3[1].metric(label='+3Y EPS Growth',value=three_yr_earnings_value)
 
-                    st.caption("The growth estimation data is sourced from Stockanalysis.com.")
                     st.caption("Please note that estimated data may not always be accurate and should not be solely relied upon for making investment decisions.")
                 except Exception as e: 
                     st.write(f'{name} has no other estimates data. {e}')
