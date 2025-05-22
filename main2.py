@@ -965,7 +965,6 @@ if st.button("Get Data"):
         with col6:
             hist_price_melted = hist_price.reset_index().melt(id_vars='Date', value_name='Price')
             years_sorted = hist_price_melted['Date'].dt.year.unique()
-
             hist_fig = go.Figure()
             hist_fig.add_trace(
                 go.Scatter(
@@ -973,7 +972,7 @@ if st.button("Get Data"):
                     y=hist_price_melted['Price'],
                     mode='lines',
                     name=ticker,
-                    line=dict(color=custom_colors.get(ticker, '#1f77b4'), shape='spline', smoothing=1.3),
+                    line=dict(color='#1f77b4', shape='spline', smoothing=1.3),
                     showlegend=True,
                     hoverinfo="text",
                 )
