@@ -649,7 +649,7 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
     try:
         end_date_hp = datetime.datetime.today()
         start_date_hp = end_date_hp - relativedelta(years=5)
-        hist_price = yf.download(ticker, start_date_hp.strftime('%Y-%m-%d'), end_date_hp.strftime('%Y-%m-%d'))['Close'])
+        hist_price = yf.download(ticker, start_date_hp.strftime('%Y-%m-%d'), end_date_hp.strftime('%Y-%m-%d'))['Close']
     except: hist_price = ""
     
     ##### AI Analysis #####
