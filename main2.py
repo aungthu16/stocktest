@@ -981,10 +981,10 @@ if st.button("Get Data"):
                     )
                 )
                 hist_fig.update_layout(
-                    title=None,
+                    title={"text":f'', "font": {"size": 22}},
                     title_y=1,  
                     title_x=0,
-                    margin=dict(t=30, b=40, l=80, r=30),
+                    margin=dict(t=30, b=40, l=40, r=30),
                     xaxis=dict(title=None, showticklabels=True, showgrid=True), 
                     yaxis=dict(title="Price (USD)", showticklabels=True, showgrid=True),
                     height=350,
