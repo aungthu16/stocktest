@@ -964,8 +964,6 @@ if st.button("Get Data"):
 
         with col6:
             try:
-                hist_price_melted = hist_price.reset_index().melt(id_vars='Date', value_name='Price')
-                years_sorted = hist_price_melted['Date'].dt.year.unique()
                 hist_fig = go.Figure()
                 hist_fig.add_trace(
                     go.Scatter(
@@ -973,9 +971,9 @@ if st.button("Get Data"):
                         y=hist_price_melted['Price'],
                         mode='lines',
                         name=ticker,
-                        line=dict(color='#1f77b4', shape='spline', smoothing=1.3),
+                        line=dict(color='#5E9BEB', shape='spline', smoothing=1.3),
                         showlegend=False,
-                        hoverinfo="text",
+                        hovertemplate='Date: %{x|%Y-%m-%d}<br>Price: $%{y:.2f}<extra></extra>',
                     )
                 )
                 hist_fig.update_layout(
@@ -984,7 +982,7 @@ if st.button("Get Data"):
                     title_x=0,
                     margin=dict(t=30, b=40, l=40, r=30),
                     xaxis=dict(title=None, showticklabels=True, showgrid=True), 
-                    yaxis=dict(title=None, showticklabels=True, showgrid=True),
+                    yaxis=dict(title="Price (USD)", showticklabels=True, showgrid=True),
                     height=500,
                 )
                 st.plotly_chart(hist_fig, use_container_width=True)
