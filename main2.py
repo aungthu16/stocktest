@@ -984,10 +984,10 @@ if st.button("Get Data"):
                     title={"text":f'{upper_ticker} Price ', "font": {"size": 22}},
                     title_y=1,  
                     title_x=0,
-                    margin=dict(t=30, b=40, l=40, r=30),
+                    margin=dict(t=30, b=40, l=80, r=30),
                     xaxis=dict(title=None, showticklabels=True, showgrid=True), 
                     yaxis=dict(title="Price (USD)", showticklabels=True, showgrid=True),
-                    height=500,
+                    height=300,
                 )
                 st.plotly_chart(hist_fig, use_container_width=True)
             except Exception as e:
