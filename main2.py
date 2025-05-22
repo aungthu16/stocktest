@@ -963,22 +963,12 @@ if st.button("Get Data"):
             st.markdown(f"<div style='text-align: justify;'>{longProfile}</div>", unsafe_allow_html=True)
 
         with col6:
-            fig_hist = go.Figure()
-            fig_hist.add_trace(
-                go.Scatter(
-                    x=hist_price.index,
-                    y=hist_price.values,
-                    mode='lines',
-                    name='Historical Price'
-                )
-            )
-            fig_hist.update_layout(
-                title=f'{upper_ticker} Stock Price History',
-                xaxis_title='Date',
-                yaxis_title='Price (USD)',
-                hovermode='x unified'
-            )
-            st.plotly_chart(fig_hist)
+            hist_price_melted = hist_price.reset_index().melt(id_vars='Date', value_name='Price')
+            years_sorted = hist_price_melted['Date'].dt.year.unique()
+            
+            st.write(hist_price)
+            st.write(hist_price_melted)
+            st.write(years_sorted)
         
         ''
         st.caption("Data source: Yahoo Finance")
