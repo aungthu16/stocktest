@@ -2113,7 +2113,7 @@ if st.button("Get Data"):
                                             line=dict(color=custom_colors.get(ticker, '#1f77b4'), shape='spline', smoothing=1.3),
                                             showlegend=True,
                                             hoverinfo="text",
-                                            text=[f"{date}: {ret:.2f}%" for date, ret in zip(df_ticker['Date'], df_ticker['Relative Return'])]
+                                            text=[f"{date}: {ret*100:.2f}%" for date, ret in zip(df_ticker['Date'], df_ticker['Relative Return'])]
                                         )
                                     )
                                 fig.update_layout(
@@ -2145,7 +2145,7 @@ if st.button("Get Data"):
                             if ticker in last_values.index:
                                 st.metric(
                                     label=ticker,
-                                    value=f"{last_values.loc[ticker, 'Relative Return']:.2f}%"
+                                    value=f"{last_values.loc[ticker, 'Relative Return']*100:.2f}%"
                                 )
                         st.write("")  # Add some spacing
                         best_performer = last_values['Relative Return'].idxmax()
@@ -2153,7 +2153,7 @@ if st.button("Get Data"):
                         best_return = last_values.loc[best_performer, 'Relative Return']
                         worst_return = last_values.loc[worst_performer, 'Relative Return']
                         
-                        summary = f"Among the competitors, {best_performer} showed the strongest performance with {best_return:.2f}% return, while {worst_performer} had the lowest return at {worst_return:.2f}%."
+                        summary = f"Among the competitors, {best_performer} showed the strongest performance with {best_return*100:.2f}% return, while {worst_performer} had the lowest return at {worst_return*100:.2f}%."
                         st.caption(summary)       
                     except Exception as e:
                         st.write("")
