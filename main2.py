@@ -958,7 +958,7 @@ if st.button("Get Data"):
              </div>
              """, unsafe_allow_html=True)
              
-        col5, col6 = st.columns([3,3])     
+        col5, col6 = st.columns([2,3])     
         with col6:
             st.markdown(f"<div style='text-align: justify;'>{longProfile}</div>", unsafe_allow_html=True)
 
