@@ -974,14 +974,14 @@ if st.button("Get Data"):
                         y=hist_price_melted['Price'],
                         mode='lines',
                         name=ticker,
-                        line=dict(color='#1f77b4', shape='spline', smoothing=1.3),
+                        line=dict(color='#DA4453', shape='spline', smoothing=1.3),
                         showlegend=False,
                         hoverinfo="text",
                         text=hover_text,
                     )
                 )
                 hist_fig.update_layout(
-                    title={"text":f'{upper_ticker} Price ', "font": {"size": 22}},
+                    title={"text":f'{upper_ticker} Price ', "font": {"size": 22},"x": 1, "xanchor": "right"},
                     title_y=1,  
                     title_x=0,
                     margin=dict(t=30, b=40, l=80, r=30),
