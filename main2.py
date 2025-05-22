@@ -974,25 +974,22 @@ if st.button("Get Data"):
                         mode='lines',
                         name=ticker,
                         line=dict(color='#1f77b4', shape='spline', smoothing=1.3),
-                        showlegend=True,
+                        showlegend=False,
                         hoverinfo="text",
                     )
                 )
                 hist_fig.update_layout(
                     title={"text":f'{upper_ticker} Price ', "font": {"size": 22}},
                     title_y=1,  
-                    title_x=0, 
-                    xaxis=dict(title=None, showticklabels=False, showgrid=True), 
-                    yaxis=dict(title="Cumulative Relative Return", showgrid=True),
+                    title_x=0,
+                    margin=dict(t=30, b=40, l=40, r=30),
+                    xaxis=dict(title=None, showticklabels=True, showgrid=True), 
+                    yaxis=dict(title=None, showticklabels=True showgrid=True),
                     height=500,
                 )
                 st.plotly_chart(hist_fig, use_container_width=True)
             except Exception as e:
-                st.write(e)
-            
-            st.write(hist_price)
-            st.write(hist_price_melted)
-            st.write(years_sorted)
+                st.write("")
         
         ''
         st.caption("Data source: Yahoo Finance")
