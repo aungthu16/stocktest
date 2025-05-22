@@ -963,6 +963,7 @@ if st.button("Get Data"):
             st.markdown(f"<div style='text-align: justify;'>{longProfile}</div>", unsafe_allow_html=True)
 
         with col6:
+            st.write(hist_fig)
             hist_fig = go.Figure()
             hist_fig.add_trace(
                 go.Scatter(
