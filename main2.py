@@ -1010,30 +1010,43 @@ if st.button("Get Data"):
 
         with overview_data:
 #Stock Performance
-            st.subheader('Stock Performance', divider='gray')
-            cols = st.columns(5)
-            cols[0].metric(label='Current Price',value=f'${price:,.2f}',delta=f'{change_dollar:,.2f} ({change_percent:.2f}%)',delta_color='normal')
-            cols[1].metric(label='EPS (ttm)',value=eps_value)
-            cols[2].metric(label='PEG Ratio',value=pegRatio_value)
-            cols[3].metric(label='Beta',value=beta_value)
-            cols[4].metric(label='ROE',value=roe_value)
-
-            cols1 = st.columns(5)
-            cols1[0].metric(label='PE Ratio',value=pe_value)
-            cols1[1].metric(label='Forward PE',value=forwardPe_value)
-            cols1[2].metric(label='PB Ratio',value=pbRatio_value)
-            cols1[3].metric(label='DE Ratio',value=deRatio_value)
-            cols1[4].metric(label='Revenue Growth',value=revenue_growth_current_value)
-
-            st.caption("Data source: Yahoo Finance")
+            if apiKey is None:
+                st.subheader('Stock Performance', divider='gray')
+                cols = st.columns(5)
+                cols[0].metric(label='Current Price',value=f'${price:,.2f}',delta=f'{change_dollar:,.2f} ({change_percent:.2f}%)',delta_color='normal')
+                cols[1].metric(label='EPS (ttm)',value=eps_value)
+                cols[2].metric(label='PEG Ratio',value=pegRatio_value)
+                cols[3].metric(label='Beta',value=beta_value)
+                cols[4].metric(label='ROE',value=roe_value)
+    
+                cols1 = st.columns(5)
+                cols1[0].metric(label='PE Ratio',value=pe_value)
+                cols1[1].metric(label='Forward PE',value=forwardPe_value)
+                cols1[2].metric(label='PB Ratio',value=pbRatio_value)
+                cols1[3].metric(label='DE Ratio',value=deRatio_value)
+                cols1[4].metric(label='Revenue Growth',value=revenue_growth_current_value)
+    
+                st.caption("Data source: Yahoo Finance")
             ''
  #Morning Star Research           
-            if apiKey is None:
-                #st.markdown("---")
-                st.subheader('', divider='gray')
-                st.warning('Certain information will be hidden due to unavailability of API key. Please input your API key to access the full data.')
-                #st.markdown("---")
             else:
+                st.subheader('Stock Performance', divider='gray')
+                cols = st.columns(5)
+                cols[0].metric(label='Current Price',value=f'${price:,.2f}',delta=f'{change_dollar:,.2f} ({change_percent:.2f}%)',delta_color='normal')
+                cols[1].metric(label='EPS (ttm)',value=eps_value)
+                cols[2].metric(label='PEG Ratio',value=pegRatio_value)
+                cols[3].metric(label='Beta',value=beta_value)
+                cols[4].metric(label='ROE',value=roe_value)
+    
+                cols1 = st.columns(5)
+                cols1[0].metric(label='PE Ratio',value=pe_value)
+                cols1[1].metric(label='Forward PE',value=forwardPe_value)
+                cols1[2].metric(label='PB Ratio',value=pbRatio_value)
+                cols1[3].metric(label='DE Ratio',value=deRatio_value)
+                cols1[4].metric(label='Revenue Growth',value=revenue_growth_current_value)
+    
+                st.caption("Data source: Yahoo Finance")
+                ######
                 st.subheader('Morningstar Research', divider='gray')
                 st.caption("This section only works with RapidAPI key.")
                 
