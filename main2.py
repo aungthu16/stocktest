@@ -1030,6 +1030,7 @@ if st.button("Get Data"):
  #Morning Star Research           
             if apiKey is None:
                 #st.markdown("---")
+                st.subheader('', divider='gray')
                 st.warning('Certain information will be hidden due to unavailability of API key. Please input your API key to access the full data.')
                 #st.markdown("---")
             else:
