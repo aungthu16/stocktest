@@ -958,7 +958,7 @@ if st.button("Get Data"):
              </div>
              """, unsafe_allow_html=True)
              
-        col5, col6 = st.columns([3,2])     
+        col5, col6 = st.columns([3,3])     
         with col5:
             st.markdown(f"<div style='text-align: justify;'>{longProfile}</div>", unsafe_allow_html=True)
 
@@ -981,7 +981,7 @@ if st.button("Get Data"):
                     )
                 )
                 hist_fig.update_layout(
-                    title={"text":f'{upper_ticker} Price ', "font": {"size": 22},"x": 1, "xanchor": "right"},
+                    title={"text":f'{upper_ticker} Price ', "font": {"size": 22}, "xanchor": "right"},
                     title_y=1,  
                     title_x=0,
                     margin=dict(t=30, b=40, l=80, r=30),
