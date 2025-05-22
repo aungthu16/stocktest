@@ -984,7 +984,7 @@ if st.button("Get Data"):
                     title_x=0,
                     margin=dict(t=30, b=40, l=40, r=30),
                     xaxis=dict(title=None, showticklabels=True, showgrid=True), 
-                    yaxis=dict(title=None, showticklabels=True showgrid=True),
+                    yaxis=dict(title=None, showticklabels=True, showgrid=True),
                     height=500,
                 )
                 st.plotly_chart(hist_fig, use_container_width=True)
