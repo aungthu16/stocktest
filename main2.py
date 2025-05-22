@@ -982,7 +982,7 @@ if st.button("Get Data"):
                     title={"text":f'{upper_ticker} Price ', "font": {"size": 22}},
                     title_y=1,  
                     title_x=0, 
-                    xaxis=dict(title=None, showticklabels=show_labels, showgrid=True), 
+                    xaxis=dict(title=None, showticklabels=False, showgrid=True), 
                     yaxis=dict(title="Cumulative Relative Return", showgrid=True),
                     height=500,
                 )
