@@ -963,7 +963,22 @@ if st.button("Get Data"):
             st.markdown(f"<div style='text-align: justify;'>{longProfile}</div>", unsafe_allow_html=True)
 
         with col6:
-            st.write(hist_price)
+            fig_hist = go.Figure()
+            fig_hist.add_trace(
+                go.Scatter(
+                    x=hist_price.index,
+                    y=hist_price.values,
+                    mode='lines',
+                    name='Historical Price'
+                )
+            )
+            fig_hist.update_layout(
+                title=f'{upper_ticker} Stock Price History',
+                xaxis_title='Date',
+                yaxis_title='Price (USD)',
+                hovermode='x unified'
+            )
+            st.plotly_chart(fig_hist)
         
         ''
         st.caption("Data source: Yahoo Finance")
