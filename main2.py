@@ -3127,7 +3127,7 @@ if st.button("Get Data"):
                 #st.dataframe(df_cash_flow.style.applymap(highlight_result, subset=['Result']),use_container_width=True, hide_index=True)
 
             try:
-                if sa_metrics_rs_df and rs_first_date and rs_pie_data is None:
+                if sa_metrics_rs_df == "" and rs_first_date == "" and rs_pie_data == "":
                     st.write("")
                 else:
                     st.subheader('Revenue Data', divider='gray')
