@@ -3127,9 +3127,7 @@ if st.button("Get Data"):
                 #st.dataframe(df_cash_flow.style.applymap(highlight_result, subset=['Result']),use_container_width=True, hide_index=True)
 
             try:
-                if sa_metrics_rs_df == "" and rs_first_date == "" and rs_pie_data == "":
-                    st.write("")
-                else:
+                if len(sa_metrics_rs_df) > 0: 
                     st.subheader('Revenue Data', divider='gray')
                     rev_col1,rev_col2 = st.columns([3,2])
                     with rev_col1:
@@ -3138,7 +3136,7 @@ if st.button("Get Data"):
                                 original_values = sa_metrics_rs_df[col].copy()
                                 sa_metrics_rs_df[col] = sa_metrics_rs_df[col].str.replace('B', '').str.replace('M', '').astype(float)
                                 sa_metrics_rs_df[col] = sa_metrics_rs_df[col].where(~original_values.str.contains('M', na=False), sa_metrics_rs_df[col]/1000)
-                
+            
                         fig_rs = go.Figure()
                         for column in sa_metrics_rs_df.columns:
                             if column != 'Date':
@@ -3171,7 +3169,7 @@ if st.button("Get Data"):
                         )
                         st.plotly_chart(fig_rs, use_container_width=True)
                         st.caption("Data Source: Stockanalysis.com")
-                
+            
                     with rev_col2:
                         for idx in rs_pie_data.index:
                             value = rs_pie_data[idx]
