@@ -3127,7 +3127,7 @@ if st.button("Get Data"):
                 #st.dataframe(df_cash_flow.style.applymap(highlight_result, subset=['Result']),use_container_width=True, hide_index=True)
 
             try:
-                st.subheader('Revenue by Segment', divider='gray')
+                st.subheader('Revenue Data', divider='gray')
                 rev_col1,rev_col2 = st.columns([3,2])
                 with rev_col1:
                     for col in sa_metrics_rs_df.columns:
@@ -3167,6 +3167,7 @@ if st.button("Get Data"):
                         )
                     )
                     st.plotly_chart(fig_rs, use_container_width=True)
+                    st.caption("Data Source: Stockanalysis.com")
             
                 with rev_col2:
                     for idx in rs_pie_data.index:
