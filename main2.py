@@ -1000,6 +1000,8 @@ if st.button("Get Data"):
                         mode='lines',
                         name=ticker,
                         line=dict(color='#DA4453', shape='spline', smoothing=1.3),
+                        fill='tonexty',
+                        fillcolor='rgba(218, 68, 83, 0.2)', 
                         showlegend=False,
                         hoverinfo="text",
                         text=hover_text,
