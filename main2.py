@@ -3126,9 +3126,9 @@ if st.button("Get Data"):
                 df_cash_flow = pd.DataFrame(cash_flow_checklist_data)
                 #st.dataframe(df_cash_flow.style.applymap(highlight_result, subset=['Result']),use_container_width=True, hide_index=True)
 
-            rev_col1,rev_col2 = st.columns([3,2])
             try:
                 st.subheader('Revenue by Segment', divider='gray')
+                rev_col1,rev_col2 = st.columns([3,2])
                 with rev_col1:
                     for col in sa_metrics_rs_df.columns:
                         if col != 'Date':
