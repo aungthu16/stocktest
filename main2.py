@@ -3126,7 +3126,6 @@ if st.button("Get Data"):
                 df_cash_flow = pd.DataFrame(cash_flow_checklist_data)
                 #st.dataframe(df_cash_flow.style.applymap(highlight_result, subset=['Result']),use_container_width=True, hide_index=True)
 
-            try:
                 try:
                     if len(sa_metrics_rs_df) > 0: 
                         st.subheader('Revenue Data', divider='gray')
@@ -3204,8 +3203,8 @@ if st.button("Get Data"):
                                 )
                             )
                             st.plotly_chart(pie_fig, use_container_width=True)
-            except: ""
-            ########################################################
+                except: ""
+                ########################################################
 
 
 #############################################                    #############################################
