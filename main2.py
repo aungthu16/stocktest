@@ -331,6 +331,31 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
     except: sa_metrics_df2 = ""
     ########################
 
+    ##### SA Revenue by Segment #####
+    try:
+        url = f'https://stockanalysis.com/stocks/{ticker}/metrics/revenue-by-segment/'
+        r = requests.get(url)
+        soup = BeautifulSoup(r.text,"html.parser")
+        table = soup.find("table",class_ = "svelte-7muvl3")
+        rows = table.find_all("tr")
+        headers = []
+        data = []
+        for row in rows:
+                    cols = row.find_all(["th", "td"])
+                    cols_text = [col.text.strip() for col in cols]
+                    if not headers:
+                        headers = cols_text
+                    else:
+                        data.append(cols_text)
+        sa_metrics_rs_df = pd.DataFrame(data, columns=headers)
+        sa_metrics_rs_df['Date'] = pd.to_datetime(sa_metrics_rs_df['Date']).dt.strftime('%Y-%m-%d')
+        sa_metrics_rs_df = sa_metrics_rs_df.reset_index(drop=True)
+        rs_first_row = sa_metrics_rs_df.iloc[0]
+        rs_first_date = rs_first_row['Date']
+        rs_pie_data = rs_first_row.drop('Date')
+    except: sa_metrics_rs_df = rs_first_date = rs_pie_data = ""
+    ########################
+
     ##### Market Beat insider trades #####
     try:
         insider_mb_url = f'https://www.marketbeat.com/stocks/{exchange_value}/{upper_ticker}/insider-trades/'
@@ -870,7 +895,7 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
     matching_etf, yf_com, \
     performance_id, fair_value, fvDate, moat, moatDate, starRating, assessment, \
     quant_rating, growth_grade, momentum_grade, profitability_grade, value_grade, yield_on_cost_grade, ticker_id, sk_targetprice, authors_strongsell_count, authors_strongbuy_count, authors_sell_count, authors_hold_count, authors_buy_count, authors_rating, authors_count, epsRevisionsGrade, dpsRevisionsGrade, dividendYieldGrade, divSafetyCategoryGrade, divGrowthCategoryGrade, divConsistencyCategoryGrade, sellSideRating, \
-    sa_growth_df, sa_metrics_df2, sa_metrics_df, sa_analysts_count, sa_analysts_consensus, sa_analysts_targetprice, sa_altmanz, sa_piotroski, \
+    sa_growth_df, sa_metrics_df2, sa_metrics_df, sa_analysts_count, sa_analysts_consensus, sa_analysts_targetprice, sa_altmanz, sa_piotroski, sa_metrics_rs_df, rs_first_date, rs_pie_data \
     insider_mb, mb_alt_headers, mb_alt_df, mb_div_df, mb_com_df, mb_targetprice_value, mb_predicted_upside, mb_consensus_rating, mb_rating_score, \
     end_date, extended_data_r, macd_data_r, rsi_data_r, ta_data_r, \
     hist_price, \
@@ -3100,6 +3125,85 @@ if st.button("Get Data"):
                 ]
                 df_cash_flow = pd.DataFrame(cash_flow_checklist_data)
                 #st.dataframe(df_cash_flow.style.applymap(highlight_result, subset=['Result']),use_container_width=True, hide_index=True)
+
+
+            rev_col1,rev_col2 = st.columns([3,2])
+            with rev_col1:
+                try:
+                    for col in sa_metrics_rs_df.columns:
+                        if col != 'Date':
+                            original_values = sa_metrics_rs_df[col].copy()
+                            sa_metrics_rs_df[col] = sa_metrics_rs_df[col].str.replace('B', '').str.replace('M', '').astype(float)
+                            sa_metrics_rs_df[col] = sa_metrics_rs_df[col].where(~original_values.str.contains('M', na=False), sa_metrics_rs_df[col]/1000)
+            
+                    fig_rs = go.Figure()
+                    for column in sa_metrics_rs_df.columns:
+                        if column != 'Date':
+                            fig_rs.add_trace(
+                                go.Bar(
+                                    name=column,
+                                    x=sa_metrics_rs_df['Date'],
+                                    y=sa_metrics_rs_df[column],
+                                    text=sa_metrics_rs_df[column].round(2),
+                                    textposition='auto',
+                                    hovertemplate="%{x}<br>" +
+                                                f"{column}: %{{y:.2f}}B<br>" +
+                                                "<extra></extra>"
+                                )
+                            )
+                    fig_rs.update_layout(
+                        title={"text":f'{upper_ticker} Revenue by Segment', "font": {"size": 20}},
+                        xaxis=dict(title=None, showticklabels=True, showgrid=False),
+                        yaxis=dict(title="Revenue (Billions)", showticklabels=True, showgrid=True),
+                        barmode='stack',
+                        height=600,
+                        showlegend=True,
+                        legend=dict(
+                            orientation="h",
+                            yanchor="bottom",
+                            y=-0.3,
+                            xanchor="center",
+                            x=0.5,
+                        )
+                    )
+                    st.plotly_chart(fig_rs, use_container_width=True)
+                except: ""
+            
+            with rev_col2:
+                try:
+                    for idx in rs_pie_data.index:
+                        value = rs_pie_data[idx]
+                        if isinstance(value, str):
+                            if 'M' in value:
+                                rs_pie_data[idx] = float(value.replace('M', '')) / 1000
+                            else:
+                                rs_pie_data[idx] = float(value.replace('B', ''))
+                            
+                    pie_fig = go.Figure(data=[go.Pie(
+                        labels=rs_pie_data.index,
+                        values=rs_pie_data.values,
+                        hole=0.5,
+                        hovertemplate="%{label}<br>" +
+                                    "%{value:.2f}B<br>" +
+                                    "(%{percent:.1f}%)<br>" +
+                                    "<extra></extra>"
+                    )])
+                    pie_fig.update_layout(
+                        title={"text":f'{upper_ticker} Revenue by Segment ({rs_first_date})', "font": {"size": 20}},
+                        height=600,
+                        showlegend=True,
+                        legend=dict(
+                            orientation="h",
+                            yanchor="bottom",
+                            y=-0.4,
+                            xanchor="center",
+                            x=0.5
+                        )
+                    )
+                    st.plotly_chart(pie_fig, use_container_width=True)
+                    st.caption("Data Source: Stockanalysis.com")
+                except: ""
+            ########################################################
 
 
 #############################################                    #############################################
