@@ -3127,80 +3127,83 @@ if st.button("Get Data"):
                 #st.dataframe(df_cash_flow.style.applymap(highlight_result, subset=['Result']),use_container_width=True, hide_index=True)
 
             try:
-                if len(sa_metrics_rs_df) > 0: 
-                    st.subheader('Revenue Data', divider='gray')
-                    rev_col1,rev_col2 = st.columns([3,2])
-                    with rev_col1:
-                        for col in sa_metrics_rs_df.columns:
-                            if col != 'Date':
-                                original_values = sa_metrics_rs_df[col].copy()
-                                sa_metrics_rs_df[col] = sa_metrics_rs_df[col].str.replace('B', '').str.replace('M', '').astype(float)
-                                sa_metrics_rs_df[col] = sa_metrics_rs_df[col].where(~original_values.str.contains('M', na=False), sa_metrics_rs_df[col]/1000)
-            
-                        fig_rs = go.Figure()
-                        for column in sa_metrics_rs_df.columns:
-                            if column != 'Date':
-                                fig_rs.add_trace(
-                                    go.Bar(
-                                        name=column,
-                                        x=sa_metrics_rs_df['Date'],
-                                        y=sa_metrics_rs_df[column],
-                                        text=sa_metrics_rs_df[column].round(2),
-                                        textposition='auto',
-                                        hovertemplate="%{x}<br>" +
-                                                    f"{column}: %{{y:.2f}}B<br>" +
-                                                    "<extra></extra>"
+                try:
+                    if len(sa_metrics_rs_df) > 0: 
+                        st.subheader('Revenue Data', divider='gray')
+                        rev_col1,rev_col2 = st.columns([3,2])
+                        with rev_col1:
+                            for col in sa_metrics_rs_df.columns:
+                                if col != 'Date':
+                                    original_values = sa_metrics_rs_df[col].copy()
+                                    sa_metrics_rs_df[col] = sa_metrics_rs_df[col].str.replace('B', '').str.replace('M', '')
+                                    sa_metrics_rs_df[col] = sa_metrics_rs_df[col].astype(float)
+                                    sa_metrics_rs_df[col] = sa_metrics_rs_df[col].where(~original_values.str.contains('M', na=False), sa_metrics_rs_df[col]/1000)
+                
+                            fig_rs = go.Figure()
+                            for column in sa_metrics_rs_df.columns:
+                                if column != 'Date':
+                                    fig_rs.add_trace(
+                                        go.Bar(
+                                            name=column,
+                                            x=sa_metrics_rs_df['Date'],
+                                            y=sa_metrics_rs_df[column],
+                                            text=sa_metrics_rs_df[column].round(2),
+                                            textposition='auto',
+                                            hovertemplate="%{x}<br>" +
+                                                        f"{column}: %{{y:.2f}}B<br>" +
+                                                        "<extra></extra>"
+                                        )
                                     )
-                                )
-                        fig_rs.update_layout(
-                            title={"text":f'{upper_ticker} Revenue by Segment', "font": {"size": 20}},
-                            xaxis=dict(title=None, showticklabels=True, showgrid=False),
-                            yaxis=dict(title="Revenue (Billions)", showticklabels=True, showgrid=True),
-                            barmode='stack',
-                            height=600,
-                            showlegend=True,
-                            legend=dict(
-                                orientation="h",
-                                yanchor="bottom",
-                                y=-0.3,
-                                xanchor="center",
-                                x=0.5,
-                            )
-                        )
-                        st.plotly_chart(fig_rs, use_container_width=True)
-                        st.caption("Data Source: Stockanalysis.com")
-            
-                    with rev_col2:
-                        for idx in rs_pie_data.index:
-                            value = rs_pie_data[idx]
-                            if isinstance(value, str):
-                                if 'M' in value:
-                                    rs_pie_data[idx] = float(value.replace('M', '')) / 1000
-                                else:
-                                    rs_pie_data[idx] = float(value.replace('B', ''))
+                            fig_rs.update_layout(
+                                title={"text":f'{upper_ticker} Revenue by Segment', "font": {"size": 20}},
+                                xaxis=dict(title=None, showticklabels=True, showgrid=False),
+                                yaxis=dict(title="Revenue (Billions)", showticklabels=True, showgrid=True, zeroline=True, zerolinewidth=2, zerolinecolor='gray'),
+                                barmode = 'relative',
+                                height=600,
+                                showlegend=True,
+                                legend=dict(
+                                    orientation="h",
+                                    yanchor="bottom",
+                                    y=-0.3,
+                                    xanchor="center",
+                                    x=0.5,
+                                ),
                                 
-                        pie_fig = go.Figure(data=[go.Pie(
-                            labels=rs_pie_data.index,
-                            values=rs_pie_data.values,
-                            hole=0.5,
-                            hovertemplate="%{label}<br>" +
-                                        "%{value:.2f}B<br>" +
-                                        "(%{percent:.1f}%)<br>" +
-                                        "<extra></extra>"
-                        )])
-                        pie_fig.update_layout(
-                            title={"text":f'{upper_ticker} Revenue by Segment ({rs_first_date})', "font": {"size": 20}},
-                            height=600,
-                            showlegend=True,
-                            legend=dict(
-                                orientation="h",
-                                yanchor="bottom",
-                                y=-0.4,
-                                xanchor="center",
-                                x=0.5
                             )
-                        )
-                        st.plotly_chart(pie_fig, use_container_width=True)
+                            st.plotly_chart(fig_rs, use_container_width=True)
+                            st.caption("Data Source: Stockanalysis.com")
+                
+                        with rev_col2:
+                            for idx in rs_pie_data.index:
+                                value = rs_pie_data[idx]
+                                if isinstance(value, str):
+                                    if 'M' in value:
+                                        rs_pie_data[idx] = float(value.replace('M', '')) / 1000
+                                    else:
+                                        rs_pie_data[idx] = float(value.replace('B', ''))
+                            positive_data = rs_pie_data[rs_pie_data > 0]
+                                    
+                            pie_fig = go.Figure(data=[go.Pie(
+                                labels=positive_data.index,
+                                values=positive_data.values,
+                                hole=0.5,
+                                hovertemplate="%{label}<br>" +
+                                            "%{value:.2f}B<br>" +
+                                            "<extra></extra>"
+                            )])
+                            pie_fig.update_layout(
+                                title={"text":f'{upper_ticker} Revenue by Segment ({rs_first_date})', "font": {"size": 20}},
+                                height=600,
+                                showlegend=True,
+                                legend=dict(
+                                    orientation="h",
+                                    yanchor="bottom",
+                                    y=-0.4,
+                                    xanchor="center",
+                                    x=0.5
+                                )
+                            )
+                            st.plotly_chart(pie_fig, use_container_width=True)
             except: ""
             ########################################################
 
