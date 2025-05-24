@@ -621,6 +621,8 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
     operatingmargin_pct = 'N/A' if operatingmargin_value == 'N/A' else f'{operatingmargin_value*100:.2f}%'
     # Profit Margin Pct
     profitmargin_pct = 'N/A' if profitmargin_value == 'N/A' else f'{profitmargin_value*100:.2f}%'
+    # FCF Margin Pct
+    fcfmargin_pct = 'N/A' if fcfmargin_value == 'N/A' else f'{fcfmargin_value*100:.2f}%'
     # Dividend Value
     dividends_value = 'N/A' if dividends == 'N/A' else f'${dividends:,.2f}'
     # Dividend Yield Value
@@ -4291,7 +4293,6 @@ if st.button("Get Data"):
                 st.write("To access this section, please ensure the 'Analyze using AI' box is checked.")
             
     except Exception as e:
-        st.write(e)
         st.error(f"Failed to fetch data. Please check your ticker again.")
         st.warning("This tool supports only tickers from the U.S. stock market. Please note that ETFs and cryptocurrencies are not available for analysis. If the entered ticker is valid but the tool does not display results, it may be due to missing data or a technical issue. Kindly try again later. If the issue persists, please contact the developer for further assistance.")
 ''
