@@ -884,10 +884,10 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
     peRatio, forwardPe, pbRatio, pe_value, forwardPe_value, pbRatio_value, ev_to_ebitda, \
     dividendYield, payoutRatio, dividends, dividends_value, dividendYield_value, payoutRatio_value, exDividendDate_value, dividend_history, exDividendDate, \
     deRatio, sa_piotroski_value, sa_altmanz_value, deRatio_value, quick_ratio, current_ratio, \
-    roe, roa, roe_value, \
-    ebitdamargin, operatingmargin, grossmargin, profitmargin, fcf_margin, grossmargin_value, operatingmargin_value, profitmargin_value, fcfmargin_value, \
+    roe, roa, roe_value, roa_value, \
+    ebitdamargin, operatingmargin, grossmargin, profitmargin, fcf_margin, grossmargin_value, operatingmargin_value, profitmargin_value, fcfmargin_value, grossmargin_pct, operatingmargin_pct, profitmargin_pct, fcfmargin_pct,  \
     fcf, \
-    revenue_growth_current, revenue_growth_current_value, earnings_growth, revenue_growth, \
+    revenue_growth_current, revenue_growth_current_value, earnings_growth, revenue_growth, earnings_growth_value, \
     institutionsPct, insiderPct, insiderPct_value, institutionsPct_value, \
     totalEsg, enviScore, socialScore, governScore, percentile, totalEsg_value, \
     income_statement_flipped, balance_sheet_flipped, cashflow_statement_flipped, cashflow_statement_tb, quarterly_cashflow_statement_tb, balance_sheet_tb, quarterly_balance_sheet_tb, income_statement_tb, quarterly_income_statement_tb, \
@@ -930,10 +930,10 @@ if st.button("Get Data"):
         peRatio, forwardPe, pbRatio, pe_value, forwardPe_value, pbRatio_value, ev_to_ebitda, \
         dividendYield, payoutRatio, dividends, dividends_value, dividendYield_value, payoutRatio_value, exDividendDate_value, dividend_history, exDividendDate, \
         deRatio, sa_piotroski_value, sa_altmanz_value, deRatio_value, quick_ratio, current_ratio, \
-        roe, roa, roe_value, \
-        ebitdamargin, operatingmargin, grossmargin, profitmargin, fcf_margin, grossmargin_value, operatingmargin_value, profitmargin_value, fcfmargin_value, \
+        roe, roa, roe_value, roa_value, \
+        ebitdamargin, operatingmargin, grossmargin, profitmargin, fcf_margin, grossmargin_value, operatingmargin_value, profitmargin_value, fcfmargin_value, grossmargin_pct, operatingmargin_pct, profitmargin_pct, fcfmargin_pct, \
         fcf, \
-        revenue_growth_current, revenue_growth_current_value, earnings_growth, revenue_growth, \
+        revenue_growth_current, revenue_growth_current_value, earnings_growth, revenue_growth, earnings_growth_value, \
         institutionsPct, insiderPct, insiderPct_value, institutionsPct_value, \
         totalEsg, enviScore, socialScore, governScore, percentile, totalEsg_value, \
         income_statement_flipped, balance_sheet_flipped, cashflow_statement_flipped, cashflow_statement_tb, quarterly_cashflow_statement_tb, balance_sheet_tb, quarterly_balance_sheet_tb, income_statement_tb, quarterly_income_statement_tb, \
@@ -1029,7 +1029,7 @@ if st.button("Get Data"):
 ############################################# Tabs #############################################
 #############################################      #############################################
 
-        overview_data, comparison_data, statements_data, guru_checklist, insider_trades, technicalAnalysis_data, news_data, ai_analysis = st.tabs (["Overview","Comparisons","Financial Statements","Guru Checklist","Insider Trades","Technical Analysis","Top News", "AI Analysis"])
+        overview_data, comparison_data, statements_data, ratios_and_metrics_data, guru_checklist, insider_trades, technicalAnalysis_data, news_data, ai_analysis = st.tabs (["Overview","Comparisons","Financial Statements", "Ratios & Metrics", "Guru Checklist","Insider Trades","Technical Analysis","Top News", "AI Analysis"])
 
 #############################################               #############################################
 ############################################# Overview Data #############################################
@@ -2787,6 +2787,126 @@ if st.button("Get Data"):
                         st.plotly_chart(pie_fig, use_container_width=True)
             except: ""
             ########################################################
+
+#############################################                      #############################################
+############################################# Ratio & Metrics Data #############################################
+#############################################                      ############################################# 
+
+        with ratios_and_metrics_data:
+            st.subheader("Ratios & Metrics", divider ='gray')
+
+            try:
+                rm_col1,rm_col2, rm_col3 = st.columns([3,1,3])
+                with rm_col1:
+                    st.markdown("#### Earnings")
+                    st.markdown(f"""
+                    <div style='float: left; width: 100%;'>
+                        <table style='width: 100%;'>
+                            <tr><td><strong>EPS</strong></td><td>{eps_value}</td></tr>
+                            <tr><td><strong>EPS Yield</strong></td><td>{eps_yield_value}</td></tr>
+                            <tr><td><strong>PEG Ratio</strong></td><td>{pegRatio_value}</td></tr>
+                        </table>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    st.write(" ")
+
+                    st.markdown("#### Valuation Ratios")
+                    st.markdown(f"""
+                    <div style='float: left; width: 100%;'>
+                        <table style='width: 100%;'>
+                            <tr><td><strong>PE</strong></td><td>{pe_value}</td></tr>
+                            <tr><td><strong>Forward PE</strong></td><td>{forwardPe_value}</td></tr>
+                            <tr><td><strong>PB</strong></td><td>{pbRatio_value}</td></tr>
+                            <tr><td><strong>EV/EBITDA</strong></td><td>{ev_to_ebitda}</td></tr>
+                        </table>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    st.write(" ")
+
+                    st.markdown("#### Dividends")
+                    st.markdown(f"""
+                    <div style='float: left; width: 100%;'>
+                        <table style='width: 100%;'>
+                            <tr><td><strong>Dividend Per Share</strong></td><td>{dividends_value}</td></tr>
+                            <tr><td><strong>Dividend Yield</strong></td><td>{dividendYield_value}</td></tr>
+                            <tr><td><strong>Payout Ratio</strong></td><td>{payoutRatio_value}</td></tr>
+                            <tr><td><strong>Ex-Dividend Date</strong></td><td>{exDividendDate_value}</td></tr>
+                        </table>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    st.write(" ")
+
+                    st.markdown("#### Growth")
+                    st.markdown(f"""
+                    <div style='float: left; width: 100%;'>
+                        <table style='width: 100%;'>
+                            <tr><td><strong>Revenue Growth</strong></td><td>{revenue_growth_current_value}</td></tr>
+                            <tr><td><strong>Earnings Growth</strong></td><td>{earnings_growth_value}</td></tr>
+                        </table>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    st.write(" ")
+
+                with rm_col3:
+                    st.markdown("#### Financial Health")
+                    st.markdown(f"""
+                    <div style='float: left; width: 100%;'>
+                        <table style='width: 100%;'>
+                            <tr><td><strong>DE</strong></td><td>{deRatio_value}</td></tr>
+                            <tr><td><strong>Current Ratio</strong></td><td>{current_ratio}</td></tr>
+                            <tr><td><strong>Quick Ratio</strong></td><td>{quick_ratio}</td></tr>
+                        </table>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    st.write(" ")
+
+                    st.markdown("#### Efficiency")
+                    st.markdown(f"""
+                    <div style='float: left; width: 100%;'>
+                        <table style='width: 100%;'>
+                            <tr><td><strong>Return on Assets</strong></td><td>{roa_value}</td></tr>
+                            <tr><td><strong>Return on Equity</strong></td><td>{roe_value}</td></tr>
+                        </table>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    st.write(" ")
+
+                    st.markdown("#### Margin")
+                    st.markdown(f"""
+                    <div style='float: left; width: 100%;'>
+                        <table style='width: 100%;'>
+                            <tr><td><strong>Profit Margin</strong></td><td>{profitmargin_pct}</td></tr>
+                            <tr><td><strong>Gross Margin</strong></td><td>{grossmargin_pct}</td></tr>
+                            <tr><td><strong>Operating Margin</strong></td><td>{operatingmargin_pct}</td></tr>
+                            <tr><td><strong>FCF Margin</strong></td><td>{fcfmargin_pct}</td></tr>
+                        </table>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    st.write(" ")
+
+                    st.markdown("#### Holdings")
+                    st.markdown(f"""
+                    <div style='float: left; width: 100%;'>
+                        <table style='width: 100%;'>
+                            <tr><td><strong>Owned by Insiders</strong></td><td>{insiderPct_value}</td></tr>
+                            <tr><td><strong>Owned by Institutions</strong></td><td>{institutionsPct_value}</td></tr>
+                        </table>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    st.write(" ")
+
+                    st.markdown("#### Scores")
+                    st.markdown(f"""
+                    <div style='float: left; width: 100%;'>
+                        <table style='width: 100%;'>
+                            <tr><td><strong>Piotroski F-Score</strong></td><td>{sa_piotroski_value}</td></tr>
+                            <tr><td><strong>Altman Z-Score</strong></td><td>{sa_altmanz_value}</td></tr>
+                        </table>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    st.write(" ")
+            except: 
+                st.warning("Ratios & Metrics section is not available currently.")
 
 
 #############################################                    #############################################
