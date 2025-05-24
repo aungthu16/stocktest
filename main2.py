@@ -917,13 +917,10 @@ with main_col1:
         ticker = st.text_input("US Stock Ticker:", "AAPL")
     with input_col2:
         apiKey = st.text_input("Enter your RapidAPI Key (optional):", "")
-
-st.write("This analysis dashboard is designed to enable beginner investors to analyze stocks effectively and with ease. Please note that the information in this page is intended for educational purposes only and it does not constitute investment advice or a recommendation to buy or sell any security. We are not responsible for any losses resulting from trading decisions based on this information.")
 st.info("Certain sections require API keys to operate. Users are advised to subscribe to the Morningstar and Seeking Alpha APIs provided by Api Dojo through rapidapi.com.")
 
 use_ai = st.checkbox("Analyze using AI (The system will use the deepseek-r1-distill-llama-70b model to analyze the stock. It will take some time for the process to complete. For a faster process, please uncheck this box.)", value=True)
 ""
-st.caption("This tool is developed by Invest IQ Central.")
 if st.button("Get Data"):
     try:
         price, beta, name, sector, industry, employee, marketCap, longProfile, website, ticker, picture_url, country, sharesOutstanding, exchange_value, upper_ticker, previous_close, beta_value, sharesOutstanding_value, employee_value, marketCap_value, change_percent, change_dollar, apiKey, \
@@ -2125,7 +2122,7 @@ if st.button("Get Data"):
 
             try:
                 SPECIAL_TICKERS = {'NVDA', 'ARM', 'NXPI', 'LHX', 'AVGO', 'QCOM', 'TXN', 'INTC', 'STM',
-                                    'THO', 'EME', 'KBR', 'ACM', 'PCAR', 'HPQ', 'SAP', 'PAR'
+                                    'THO', 'EME', 'KBR', 'ACM', 'PCAR', 'HPQ', 'SAP', 'PAR', 'USNA'
                                     }
                 def clean_ticker_name(text):
                     for ticker in SPECIAL_TICKERS:
@@ -2796,116 +2793,207 @@ if st.button("Get Data"):
 
         with ratios_and_metrics_data:
             st.subheader("Ratios & Metrics", divider ='gray')
-
             try:
                 rm_col1,rm_col2, rm_col3 = st.columns([3,1,3])
                 with rm_col1:
-                    st.markdown("#### Earnings")
-                    st.markdown(f"""
-                    <div style='float: left; width: 100%;'>
-                        <table style='width: 100%;'>
-                            <tr><td><strong>EPS</strong></td><td>{eps_value}</td></tr>
-                            <tr><td><strong>EPS Yield</strong></td><td>{eps_yield_value}</td></tr>
-                            <tr><td><strong>PEG Ratio</strong></td><td>{pegRatio_value}</td></tr>
-                        </table>
-                    </div>
-                    """, unsafe_allow_html=True)
+                    earnings_data = {
+                        'Earnings': ['EPS', 'EPS Yield', 'PEG Ratio'],
+                        '': [eps_value, eps_yield_value, pegRatio_value]
+                    }
+                    df = pd.DataFrame(earnings_data)
+                    st.dataframe(
+                        df,
+                        hide_index=True,
+                        use_container_width=True,
+                        column_config={
+                            "Earnings": st.column_config.Column(
+                                "Earnings",
+                                width="large"
+                            ),
+                            "": st.column_config.Column(
+                                "",
+                                width="small"
+                            )
+                        }
+                    )
+                    st.write(" ")
+                    
+                    valuation_ratios_data = {
+                        'Valuation Ratios': ['PE', 'Forward PE', 'PB', 'EV/EBITDA'],
+                        '': [pe_value, forwardPe_value, pbRatio_value, ev_to_ebitda]
+                    }
+                    df = pd.DataFrame(valuation_ratios_data)
+                    st.dataframe(
+                        df,
+                        hide_index=True,
+                        use_container_width=True,
+                        column_config={
+                            "Valuation Ratios": st.column_config.Column(
+                                "Valuation Ratios",
+                                width="large"
+                            ),
+                            "": st.column_config.Column(
+                                "",
+                                width="small"
+                            )
+                        }
+                    )
                     st.write(" ")
 
-                    st.markdown("#### Valuation Ratios")
-                    st.markdown(f"""
-                    <div style='float: left; width: 100%;'>
-                        <table style='width: 100%;'>
-                            <tr><td><strong>PE</strong></td><td>{pe_value}</td></tr>
-                            <tr><td><strong>Forward PE</strong></td><td>{forwardPe_value}</td></tr>
-                            <tr><td><strong>PB</strong></td><td>{pbRatio_value}</td></tr>
-                            <tr><td><strong>EV/EBITDA</strong></td><td>{ev_to_ebitda}</td></tr>
-                        </table>
-                    </div>
-                    """, unsafe_allow_html=True)
+                    dividends_data = {
+                        'Dividends': ['Dividend Per Share', 'Dividend Yield', 'Payout Ratio', 'Ex-Dividend Date'],
+                        '': [dividends_value, dividendYield_value, payoutRatio_value, exDividendDate_value]
+                    }
+                    df = pd.DataFrame(dividends_data)
+                    st.dataframe(
+                        df,
+                        hide_index=True,
+                        use_container_width=True,
+                        column_config={
+                            "Dividends": st.column_config.Column(
+                                "Dividends",
+                                width="large"
+                            ),
+                            "": st.column_config.Column(
+                                "",
+                                width="small"
+                            )
+                        }
+                    )
                     st.write(" ")
 
-                    st.markdown("#### Dividends")
-                    st.markdown(f"""
-                    <div style='float: left; width: 100%;'>
-                        <table style='width: 100%;'>
-                            <tr><td><strong>Dividend Per Share</strong></td><td>{dividends_value}</td></tr>
-                            <tr><td><strong>Dividend Yield</strong></td><td>{dividendYield_value}</td></tr>
-                            <tr><td><strong>Payout Ratio</strong></td><td>{payoutRatio_value}</td></tr>
-                            <tr><td><strong>Ex-Dividend Date</strong></td><td>{exDividendDate_value}</td></tr>
-                        </table>
-                    </div>
-                    """, unsafe_allow_html=True)
-                    st.write(" ")
-
-                    st.markdown("#### Growth")
-                    st.markdown(f"""
-                    <div style='float: left; width: 100%;'>
-                        <table style='width: 100%;'>
-                            <tr><td><strong>Revenue Growth</strong></td><td>{revenue_growth_current_value}</td></tr>
-                            <tr><td><strong>Earnings Growth</strong></td><td>{earnings_growth_value}</td></tr>
-                        </table>
-                    </div>
-                    """, unsafe_allow_html=True)
+                    growth_data = {
+                        'Growth': ['Revenue Growth', 'Earnings Growth'],
+                        '': [revenue_growth_current_value, earnings_growth_value]
+                    }
+                    df = pd.DataFrame(growth_data)
+                    st.dataframe(
+                        df,
+                        hide_index=True,
+                        use_container_width=True,
+                        column_config={
+                            "Growth": st.column_config.Column(
+                                "Growth",
+                                width="large"
+                            ),
+                            "": st.column_config.Column(
+                                "",
+                                width="small"
+                            )
+                        }
+                    )
                     st.write(" ")
 
                 with rm_col3:
-                    st.markdown("#### Financial Health")
-                    st.markdown(f"""
-                    <div style='float: left; width: 100%;'>
-                        <table style='width: 100%;'>
-                            <tr><td><strong>DE</strong></td><td>{deRatio_value}</td></tr>
-                            <tr><td><strong>Current Ratio</strong></td><td>{current_ratio}</td></tr>
-                            <tr><td><strong>Quick Ratio</strong></td><td>{quick_ratio}</td></tr>
-                        </table>
-                    </div>
-                    """, unsafe_allow_html=True)
+
+                    financial_health_data = {
+                        'Financial Health': ['DE', 'Current Ratio', 'Quick Ratio'],
+                        '': [deRatio_value, current_ratio, quick_ratio]
+                    }
+                    df = pd.DataFrame(financial_health_data)
+                    st.dataframe(
+                        df,
+                        hide_index=True,
+                        use_container_width=True,
+                        column_config={
+                            "Financial Health": st.column_config.Column(
+                                "Financial Health",
+                                width="large"
+                            ),
+                            "": st.column_config.Column(
+                                "",
+                                width="small"
+                            )
+                        }
+                    )
                     st.write(" ")
 
-                    st.markdown("#### Efficiency")
-                    st.markdown(f"""
-                    <div style='float: left; width: 100%;'>
-                        <table style='width: 100%;'>
-                            <tr><td><strong>Return on Assets</strong></td><td>{roa_value}</td></tr>
-                            <tr><td><strong>Return on Equity</strong></td><td>{roe_value}</td></tr>
-                        </table>
-                    </div>
-                    """, unsafe_allow_html=True)
+                    efficiency_data = {
+                        'Efficiency': ['Return on Assets', 'Return on Equity'],
+                        '': [roa_value, roe_value]
+                    }
+                    df = pd.DataFrame(efficiency_data)
+                    st.dataframe(
+                        df,
+                        hide_index=True,
+                        use_container_width=True,
+                        column_config={
+                            "Efficiency": st.column_config.Column(
+                                "Efficiency",
+                                width="large"
+                            ),
+                            "": st.column_config.Column(
+                                "",
+                                width="small"
+                            )
+                        }
+                    )
                     st.write(" ")
 
-                    st.markdown("#### Margin")
-                    st.markdown(f"""
-                    <div style='float: left; width: 100%;'>
-                        <table style='width: 100%;'>
-                            <tr><td><strong>Profit Margin</strong></td><td>{profitmargin_pct}</td></tr>
-                            <tr><td><strong>Gross Margin</strong></td><td>{grossmargin_pct}</td></tr>
-                            <tr><td><strong>Operating Margin</strong></td><td>{operatingmargin_pct}</td></tr>
-                            <tr><td><strong>FCF Margin</strong></td><td>{fcfmargin_pct}</td></tr>
-                        </table>
-                    </div>
-                    """, unsafe_allow_html=True)
+                    margin_data = {
+                        'Margin': ['Profit Margin', 'Gross Margin', 'Operating Margin', 'FCF Margin'],
+                        '': [profitmargin_pct, grossmargin_pct, operatingmargin_pct, fcfmargin_pct]
+                    }
+                    df = pd.DataFrame(margin_data)
+                    st.dataframe(
+                        df,
+                        hide_index=True,
+                        use_container_width=True,
+                        column_config={
+                            "Margin": st.column_config.Column(
+                                "Margin",
+                                width="large"
+                            ),
+                            "": st.column_config.Column(
+                                "",
+                                width="small"
+                            )
+                        }
+                    )
                     st.write(" ")
 
-                    st.markdown("#### Holdings")
-                    st.markdown(f"""
-                    <div style='float: left; width: 100%;'>
-                        <table style='width: 100%;'>
-                            <tr><td><strong>Owned by Insiders</strong></td><td>{insiderPct_value}</td></tr>
-                            <tr><td><strong>Owned by Institutions</strong></td><td>{institutionsPct_value}</td></tr>
-                        </table>
-                    </div>
-                    """, unsafe_allow_html=True)
+                    holdings_data = {
+                        'Holdings': ['Owned by Insiders', 'Owned by Institutions'],
+                        '': [insiderPct_value, institutionsPct_value]
+                    }
+                    df = pd.DataFrame(holdings_data)
+                    st.dataframe(
+                        df,
+                        hide_index=True,
+                        use_container_width=True,
+                        column_config={
+                            "Holdings": st.column_config.Column(
+                                "Holdings",
+                                width="large"
+                            ),
+                            "": st.column_config.Column(
+                                "",
+                                width="small"
+                            )
+                        }
+                    )
                     st.write(" ")
 
-                    st.markdown("#### Scores")
-                    st.markdown(f"""
-                    <div style='float: left; width: 100%;'>
-                        <table style='width: 100%;'>
-                            <tr><td><strong>Piotroski F-Score</strong></td><td>{sa_piotroski_value}</td></tr>
-                            <tr><td><strong>Altman Z-Score</strong></td><td>{sa_altmanz_value}</td></tr>
-                        </table>
-                    </div>
-                    """, unsafe_allow_html=True)
+                    scores_data = {
+                        'Scores': ['Piotroski F-Score', 'Altman Z-Score'],
+                        '': [sa_piotroski_value, sa_altmanz_value]
+                    }
+                    df = pd.DataFrame(scores_data)
+                    st.dataframe(
+                        df,
+                        hide_index=True,
+                        use_container_width=True,
+                        column_config={
+                            "Scores": st.column_config.Column(
+                                "Scores",
+                                width="large"
+                            ),
+                            "": st.column_config.Column(
+                                "",
+                                width="small"
+                            )
+                        }
+                    )
                     st.write(" ")
             except: 
                 st.warning("Ratios & Metrics section is not available currently.")
@@ -4295,4 +4383,14 @@ if st.button("Get Data"):
     except Exception as e:
         st.error(f"Failed to fetch data. Please check your ticker again.")
         st.warning("This tool supports only tickers from the U.S. stock market. Please note that ETFs and cryptocurrencies are not available for analysis. If the entered ticker is valid but the tool does not display results, it may be due to missing data or a technical issue. Kindly try again later. If the issue persists, please contact the developer for further assistance.")
+''
+st.subheader("", divider ='gray')
+iiqc1, iiqc2 = st.columns ([3,1])
+with iiqc1:
+    st.write("")
+    st.markdown("**Disclaimer:**")
+    st.write("This analysis dashboard is designed to enable beginner investors to analyze stocks effectively and with ease. Please note that the information in this page is intended for educational purposes only and it does not constitute investment advice or a recommendation to buy or sell any security. We are not responsible for any losses resulting from trading decisions based on this information.")
+with iiqc2:
+    invest_iq_central='./Image/InvestIQCentral.png'
+    st.image(invest_iq_central,width=300)
 ''
