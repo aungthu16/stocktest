@@ -179,7 +179,6 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
             sa_altmanz = sa_score_data.get("Altman Z-Score", "N/A")
             sa_piotroski = sa_score_data.get("Piotroski F-Score", "N/A")
     except Exception as e:
-        st.write(e)
         print(f"SA scores fetching failed")
     ########################
 
@@ -4364,7 +4363,6 @@ if st.button("Get Data"):
         with news_data:
             try:
                 st.caption("News data is sourced from Stockanalysis.com.")
-                st.write(news)
                 num_columns = 3
                 columns = st.columns(num_columns)
                 for i, news_item in enumerate(news):
