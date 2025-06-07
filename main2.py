@@ -164,7 +164,7 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
         sa_score_url = f'https://stockanalysis.com/stocks/{ticker}/statistics/'
         sa_score_response = requests.get(sa_score_url)
         sa_score_soup = BeautifulSoup(sa_score_response.content, "html.parser")
-        sa_score_table = sa_score_soup.find_all('table')[17]
+        sa_score_table = sa_score_soup.find_all('table')[18]
         sa_score_data = {}
         #sa_altmanz = "N/A"
         #sa_piotroski = "N/A"
