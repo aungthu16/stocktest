@@ -4243,7 +4243,7 @@ if st.button("Get Data"):
                                     open=data['Open'], high=data['High'], low=data['Low'], close=data['Close'],
                                     name="Candlestick",
                                     showlegend=False,
-                                    increasing_line_width=0.5, decreasing_line_width=0.5,
+                                    increasing_line_width=1, decreasing_line_width=1,
                                     increasing_line_color='rgba(0,150,0,1)',
                                     decreasing_line_color='rgba(150,0,0,1)',
                                     opacity=1
@@ -4453,7 +4453,7 @@ if st.button("Get Data"):
                                     open=data['Open'], high=data['High'], low=data['Low'], close=data['Close'],
                                     name="Price",
                                     showlegend=False,
-                                    increasing_line_width=0.5, decreasing_line_width=0.5,
+                                    increasing_line_width=1, decreasing_line_width=1,
                                     increasing_line_color='rgba(0,150,0,1)',
                                     decreasing_line_color='rgba(150,0,0,1)',
                                     opacity=1
