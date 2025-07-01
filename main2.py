@@ -2010,6 +2010,17 @@ if st.button("Get Data"):
                                     text=[f"{date}: {ret*100:.2f}%" for date, ret in zip(df_ticker['Date'], df_ticker['Relative Return'])]
                                 )
                             )
+                        fig.add_shape(
+                            type="line",
+                            x0=0,
+                            x1=1,
+                            y0=0,
+                            y1=0,
+                            xref="paper",
+                            yref="y",
+                            line=dict(color="#31333E", width=3),
+                            layer="below"
+                        )
                         fig.update_layout(
                             title={"text":f'{upper_ticker} - 5 Years Price Performance Comparison With Indices', "font": {"size": 22}},
                             title_y=1,  
@@ -2087,6 +2098,16 @@ if st.button("Get Data"):
                                 marker=dict(cornerradius=5),
                                 marker_color=vscolors
                             ))
+                            fig4.add_shape(
+                                type="line",
+                                x0=0,
+                                x1=1,
+                                y0=0,
+                                y1=0,
+                                xref="paper",
+                                yref="y",
+                                line=dict(color="#656D78", width=2)
+                            )
                             fig4.update_layout(
                                 title={"text":"Net Income Comparison (in Billions USD)","font": {"size": 15}},
                                 xaxis_title=None,
@@ -2116,6 +2137,16 @@ if st.button("Get Data"):
                                     marker=dict(cornerradius=5),
                                     marker_color=vscolors[i]
                                 ))
+                            fig2.add_shape(
+                                type="line",
+                                x0=0,
+                                x1=1,
+                                y0=0,
+                                y1=0,
+                                xref="paper",
+                                yref="y",
+                                line=dict(color="#656D78", width=2)
+                            )
                             fig2.update_layout(
                                 title={"text":"Ratios Comparison","font": {"size": 15}},
                                 xaxis_title=None,
@@ -2146,6 +2177,16 @@ if st.button("Get Data"):
                                     marker=dict(cornerradius=5),
                                     marker_color=vscolors[i]
                                 ))
+                            fig3.add_shape(
+                                type="line",
+                                x0=0,
+                                x1=1,
+                                y0=0,
+                                y1=0,
+                                xref="paper",
+                                yref="y",
+                                line=dict(color="#656D78", width=2)
+                            )
                             fig3.update_layout(
                                 title={"text":"Performance Comparison","font": {"size": 15}},
                                 xaxis_title=None,
@@ -2197,6 +2238,16 @@ if st.button("Get Data"):
                                 marker=dict(cornerradius=5),
                                 marker_color=vscolors2[:3]
                             ))
+                            fig1.add_shape(
+                                type="line",
+                                x0=0,
+                                x1=1,
+                                y0=0,
+                                y1=0,
+                                xref="paper",
+                                yref="y",
+                                line=dict(color="#656D78", width=2)
+                            )
                             fig1.update_layout(
                                 title={"text":"Annual Dividend Comparison","font": {"size": 15}},
                                 xaxis_title=None,
@@ -2221,6 +2272,16 @@ if st.button("Get Data"):
                                 marker=dict(cornerradius=5),
                                 marker_color=vscolors2[:3]
                             ))
+                            fig2.add_shape(
+                                type="line",
+                                x0=0,
+                                x1=1,
+                                y0=0,
+                                y1=0,
+                                xref="paper",
+                                yref="y",
+                                line=dict(color="#656D78", width=2)
+                            )
                             fig2.update_layout(
                                 title={"text":"Dividend Yield Comparison","font": {"size": 15}},
                                 xaxis_title=None,
@@ -2245,6 +2306,16 @@ if st.button("Get Data"):
                                 marker=dict(cornerradius=5),
                                 marker_color=vscolors2[:3]
                             ))
+                            fig3.add_shape(
+                                type="line",
+                                x0=0,
+                                x1=1,
+                                y0=0,
+                                y1=0,
+                                xref="paper",
+                                yref="y",
+                                line=dict(color="#656D78", width=2)
+                            )
                             fig3.update_layout(
                                 title={"text":"Annualized 3-Year Dividend Growth Comparison","font": {"size": 15}},
                                 xaxis_title=None,
@@ -2341,6 +2412,17 @@ if st.button("Get Data"):
                                             text=[f"{date}: {ret*100:.2f}%" for date, ret in zip(df_ticker['Date'], df_ticker['Relative Return'])]
                                         )
                                     )
+                                fig.add_shape(
+                                    type="line",
+                                    x0=0,
+                                    x1=1,
+                                    y0=0,
+                                    y1=0,
+                                    xref="paper",
+                                    yref="y",
+                                    line=dict(color="#31333E", width=3),
+                                    layer="below"
+                                )
                                 fig.update_layout(
                                     title={"text":f'{upper_ticker} - 5 Years Price Performance Comparison With Competitors', "font": {"size": 22}},
                                     title_y=1,  
@@ -2435,6 +2517,16 @@ if st.button("Get Data"):
                                 marker_color=colors[item]
                             )
                         )
+                    fig.add_shape(
+                        type="line",
+                        x0=0,
+                        x1=1,
+                        y0=0,
+                        y1=0,
+                        xref="paper",
+                        yref="y",
+                        line=dict(color="#656D78", width=2)
+                    )
                     fig.update_layout(
                         title={"text":"Income Statement Key Values Chart", "font": {"size": 20}},
                         title_y=1,  
@@ -2473,6 +2565,16 @@ if st.button("Get Data"):
                                     marker_color=eps_color[item]
                                 )
                             )
+                        fig.add_shape(
+                            type="line",
+                            x0=0,
+                            x1=1,
+                            y0=0,
+                            y1=0,
+                            xref="paper",
+                            yref="y",
+                            line=dict(color="#656D78", width=2)
+                        )
                         fig.update_layout(
                             title={"text":"EPS Chart", "font": {"size": 20}},
                             title_y=1,  
@@ -2540,6 +2642,16 @@ if st.button("Get Data"):
                                 marker_color=colors[item]
                             )
                         )
+                    fig.add_shape(
+                        type="line",
+                        x0=0,
+                        x1=1,
+                        y0=0,
+                        y1=0,
+                        xref="paper",
+                        yref="y",
+                        line=dict(color="#656D78", width=2)
+                    )
                     fig.update_layout(
                         title={"text":"Balance Sheet Key Values Chart", "font": {"size": 20}},
                         title_y=1,  
@@ -2633,6 +2745,16 @@ if st.button("Get Data"):
                                 marker_color=colors[item]
                             )
                         )
+                    fig.add_shape(
+                        type="line",
+                        x0=0,
+                        x1=1,
+                        y0=0,
+                        y1=0,
+                        xref="paper",
+                        yref="y",
+                        line=dict(color="#656D78", width=2)
+                    )
                     fig.update_layout(
                         title={"text":"Cashflow Statement Key Values Chart", "font": {"size": 20}},
                         title_y=1,  
@@ -2672,6 +2794,16 @@ if st.button("Get Data"):
                                     marker_color=dividend_color[item]
                                 )
                             )
+                        fig.add_shape(
+                            type="line",
+                            x0=0,
+                            x1=1,
+                            y0=0,
+                            y1=0,
+                            xref="paper",
+                            yref="y",
+                            line=dict(color="#656D78", width=2)
+                        )
                         fig.update_layout(
                             title={"text":"Dividends Paid Chart", "font": {"size": 20}},
                             title_y=1,  
@@ -2729,6 +2861,17 @@ if st.button("Get Data"):
                             mode='lines+markers',
                             name=str(fiscal_year)
                         ))
+                    figf.add_shape(
+                        type="line",
+                        x0=0,
+                        x1=1,
+                        y0=0,
+                        y1=0,
+                        xref="paper",
+                        yref="y",
+                        line=dict(color="#31333E", width=3),
+                        layer="below"
+                    )
                     figf.update_layout(
                         title={"text":"Financial Health Data", "font": {"size": 20}},
                         title_y=1,  
@@ -2764,6 +2907,17 @@ if st.button("Get Data"):
                             mode='lines+markers',
                             name=str(fiscal_year)
                         ))
+                    figv.add_shape(
+                        type="line",
+                        x0=0,
+                        x1=1,
+                        y0=0,
+                        y1=0,
+                        xref="paper",
+                        yref="y",
+                        line=dict(color="#31333E", width=3),
+                        layer="below"
+                    )
                     figv.update_layout(
                         title={"text":"Valuation Data", "font": {"size": 20}},
                         title_y=1,  
@@ -2800,6 +2954,17 @@ if st.button("Get Data"):
                             mode='lines+markers',
                             name=str(fiscal_year)
                         ))
+                    figp.add_shape(
+                        type="line",
+                        x0=0,
+                        x1=1,
+                        y0=0,
+                        y1=0,
+                        xref="paper",
+                        yref="y",
+                        line=dict(color="#31333E", width=3),
+                        layer="below"
+                    )
                     figp.update_layout(
                         title={"text":"Profitability Data", "font": {"size": 20}},
                         title_y=1,  
@@ -2833,6 +2998,17 @@ if st.button("Get Data"):
                             mode='lines+markers',
                             name=str(fiscal_year)
                         ))
+                    figy.add_shape(
+                        type="line",
+                        x0=0,
+                        x1=1,
+                        y0=0,
+                        y1=0,
+                        xref="paper",
+                        yref="y",
+                        line=dict(color="#31333E", width=3),
+                        layer="below"
+                    )
                     figy.update_layout(
                         title={"text":"Yield Data", "font": {"size": 20}},
                         title_y=1,  
@@ -2872,6 +3048,17 @@ if st.button("Get Data"):
                             hoverinfo='y+name',
                             #marker=dict(line=dict(width=1))
                         ))
+                    figm.add_shape(
+                        type="line",
+                        x0=0,
+                        x1=1,
+                        y0=0,
+                        y1=0,
+                        xref="paper",
+                        yref="y",
+                        line=dict(color="#31333E", width=3),
+                        layer="below"
+                    )
                     figm.update_layout(
                         title={"text":"Margin Data", "font": {"size": 20}},
                         title_y=1,  
@@ -2907,6 +3094,17 @@ if st.button("Get Data"):
                             mode='lines+markers',
                             name=str(fiscal_year)
                         ))
+                    figg.add_shape(
+                        type="line",
+                        x0=0,
+                        x1=1,
+                        y0=0,
+                        y1=0,
+                        xref="paper",
+                        yref="y",
+                        line=dict(color="#31333E", width=3),
+                        layer="below"
+                    )
                     figg.update_layout(
                         title={"text":"Growth Data", "font": {"size": 20}},
                         title_y=1,  
@@ -2958,6 +3156,16 @@ if st.button("Get Data"):
                                                     "<extra></extra>"
                                     )
                                 )
+                        fig_rs.add_shape(
+                            type="line",
+                            x0=0,
+                            x1=1,
+                            y0=0,
+                            y1=0,
+                            xref="paper",
+                            yref="y",
+                            line=dict(color="#656D78", width=2)
+                        )
                         fig_rs.update_layout(
                             title={"text":f'{upper_ticker} Revenue by Segment', "font": {"size": 20}},
                             xaxis=dict(title=None, showticklabels=True, showgrid=False),
