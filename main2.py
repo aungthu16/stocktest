@@ -2236,6 +2236,9 @@ if st.button("Get Data"):
                                     numeric_df.loc[mask, col] = numeric_df.loc[mask, col].replace('[\$,\%]', '', regex=True).astype(float)
                             vscolors2 = ['#4FC1E9', '#48CFAD', '#EC87C0', '#FFCE54']
                             annual_data = numeric_df[numeric_df['Type'] == 'Annual Dividend']
+                            values = annual_data.iloc[0, 1:]
+                            if values.isnull().all() or (values.fillna(0) == 0).all():
+                                raise ValueError("All values are zero or missing.")
                             fig1 = go.Figure()
                             fig1.add_trace(go.Bar(
                                 x=mb_div_df.columns[1:],
@@ -2274,6 +2277,9 @@ if st.button("Get Data"):
                         chart5_success = False
                         try:
                             yield_data = numeric_df[numeric_df['Type'] == 'Dividend Yield']
+                            values = yield_data.iloc[0, 1:]
+                            if values.isnull().all() or (values.fillna(0) == 0).all():
+                                raise ValueError("All values are zero or missing.")
                             fig2 = go.Figure()
                             fig2.add_trace(go.Bar(
                                 x=mb_div_df.columns[1:],
@@ -2312,6 +2318,9 @@ if st.button("Get Data"):
                         chart6_success = False
                         try:
                             growth_data = numeric_df[numeric_df['Type'] == 'Annualized 3-Year Dividend Growth']
+                            values = growth_data.iloc[0, 1:]
+                            if values.isnull().all() or (values.fillna(0) == 0).all():
+                                raise ValueError("All values are zero or missing.")
                             fig3 = go.Figure()
                             fig3.add_trace(go.Bar(
                                 x=mb_div_df.columns[1:],
@@ -2868,6 +2877,8 @@ if st.button("Get Data"):
                                                 var_name='Year', 
                                                 value_name='Value')
                     sa_metrics_df_melted['Value'] = sa_metrics_df_melted['Value'].replace({'-': '0'}, regex=True).astype(float)
+                    if sa_metrics_df_melted['Value'].isnull().all() or (sa_metrics_df_melted['Value'].fillna(0) == 0).all():
+                        raise ValueError("All values are zero or missing.")
                     unique_years = sa_metrics_df_melted['Year'].unique()
                     unique_years_sorted = sorted([year for year in unique_years if year != 'Current'])
                     if 'Current' in unique_years:
@@ -2914,6 +2925,8 @@ if st.button("Get Data"):
                                                 var_name='Year', 
                                                 value_name='Value')
                     sa_metrics_df_melted['Value'] = sa_metrics_df_melted['Value'].replace({'-': '0'}, regex=True).astype(float)
+                    if sa_metrics_df_melted['Value'].isnull().all() or (sa_metrics_df_melted['Value'].fillna(0) == 0).all():
+                        raise ValueError("All values are zero or missing.")
                     unique_years = sa_metrics_df_melted['Year'].unique()
                     unique_years_sorted = sorted([year for year in unique_years if year != 'Current'])
                     if 'Current' in unique_years:
@@ -2961,6 +2974,8 @@ if st.button("Get Data"):
                                                 var_name='Year', 
                                                 value_name='Value (%)')
                     sa_metrics_df_melted['Value (%)'] = sa_metrics_df_melted['Value (%)'].replace({'%': '','-': '0'}, regex=True).astype(float)
+                    if sa_metrics_df_melted['Value (%)'].isnull().all() or (sa_metrics_df_melted['Value (%)'].fillna(0) == 0).all():
+                        raise ValueError("All values are zero or missing.")
                     unique_years = sa_metrics_df_melted['Year'].unique()
                     unique_years_sorted = sorted([year for year in unique_years if year != 'Current'])
                     if 'Current' in unique_years:
@@ -3005,6 +3020,8 @@ if st.button("Get Data"):
                     sa_metrics_df_filtered = sa_metrics_df[sa_metrics_df['Fiscal Year'].isin(pmetrics)]
                     sa_metrics_df_melted = sa_metrics_df_filtered.melt(id_vars=['Fiscal Year'], var_name='Year', value_name='Value (%)')
                     sa_metrics_df_melted['Value (%)'] = sa_metrics_df_melted['Value (%)'].replace({'%': '','-': '0'}, regex=True).astype(float)
+                    if sa_metrics_df_melted['Value (%)'].isnull().all() or (sa_metrics_df_melted['Value (%)'].fillna(0) == 0).all():
+                        raise ValueError("All values are zero or missing.")
                     unique_years = sa_metrics_df_melted['Year'].unique()
                     unique_years_sorted = sorted([year for year in unique_years if year != 'Current'])
                     if 'Current' in unique_years:
@@ -3053,6 +3070,8 @@ if st.button("Get Data"):
                                                 var_name='Year', 
                                                 value_name='Value (%)')
                     sa_metrics_df_melted['Value (%)'] = sa_metrics_df_melted['Value (%)'].replace({'%': '','-': '0'}, regex=True).astype(float)
+                    if sa_metrics_df_melted['Value (%)'].isnull().all() or (sa_metrics_df_melted['Value (%)'].fillna(0) == 0).all():
+                        raise ValueError("All values are zero or missing.")
                     unique_years = sa_metrics_df_melted['Year'].unique()
                     unique_years_sorted = sorted([year for year in unique_years if year != 'TTM'])
                     if 'TTM' in unique_years:
@@ -3101,6 +3120,8 @@ if st.button("Get Data"):
                                                 var_name='Year', 
                                                 value_name='Value (%)')
                     sa_metrics_df_melted['Value (%)'] = sa_metrics_df_melted['Value (%)'].replace({'%': '','-': '0'}, regex=True).astype(float)
+                    if sa_metrics_df_melted['Value (%)'].isnull().all() or (sa_metrics_df_melted['Value (%)'].fillna(0) == 0).all():
+                        raise ValueError("All values are zero or missing.")
                     unique_years = sa_metrics_df_melted['Year'].unique()
                     unique_years_sorted = sorted([year for year in unique_years if year != 'TTM'])
                     if 'TTM' in unique_years:
