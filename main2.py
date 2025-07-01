@@ -2073,10 +2073,12 @@ if st.button("Get Data"):
             st.caption("Data source: Yahoo Finance")
             ''
             st.subheader("Industry and Sector Comparison", divider = 'gray')
+            isc_all_fail = True
             try:
                 col1,col2,col3= st.columns([3,3,3])
                 with col1:  
                         vscolors = ['#4FC1E9', '#48CFAD', '#EC87C0', '#FFCE54']
+                        chart1_success = False
                         try:
                             numeric_df = mb_com_df.copy()
                             def convert_to_billions(value):
@@ -2118,10 +2120,14 @@ if st.button("Get Data"):
                                 showlegend=False
                             )
                             st.plotly_chart(fig4, use_container_width=True)
+                            chart1_success = True
+                            isc_all_fail = False
                         except Exception as e:
-                            st.warning("Net Income Comparison: No data available.")
+                            if not isc_all_fail:
+                                st.warning("Net Income Comparison: No data available.")
                             
                 with col2:            
+                        chart2_success = False
                         try:
                             ratio_metrics = ['P/E Ratio', 'Price / Sales', 'Price / Cash', 'Price / Book']
                             ratio_data = numeric_df[numeric_df['Metric'].isin(ratio_metrics)]
@@ -2159,9 +2165,13 @@ if st.button("Get Data"):
                                 legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.010)
                             )
                             st.plotly_chart(fig2, use_container_width=True)
+                            chart2_success = True
+                            isc_all_fail = False
                         except Exception as e:
-                            st.warning("Ratio Comparison: No data available.")
+                            if not isc_all_fail:
+                                st.warning("Ratio Comparison: No data available.")
                 with col3:
+                        chart3_success = False
                         try:
                             performance_metrics = ['7 Day Performance', '1 Month Performance', '1 Year Performance']
                             performance_data = numeric_df[numeric_df['Metric'].isin(performance_metrics)]
@@ -2199,28 +2209,25 @@ if st.button("Get Data"):
                                 legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.010)
                             )
                             st.plotly_chart(fig3, use_container_width=True)
+                            chart3_success = True
+                            isc_all_fail = False
                         except Exception as e:
-                            st.warning("Performance Comparison: No data available.")
+                            if not isc_all_fail:
+                                st.warning("Performance Comparison: No data available.")
                             
             except Exception as e:
                 st.warning(f"Valuation Comparison: No data available.")
+            if isc_all_fail:
+                st.write("There is no data available.")
             st.caption("Data source: Market Beat")
             ''            
                 
             st.subheader("Dividend Comparison", divider = 'gray')
+            dc_all_fail = True
             try:
                 col5, col6, col7 = st.columns([3,3,3])
                 with col5:
-                    #try:
-                    #    st.subheader('Dividends Comparison')
-                    #    def highlight_company(s):
-                    #        return ['background-color: yellow' if s.name == mb_div_df.columns[1] else '' for _ in s]
-                    #    mb_div_styled_df = mb_div_df.style.apply(highlight_company, axis=0)
-                    #    st.dataframe(mb_div_styled_df,hide_index=True,use_container_width=True)
-                    #except Exception as e:
-                    #    st.warning(f"Dividends Comparison: No data available.")
-                    #st.caption("Data source: Market Beat")
-    
+                        chart4_success = False
                         try:
                             numeric_df = mb_div_df.copy()
                             for col in numeric_df.columns:
@@ -2258,9 +2265,13 @@ if st.button("Get Data"):
                                 showlegend=False
                             )
                             st.plotly_chart(fig1, use_container_width=True)
+                            chart4_success = True
+                            dc_all_fail = False
                         except Exception as e:
-                            st.warning("Annual Dividend Comparison: No data available.")
+                            if not dc_all_fail:
+                                st.warning("Annual Dividend Comparison: No data available.")
                 with col6:
+                        chart5_success = False
                         try:
                             yield_data = numeric_df[numeric_df['Type'] == 'Dividend Yield']
                             fig2 = go.Figure()
@@ -2292,9 +2303,13 @@ if st.button("Get Data"):
                                 showlegend=False
                             )
                             st.plotly_chart(fig2, use_container_width=True)
+                            chart5_success = True
+                            dc_all_fail = False
                         except Exception as e:
-                            st.warning("Dividend Yield Comparison: No data available.")
+                            if not dc_all_fail:
+                                st.warning("Dividend Yield Comparison: No data available.")
                 with col7:
+                        chart6_success = False
                         try:
                             growth_data = numeric_df[numeric_df['Type'] == 'Annualized 3-Year Dividend Growth']
                             fig3 = go.Figure()
@@ -2326,10 +2341,15 @@ if st.button("Get Data"):
                                 showlegend=False
                             )
                             st.plotly_chart(fig3, use_container_width=True)
+                            chart6_success = True
+                            dc_all_fail = False
                         except Exception as e:
-                            st.warning("Dividend Growth Comparison: No data available.")
+                            if not dc_all_fail:
+                                st.warning("Dividend Growth Comparison: No data available.")
             except Exception as e:
                 st.warning(f"Dividends Comparison: No data available.")
+            if dc_all_fail:
+                st.write("There is no data available.")
             st.caption("Data source: Market Beat")
             ''
 
@@ -2442,6 +2462,7 @@ if st.button("Get Data"):
                                 )
                                 st.plotly_chart(fig, use_container_width=True)
                             plot_relative_return_comparison(mb_alt_df_melted, custom_colors, upper_ticker)
+                            st.caption("Data source: Yahoo Finance")
                     except Exception as e:
                         print(f"Failed to scrape ticker data from table.")
                 with compcol4:
@@ -2466,7 +2487,6 @@ if st.button("Get Data"):
                         st.write("")
             except Exception as e:
                 print(f"Failed to scrape ticker data from table.")
-            st.caption("Data source: Yahoo Finance")
 
 #############################################            #############################################
 ############################################# Statements #############################################
