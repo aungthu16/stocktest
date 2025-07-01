@@ -2355,7 +2355,7 @@ if st.button("Get Data"):
 
             try:
                 SPECIAL_TICKERS = {'NVDA', 'ARM', 'NXPI', 'LHX', 'AVGO', 'QCOM', 'TXN', 'INTC', 'STM',
-                                    'THO', 'EME', 'KBR', 'ACM', 'PCAR', 'HPQ', 'SAP', 'PAR', 'USNA'
+                                    'THO', 'EME', 'KBR', 'ACM', 'PCAR', 'HPQ', 'SAP', 'PAR', 'USNA', 'NU'
                                     }
                 def clean_ticker_name(text):
                     for ticker in SPECIAL_TICKERS:
