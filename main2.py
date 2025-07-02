@@ -4780,6 +4780,7 @@ if st.button("Get Data"):
         with ai_analysis:
             st.write(analysis)
             st.write(analysis3)
+            st.wrtie(analysis2)
             if use_ai:
                 st.subheader("AI Stock Analysis", divider ='gray')
                 aicol1, aicol2 = st.columns([3,2])
