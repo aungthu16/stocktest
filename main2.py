@@ -4784,6 +4784,7 @@ if st.button("Get Data"):
                 with aicol2:
                     try:
                         response_text = analysis3['snowflakes']
+                        st.write(response_text)
                         ratings_dict = {}
                         for line in response_text.strip().split('\n'):
                             if ':' in line:
@@ -4838,6 +4839,8 @@ if st.button("Get Data"):
                     try:
                         if upper_ticker:
                             with st.spinner('Analyzing stock data...'):
+                                text = analysis['summary']
+                                st.write(text)
                                 cleaned_text = analysis['summary'].replace('\\n', '\n').replace('\\', '')
                                 special_chars = ['$', '>', '<', '`', '|', '[', ']', '(', ')', '+', '{', '}', '!', '&']
                                 for char in special_chars:
