@@ -2666,6 +2666,7 @@ if st.button("Get Data"):
                         st.write("EPS Data is not available.")
 
                 ''
+                st.write(zen_rev_df)
                 try:
                     zen_rev_df = pd.DataFrame(zen_rev)
                     zen_df_plot = zen_rev_df.iloc[:, [0, 1]].copy()
@@ -4145,8 +4146,8 @@ if st.button("Get Data"):
             except Exception as e:
                 st.warning("Insider information is not available.")
             ''
-            st.subheader("Top Shareholders", divider ='gray')
             try:
+                st.subheader("Top Shareholders", divider ='gray')
                 if 'Shares' in zen_own.columns:
                     zen_own['Shares'] = zen_own['Shares'].apply(lambda x: f"{int(x):,}" if pd.notnull(x) and str(x).replace(',', '').isdigit() else x)
                 st.dataframe(zen_own, use_container_width=True, hide_index=True)
