@@ -433,40 +433,42 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
     ########################
 
     ##### WallstreetZen ownership info #####
-    url = f'https://www.wallstreetzen.com/stocks/us/{exchange_value}/{ticker}/ownership'
-    headers = {"User-Agent": "Mozilla/5.0"}
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        soup = BeautifulSoup(response.text, "html.parser")
-        tables = soup.find_all("table")
-        if len(tables) >= 3:
-            try:
-                zen_own = pd.read_html(str(tables[1]))[0]
-                zen_industry_own = pd.read_html(str(tables[2]))[0]
-            except Exception as e:
+    try:
+        url = f'https://www.wallstreetzen.com/stocks/us/{exchange_value}/{ticker}/ownership'
+        response = requests.get(url)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.text, "html.parser")
+            tables = soup.find_all("table")
+            if len(tables) >= 3:
+                try:
+                    zen_own = pd.read_html(str(tables[1]))[0]
+                    zen_industry_own = pd.read_html(str(tables[2]))[0]
+                except Exception as e:
+                    zen_own = zen_industry_own = ""
+            else:
                 zen_own = zen_industry_own = ""
         else:
             zen_own = zen_industry_own = ""
-    else:
-        zen_own = zen_industry_own = ""
+    except Exception as e: zen_own = zen_industry_own = ""
     ########################
 
     ##### WallstreetZen revenue info #####
-    url = f'https://www.wallstreetzen.com/stocks/us/{exchange_value}/{ticker}/revenue'
-    headers = {"User-Agent": "Mozilla/5.0"}
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        soup = BeautifulSoup(response.text, "html.parser")
-        tables = soup.find_all("table")
-        if len(tables) >= 0:
-            try:
-                zen_rev = pd.read_html(str(tables[0]))[0]
-            except Exception as e:
+    try:
+        url = f'https://www.wallstreetzen.com/stocks/us/{exchange_value}/{ticker}/revenue'
+        response = requests.get(url)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.text, "html.parser")
+            tables = soup.find_all("table")
+            if len(tables) > 0:
+                try:
+                    zen_rev = pd.read_html(str(tables[0]))[0]
+                except Exception as e:
+                    zen_rev = ""
+            else:
                 zen_rev = ""
         else:
             zen_rev = ""
-    else:
-        zen_rev = ""
+    except Exception as e: zen_rev = ""
     ########################
 
     ##### Yahoo Finance #####
