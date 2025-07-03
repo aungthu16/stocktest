@@ -44,7 +44,7 @@ ticker = "aapl"
 upper_ticker = ticker.upper()
 exchange_value = "NASDAQ"
 
-url = "https://stockanalysis.com/stocks/mcd/financials/balance-sheet/"
+url = "https://www.marketbeat.com/stocks/NASDAQ/NVDA/forecast/"
 headers = {
     "User-Agent": "Mozilla/5.0"
 }
