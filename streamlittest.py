@@ -44,26 +44,22 @@ ticker = "aapl"
 upper_ticker = ticker.upper()
 exchange_value = "NASDAQ"
 
-url = "https://www.marketbeat.com/stocks/NASDAQ/NVDA/forecast/"
-headers = {
-    "User-Agent": "Mozilla/5.0"
-}
-
-response = requests.get(url, headers=headers)
-
-if response.status_code == 200:
-    soup = BeautifulSoup(response.text, "html.parser")
-    tables = soup.find_all("table")
-    
-    if tables:
-        for i, table in enumerate(tables):
-            try:
-                df = pd.read_html(str(table))[0]  # Convert to DataFrame
-                st.write(f"### Table {i + 1}")
-                st.dataframe(df)
-            except Exception as e:
-                st.warning(f"Could not parse Table {i + 1}: {e}")
-    else:
-        st.warning("No <table> elements found in the static HTML.")
+mb_com_url = f'https://www.macrotrends.net/stocks/charts/MED/medifast-inc/revenue'
+headers_request = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"}
+mb_com_response = requests.get(mb_com_url, headers=headers_request)
+if mb_com_response.status_code == 200:
+    try:
+        tables_dfs = pd.read_html(mb_com_response.text)
+        if len(tables_dfs) > 1:
+            mb_com_df = tables_dfs[0]
+            st.write("DataFrame created successfully using pd.read_html():")
+            st.write(mb_com_df)
+        else:
+            st.error("Could not find the second table on the MarketBeat page.")
+            mb_com_df = pd.DataFrame() 
+    except Exception as e:
+        st.error(f"Error parsing tables with pd.read_html: {e}")
+        mb_com_df = pd.DataFrame() 
 else:
-    st.error(f"Failed to fetch page. Status code: {response.status_code}")
+    st.error(f"Failed to fetch page from MarketBeat. Status code: {mb_com_response.status_code}")
+    mb_com_df = pd.DataFrame() 
