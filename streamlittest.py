@@ -44,7 +44,7 @@ ticker = "aapl"
 upper_ticker = ticker.upper()
 exchange_value = "NASDAQ"
 
-url = "https://www.macrotrends.net/stocks/charts/AAPL/apple/revenue"
+url = "https://stockanalysis.com/stocks/mcd/financials/balance-sheet/"
 headers = {
     "User-Agent": "Mozilla/5.0"
 }
