@@ -432,45 +432,6 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
         mb_earning_df = ""
     ########################
 
-    ##### WallstreetZen ownership info #####
-    try:
-        url = f'https://www.wallstreetzen.com/stocks/us/{exchange_value}/{ticker}/ownership'
-        response = requests.get(url)
-        if response.status_code == 200:
-            soup = BeautifulSoup(response.text, "html.parser")
-            tables = soup.find_all("table")
-            if len(tables) >= 3:
-                try:
-                    zen_own = pd.read_html(str(tables[1]))[0]
-                    zen_industry_own = pd.read_html(str(tables[2]))[0]
-                except Exception as e:
-                    zen_own = zen_industry_own = ""
-            else:
-                zen_own = zen_industry_own = ""
-        else:
-            zen_own = zen_industry_own = ""
-    except Exception as e: zen_own = zen_industry_own = ""
-    ########################
-
-    ##### WallstreetZen revenue info #####
-    try:
-        url = f'https://www.wallstreetzen.com/stocks/us/{exchange_value}/{ticker}/revenue'
-        response = requests.get(url)
-        if response.status_code == 200:
-            soup = BeautifulSoup(response.text, "html.parser")
-            tables = soup.find_all("table")
-            if len(tables) > 0:
-                try:
-                    zen_rev = pd.read_html(str(tables[0]))[0]
-                except Exception as e:
-                    zen_rev = ""
-            else:
-                zen_rev = ""
-        else:
-            zen_rev = ""
-    except Exception as e: zen_rev = ""
-    ########################
-
     ##### Yahoo Finance #####
     ##### Profile #####
     name = stock.info.get('longName', 'N/A')
@@ -1013,7 +974,6 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
     quant_rating, growth_grade, momentum_grade, profitability_grade, value_grade, yield_on_cost_grade, ticker_id, sk_targetprice, authors_strongsell_count, authors_strongbuy_count, authors_sell_count, authors_hold_count, authors_buy_count, authors_rating, authors_count, epsRevisionsGrade, dpsRevisionsGrade, dividendYieldGrade, divSafetyCategoryGrade, divGrowthCategoryGrade, divConsistencyCategoryGrade, sellSideRating, \
     sa_growth_df, sa_metrics_df2, sa_metrics_df, sa_analysts_count, sa_analysts_consensus, sa_analysts_targetprice, sa_altmanz, sa_piotroski, sa_metrics_rs_df, rs_first_date, rs_pie_data, \
     insider_mb, mb_alt_headers, mb_alt_df, mb_div_df, mb_com_df, mb_targetprice_value, mb_predicted_upside, mb_consensus_rating, mb_rating_score, mb_earning_df, \
-    zen_own, zen_industry_own, zen_rev, \
     end_date, extended_data_r, macd_data_r, rsi_data_r, ta_data_r, \
     hist_price, \
     analysis3, analysis2, analysis
@@ -1057,7 +1017,6 @@ if st.button("Get Data"):
         quant_rating, growth_grade, momentum_grade, profitability_grade, value_grade, yield_on_cost_grade, ticker_id, sk_targetprice, authors_strongsell_count, authors_strongbuy_count, authors_sell_count, authors_hold_count, authors_buy_count, authors_rating, authors_count, epsRevisionsGrade, dpsRevisionsGrade, dividendYieldGrade, divSafetyCategoryGrade, divGrowthCategoryGrade, divConsistencyCategoryGrade, sellSideRating, \
         sa_growth_df, sa_metrics_df2, sa_metrics_df, sa_analysts_count, sa_analysts_consensus, sa_analysts_targetprice, sa_altmanz, sa_piotroski, sa_metrics_rs_df, rs_first_date, rs_pie_data, \
         insider_mb, mb_alt_headers, mb_alt_df, mb_div_df, mb_com_df, mb_targetprice_value, mb_predicted_upside, mb_consensus_rating, mb_rating_score, mb_earning_df, \
-        zen_own, zen_industry_own, zen_rev, \
         end_date, extended_data_r, macd_data_r, rsi_data_r, ta_data_r, \
         hist_price, \
         analysis3, analysis2, analysis = get_stock_data(ticker, apiKey if apiKey.strip() else None, use_ai)
@@ -2664,58 +2623,6 @@ if st.button("Get Data"):
                         st.plotly_chart(fig, use_container_width=True)
                     except Exception as e:
                         st.write("EPS Data is not available.")
-
-                ''
-                st.write(zen_rev_df)
-                try:
-                    zen_rev_df = pd.DataFrame(zen_rev)
-                    zen_df_plot = zen_rev_df.iloc[:, [0, 1]].copy()
-                    zen_df_plot.columns = ['Date', 'Revenue']
-                    zen_df_plot['Date'] = pd.to_datetime(zen_df_plot['Date'])
-                    def zen_convert_to_number(value):
-                        if value in ("-", None):
-                            return 0
-                        value = value.replace("$", "").strip()
-                        if value.endswith("B"):
-                            return float(value[:-1]) * 1e9
-                        elif value.endswith("M"):
-                            return float(value[:-1]) * 1e6
-                        else:
-                            return float(value)
-                    zen_df_plot["Revenue"] = zen_df_plot["Revenue"].apply(zen_convert_to_number)
-                    zen_df_plot = zen_df_plot.sort_values('Date')
-                    fig = go.Figure()
-                    fig.add_trace(
-                        go.Bar(
-                            x=zen_df_plot['Date'].dt.year,
-                            y=zen_df_plot['Revenue'],
-                            name="Revenue",
-                            marker=dict(color="#ED5565") 
-                        )
-                    )
-                    fig.add_shape(
-                            type="line",
-                            x0=0,
-                            x1=1,
-                            y0=0,
-                            y1=0,
-                            xref="paper",
-                            yref="y",
-                            line=dict(color="#656D78", width=2)
-                        )
-                    fig.update_layout(
-                        title={"text": "Revenue History", "font": {"size": 20}},
-                        title_y=1,
-                        title_x=0,
-                        margin=dict(t=30, b=40, l=40, r=30),
-                        xaxis_title=None,
-                        yaxis_title="Revenue (USD)",
-                        xaxis=dict(type="category"),
-                        height=300,
-                    )
-                    st.plotly_chart(fig, use_container_width=True)
-                    st.caption("Data source: WallStreetZen")
-                except Exception as e: ''
                 ''
                 if use_ai:
                     income_cleaned_text = analysis2['income'].replace('\\n', '\n').replace('\\', '')
@@ -4145,15 +4052,6 @@ if st.button("Get Data"):
                 st.caption("Data source: Market Beat")
             except Exception as e:
                 st.warning("Insider information is not available.")
-            ''
-            try:
-                st.subheader("Top Shareholders", divider ='gray')
-                if 'Shares' in zen_own.columns:
-                    zen_own['Shares'] = zen_own['Shares'].apply(lambda x: f"{int(x):,}" if pd.notnull(x) and str(x).replace(',', '').isdigit() else x)
-                st.dataframe(zen_own, use_container_width=True, hide_index=True)
-                st.caption("Data source: Wallstreet Zen")
-            except Exception as e:
-                st.write("Top Shareholders information is not available.")
             ''
 
 #############################################                         #############################################
