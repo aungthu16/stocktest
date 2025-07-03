@@ -122,7 +122,7 @@ if response.status_code == 200:
 else:
     zen_rev = ""
 
-
+st.write(zen_rev)
 zen_rev_df = pd.DataFrame(zen_rev)
 zen_df_plot = zen_rev_df.iloc[:, [0, 1]].copy()
 zen_df_plot.columns = ['Date', 'Revenue']
