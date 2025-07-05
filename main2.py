@@ -2497,6 +2497,70 @@ if st.button("Get Data"):
             except Exception as e:
                 print(f"Failed to scrape ticker data from table.")
 
+            ''
+            st.subheader("Correlation", divider = 'gray')
+            core_col1, core_col2 = st.columns([3,1])
+            try:
+                end_date = datetime.datetime.today()
+                start_date = end_date - relativedelta(years=5)
+                window_size = 60
+                with core_col1:
+                    if ticker:
+                        stock_data = yf.download(ticker, start=start_date, end=end_date)
+                        sp500_data = yf.download("^GSPC", start=start_date, end=end_date) 
+                        if not stock_data.empty and not sp500_data.empty:
+                            stock_returns = stock_data["Close"].pct_change().dropna()
+                            sp500_returns = sp500_data["Close"].pct_change().dropna()
+                            combined = pd.concat([stock_returns, sp500_returns], axis=1)
+                            combined.columns = [ticker, "SPY"]
+                            combined.dropna(inplace=True)
+                            rolling_corr = combined[ticker].rolling(window=window_size).corr(combined["SPY"])
+            
+                            fig = go.Figure()
+                            fig.add_trace(go.Scatter(
+                                x=rolling_corr.index,
+                                y=rolling_corr,
+                                mode="lines",
+                                line=dict(color="#89CFF0", width=2),
+                                name="Rolling Correlation"
+                            ))
+                            fig.add_shape(
+                                type="line",
+                                x0=0,
+                                x1=1,
+                                y0=0,
+                                y1=0,
+                                xref="paper",
+                                yref="y",
+                                line=dict(color="#31333E", width=3),
+                                layer="below"
+                            )
+                            fig.update_layout(
+                                title={"text":f'{upper_ticker} vs. S&P500 - Rolling Correlation (Window = {window_size} Days)', "font": {"size": 22}},
+                                title_y=1,  
+                                title_x=0, 
+                                margin=dict(t=70, b=40, l=40, r=30),
+                                xaxis=dict(title=None), 
+                                yaxis=dict(title="Correlation", showgrid=True, range=[-1, 1]),
+                                legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.010),
+                                height=500,
+                            )
+                            st.plotly_chart(fig, use_container_width=True)
+                        else:
+                            st.warning("Data not found. Check symbol and dates.")
+                with core_col2:
+                    ""
+                    correlation = rolling_corr.dropna().iloc[-1] if not rolling_corr.dropna().empty else None
+                    st.metric(
+                        label="Current Correlation",
+                        value=f"{correlation:.4f}"
+                    )
+                    st.caption("+1 Positive Correlation: This means the stock and the index move in the exact same direction, by the same proportion. If the index goes up by 1%, the stock also goes up by 1%. This is rare in practice.")
+                    st.caption("-1 Negative Correlation: This means the stock and the index move in completely opposite directions. If the index goes up by 1%, the stock goes down by 1%. This is also very rare.")
+                    st.caption("0 No Linear Correlation: This indicates there's no linear relationship between the movements of the stock and the index. Their price changes are independent of each other.")
+            except Exception as e:
+                st.write("")
+
 #############################################            #############################################
 ############################################# Statements #############################################
 #############################################            #############################################
