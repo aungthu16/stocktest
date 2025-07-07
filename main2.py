@@ -579,7 +579,7 @@ def get_stock_data(ticker, apiKey=None, use_ai=True):
                     "Communication Services": "XLC"
                     }
         matching_etf = sector_etf_mapping.get(sector)
-        compare_tickers = (upper_ticker, '^GSPC', matching_etf)
+        compare_tickers = (upper_ticker, '^GSPC', matching_etf, 'GLD')
         end = datetime.datetime.today()
         start = end - relativedelta(years=5)
         def relativereturn(df):
@@ -1985,12 +1985,13 @@ if st.button("Get Data"):
                 try:
                     yf_com_df = yf_com
                     yf_com_df_melted = yf_com_df.reset_index().melt(id_vars='Date', var_name='Ticker', value_name='Relative Return')
-                    yf_com_df_melted['Ticker'] = yf_com_df_melted['Ticker'].replace({'^GSPC': 'S&P500', matching_etf: 'Sector'})
+                    yf_com_df_melted['Ticker'] = yf_com_df_melted['Ticker'].replace({'^GSPC': 'S&P500', matching_etf: 'Sector', 'GLD': 'Gold'})
                     unique_years_sorted = yf_com_df_melted['Date'].dt.year.unique()
                     custom_colors = {
                             upper_ticker: '#DA4453',  
                             'S&P500': '#5E9BEB',
-                            'Sector': '#FFCE54'
+                            'Sector': '#48CFAD',
+                            'Gold': '#F6BB42'
                     }
                     def plot_relative_return_chart(yf_com_df_melted, custom_colors, upper_ticker):
                         df_plot = yf_com_df_melted.copy()
@@ -2052,17 +2053,22 @@ if st.button("Get Data"):
                         label="S&P500",
                         value=f"{last_values.loc['S&P500', 'Relative Return']*100:.2f}%"
                     )
+                    st.metric(
+                        label="Gold",
+                        value=f"{last_values.loc['Gold', 'Relative Return']*100:.2f}%"
+                    )
                     stock_return = last_values.loc[upper_ticker, 'Relative Return']
                     sector_return = last_values.loc['Sector', 'Relative Return']
                     sp500_return = last_values.loc['S&P500', 'Relative Return']
+                    gld_return = last_values.loc['Gold', 'Relative Return']
                     
                     performance_text = f"{upper_ticker} has "
-                    if stock_return > sector_return and stock_return > sp500_return:
-                        performance_text += f"outperformed both its sector ({sector_return*100:.2f}%) and S&P500 ({sp500_return*100:.2f}%) with a return of {stock_return*100:.2f}%"
-                    elif stock_return < sector_return and stock_return < sp500_return:
-                        performance_text += f"underperformed both its sector ({sector_return*100:.2f}%) and S&P500 ({sp500_return*100:.2f}%) with a return of {stock_return*100:.2f}%"
+                    if stock_return > sector_return and stock_return > sp500_return and stock_return > gld_return:
+                        performance_text += f"outperformed both its sector ({sector_return*100:.2f}%), S&P500 ({sp500_return*100:.2f}%) and gold ({gld_return*100:.2f}%) with a return of {stock_return*100:.2f}%"
+                    elif stock_return < sector_return and stock_return < sp500_return and stock_return < gld_return:
+                        performance_text += f"underperformed both its sector ({sector_return*100:.2f}%), S&P500 ({sp500_return*100:.2f}%) and gold ({gld_return*100:.2f}%) with a return of {stock_return*100:.2f}%"
                     else:
-                        performance_text += f"shown mixed performance with a return of {stock_return*100:.2f}% compared to its sector ({sector_return*100:.2f}%) and S&P500 ({sp500_return*100:.2f}%)"
+                        performance_text += f"shown mixed performance with a return of {stock_return*100:.2f}% compared to its sector ({sector_return*100:.2f}%), S&P500 ({sp500_return*100:.2f}%) and gold ({gld_return*100:.2f}%)"
                     
                     st.write("")
                     st.caption(performance_text)
@@ -2508,21 +2514,30 @@ if st.button("Get Data"):
                     if ticker:
                         stock_data = yf.download(ticker, start=start_date, end=end_date)
                         sp500_data = yf.download("^GSPC", start=start_date, end=end_date) 
+                        gold_data = yf.download("GLD", start=start_date, end=end_date)
                         if not stock_data.empty and not sp500_data.empty:
                             stock_returns = stock_data["Close"].pct_change().dropna()
                             sp500_returns = sp500_data["Close"].pct_change().dropna()
-                            combined = pd.concat([stock_returns, sp500_returns], axis=1)
-                            combined.columns = [ticker, "SPY"]
+                            gold_returns = gold_data["Close"].pct_change().dropna()
+                            combined = pd.concat([stock_returns, sp500_returns, gold_returns], axis=1)
+                            combined.columns = [ticker, "S&P500", "Gold"]
                             combined.dropna(inplace=True)
-                            rolling_corr = combined[ticker].rolling(window=window_size).corr(combined["SPY"])
-            
+                            corr_sp500 = combined[ticker].rolling(window=window_size).corr(combined["S&P500"])
+                            corr_gold = combined[ticker].rolling(window=window_size).corr(combined["Gold"])
                             fig = go.Figure()
                             fig.add_trace(go.Scatter(
-                                x=rolling_corr.index,
-                                y=rolling_corr,
+                                x=corr_sp500.index,
+                                y=corr_sp500,
                                 mode="lines",
-                                line=dict(color="#89CFF0", width=2),
-                                name="Rolling Correlation"
+                                line=dict(color="#5E9BEB", width=2),
+                                name="S&P500"
+                            ))
+                            fig.add_trace(go.Scatter(
+                                x=corr_gold.index,
+                                y=corr_gold,
+                                mode="lines",
+                                name="Gold",
+                                line=dict(color="#F6BB42", width=2)
                             ))
                             fig.add_shape(
                                 type="line",
@@ -2536,7 +2551,7 @@ if st.button("Get Data"):
                                 layer="below"
                             )
                             fig.update_layout(
-                                title={"text":f'{upper_ticker} vs. S&P500 - Rolling Correlation (Window = {window_size} Days)', "font": {"size": 22}},
+                                title={"text":f'{upper_ticker} vs. S&P500 and Gold - Rolling Correlation (Window = {window_size} Days)', "font": {"size": 22}},
                                 title_y=1,  
                                 title_x=0, 
                                 margin=dict(t=70, b=40, l=40, r=30),
@@ -2550,10 +2565,15 @@ if st.button("Get Data"):
                             st.warning("Data not found. Check symbol and dates.")
                 with core_col2:
                     ""
-                    correlation = rolling_corr.dropna().iloc[-1] if not rolling_corr.dropna().empty else None
+                    correlation_sp500 = corr_sp500.dropna().iloc[-1] if not corr_sp500.dropna().empty else None
+                    correlation_gold = corr_gold.dropna().iloc[-1] if not corr_gold.dropna().empty else None
                     st.metric(
-                        label="Current Correlation",
-                        value=f"{correlation:.4f}"
+                        label="Current Correlation with S&P500",
+                        value=f"{correlation_sp500:.4f}"
+                    )
+                    st.metric(
+                        label="Current Correlation with Gold",
+                        value=f"{correlation_gold:.4f}"
                     )
                     st.caption("+1 Positive Correlation: This means the stock and the index move in the exact same direction, by the same proportion. If the index goes up by 1%, the stock also goes up by 1%. This is rare in practice.")
                     st.caption("-1 Negative Correlation: This means the stock and the index move in completely opposite directions. If the index goes up by 1%, the stock goes down by 1%. This is also very rare.")
