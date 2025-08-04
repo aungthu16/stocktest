@@ -854,7 +854,7 @@ def get_stock_data(ticker, use_ai=True):
         except Exception as e:
             analysis3 = ""
 
-    return price, fiftyTwoWeekLow, fiftyTwoWeekHigh, beta, name, sector, industry, employee, marketCap, longProfile, website, ticker, picture_url, country, sharesOutstanding, exchange_value, upper_ticker, previous_close, beta_value, sharesOutstanding_value, employee_value, marketCap_value, change_percent, change_dollar, apiKey, \
+    return price, fiftyTwoWeekLow, fiftyTwoWeekHigh, beta, name, sector, industry, employee, marketCap, longProfile, website, ticker, picture_url, country, sharesOutstanding, exchange_value, upper_ticker, previous_close, beta_value, sharesOutstanding_value, employee_value, marketCap_value, change_percent, change_dollar, \
     eps, pegRatio, revenue, eps_yield_value, eps_value, pegRatio_value, eps_yield, eps_trend, earnings_history, earningsDate, \
     yf_targetprice, yf_consensus, yf_analysts_count, yf_mos, \
     peRatio, forwardPe, pbRatio, pe_value, forwardPe_value, pbRatio_value, ev_to_ebitda, \
@@ -892,7 +892,7 @@ use_ai = st.checkbox("Analyze using AI (The system will use the deepseek-r1-dist
 ""
 if st.button("Get Data"):
     try:
-        price, fiftyTwoWeekLow, fiftyTwoWeekHigh, beta, name, sector, industry, employee, marketCap, longProfile, website, ticker, picture_url, country, sharesOutstanding, exchange_value, upper_ticker, previous_close, beta_value, sharesOutstanding_value, employee_value, marketCap_value, change_percent, change_dollar, apiKey, \
+        price, fiftyTwoWeekLow, fiftyTwoWeekHigh, beta, name, sector, industry, employee, marketCap, longProfile, website, ticker, picture_url, country, sharesOutstanding, exchange_value, upper_ticker, previous_close, beta_value, sharesOutstanding_value, employee_value, marketCap_value, change_percent, change_dollar, \
         eps, pegRatio, revenue, eps_yield_value, eps_value, pegRatio_value, eps_yield, eps_trend, earnings_history, earningsDate, \
         yf_targetprice, yf_consensus, yf_analysts_count, yf_mos, \
         peRatio, forwardPe, pbRatio, pe_value, forwardPe_value, pbRatio_value, ev_to_ebitda, \
@@ -4757,7 +4757,7 @@ if st.button("Get Data"):
                 st.write("To access this section, please ensure the 'Analyze using AI' box is checked.")
             
     except Exception as e:
-        st.write(e)
+        #st.write(e)
         st.error(f"Failed to fetch data. Please check your ticker again.")
         st.warning("This tool supports only tickers from the U.S. stock market. Please note that ETFs and cryptocurrencies are not available for analysis. If the entered ticker is valid but the tool does not display results, it may be due to missing data or a technical issue. Kindly try again later. If the issue persists, please contact the developer for further assistance.")
 ''
