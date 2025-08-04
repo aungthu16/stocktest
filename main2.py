@@ -888,7 +888,8 @@ with main_col1:
     with input_col1:
         ticker = st.text_input("US Stock Ticker:", "AAPL")
 
-use_ai = st.checkbox("Analyze using AI (The system will use the deepseek-r1-distill-llama-70b model to analyze the stock. It will take some time for the process to complete. For a faster process, please uncheck this box.)", value=True)
+use_ai = st.checkbox("Analyze using AI", value=True)
+st.info("The system will use the deepseek-r1-distill-llama-70b model to analyze the stock. It will take some time for the process to complete. For a faster process, please uncheck this box.")
 ""
 if st.button("Get Data"):
     try:
