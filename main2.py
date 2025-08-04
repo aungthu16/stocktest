@@ -1701,7 +1701,7 @@ if st.button("Get Data"):
             except Exception as e:
                 largest_count_type = 'N/A'
                 largest_value = 'N/A'
-            col1, col2, col3, col4 = st.columns([3, 3, 3, 3])
+            col1, col2, col3 = st.columns([3, 3, 3])
             try:
                 yf_targetprice_value = 'N/A' if yf_targetprice == 'N/A' else f'${yf_targetprice:.2f}'
             except: yf_targetprice_value = 'N/A'
@@ -1721,16 +1721,6 @@ if st.button("Get Data"):
                 st.write(f'Forecasted Difference: {mb_predicted_upside}%')
                 st.write(f'Analyst Consensus: {mb_consensus_rating}')
                 st.write(f'Rating Score: {mb_rating_score}')
-                ''
-            
-            sk_targetprice_fix = 'N/A' if sk_targetprice == 'N/A' else f'${float(sk_targetprice):.2f}'
-            sk_targetprice_mos ='N/A' if sk_targetprice =='N/A' else f'{((float(sk_targetprice) - price)/float(sk_targetprice)) * 100:.2f}%'
-            with col4:
-                st.markdown(''':orange-background[Seeking Alpha]''')
-                st.write(f'Price Target: {sk_targetprice_fix}')
-                st.write(f'Forecasted Difference: {sk_targetprice_mos}')
-                st.write(f'Analyst Consensus: {largest_count_type}')
-                st.write(f'Analyst Count: {largest_value}')
                 ''
 
             sa_mos_value = 'N/A' if sa_mos == 'N/A' else f'{sa_mos:.2f}%'
