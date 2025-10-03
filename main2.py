@@ -17,29 +17,29 @@ from groq import Groq
 st.set_page_config(page_title='US Stock Analysis Tool', layout='wide', page_icon="./Image/logo.png")
 
 #Font Styles#
-st.markdown("""
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap');
-    * {
-        font-family: 'Barlow', sans-serif !important;
-    }
-    # .streamlit-expanderContent {
-    #     font-family: 'Barlow', sans-serif !important;
-    # }
-    .stMarkdown {
-        font-family: 'Barlow', sans-serif !important;
-    }
-    p {
-        font-family: 'Barlow', sans-serif !important;
-    }
-    div {
-        font-family: 'Barlow', sans-serif !important;
-    }
-    .stDataFrame {
-        font-family: 'Barlow', sans-serif !important;
-    }
-</style>
-""", unsafe_allow_html=True)
+# st.markdown("""
+# <style>
+#     @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&display=swap');
+#     * {
+#         font-family: 'Barlow', sans-serif !important;
+#     }
+#     .streamlit-expanderContent {
+#         font-family: 'Barlow', sans-serif !important;
+#     }
+#     .stMarkdown {
+#         font-family: 'Barlow', sans-serif !important;
+#     }
+#     p {
+#         font-family: 'Barlow', sans-serif !important;
+#     }
+#     div {
+#         font-family: 'Barlow', sans-serif !important;
+#     }
+#     .stDataFrame {
+#         font-family: 'Barlow', sans-serif !important;
+#     }
+# </style>
+# """, unsafe_allow_html=True)
 
 @st.cache_data(ttl=3600)
 def get_stock_data(ticker, use_ai=True):
@@ -51,7 +51,7 @@ def get_stock_data(ticker, use_ai=True):
     fiftyTwoWeekLow = stock.info.get('fiftyTwoWeekLow', 'N/A')
     fiftyTwoWeekHigh = stock.info.get('fiftyTwoWeekHigh', 'N/A')
     picture_url = f'https://logos.stockanalysis.com/{lowercase_ticker}.svg'
-    ai_model = "llama-3.3-70b-versatile"
+    ai_model = 'llama-3.3-70b-versatile'
 
     #### Exchange Value ####
     exchange = stock.info.get('exchange', 'N/A')
@@ -874,7 +874,7 @@ def get_stock_data(ticker, use_ai=True):
     insider_mb, mb_alt_headers, mb_alt_df, mb_div_df, mb_com_df, mb_targetprice_value, mb_predicted_upside, mb_consensus_rating, mb_rating_score, mb_earning_df, \
     end_date, extended_data_r, macd_data_r, rsi_data_r, ta_data_r, \
     hist_price, \
-    analysis3, analysis2, analysis
+    analysis3, analysis2, analysis, ai_model
 
 ''
 ''
@@ -890,8 +890,7 @@ with main_col1:
         ticker = st.text_input("US Stock Ticker:", "AAPL")
 
 use_ai = st.checkbox("Analyze using AI", value=True)
-info=f'The system will use the llama-3.3-70b-versatile model to analyze the stock. It will take some time for the process to complete. For a faster process, please uncheck this box.'
-st.info(info)
+st.info("The system will use the llama-3.3-70b-versatile model to analyze the stock. It will take some time for the process to complete. For a faster process, please uncheck this box.")
 ""
 if st.button("Get Data"):
     try:
@@ -914,7 +913,7 @@ if st.button("Get Data"):
         insider_mb, mb_alt_headers, mb_alt_df, mb_div_df, mb_com_df, mb_targetprice_value, mb_predicted_upside, mb_consensus_rating, mb_rating_score, mb_earning_df, \
         end_date, extended_data_r, macd_data_r, rsi_data_r, ta_data_r, \
         hist_price, \
-        analysis3, analysis2, analysis = get_stock_data(ticker, use_ai, ai_model)
+        analysis3, analysis2, analysis, ai_model = get_stock_data(ticker, use_ai)
 
 #############################################         #############################################
 ############################################# Profile #############################################
@@ -4762,5 +4761,5 @@ with iiqc1:
     st.write("This analysis dashboard is designed to enable beginner investors to analyze stocks effectively and with ease. Please note that the information in this page is intended for educational purposes only and it does not constitute investment advice or a recommendation to buy or sell any security. We are not responsible for any losses resulting from trading decisions based on this information.")
 with iiqc2:
     invest_iq_central='./Image/InvestIQCentral.png'
-    st.image(invest_iq_central,width=300)
+    #st.image(invest_iq_central,width=300)
 ''
