@@ -4734,6 +4734,7 @@ if st.button("Get Data"):
                         st.write("")
                     ''
                 with aicol1:
+                    st.write(analysis['summary'])
                     try:
                         if upper_ticker:
                             with st.spinner('Analyzing stock data...'):
