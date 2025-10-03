@@ -699,7 +699,7 @@ def get_stock_data(ticker, use_ai=True):
                 except: 
                     cleaned_response = raw_response
                 return cleaned_response
-            summary_analysis = analyze_stock(summary_prompt,100000)
+            summary_analysis = analyze_stock(summary_prompt,10000)
             analysis = {
                 'summary': summary_analysis,
             }
