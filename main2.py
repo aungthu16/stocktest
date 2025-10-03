@@ -42,7 +42,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 @st.cache_data(ttl=3600)
-def get_stock_data(ticker, use_ai=True, ai_model):
+def get_stock_data(ticker, use_ai=True):
 
     stock = yf.Ticker(ticker)
     lowercase_ticker = ticker.lower()
@@ -51,6 +51,7 @@ def get_stock_data(ticker, use_ai=True, ai_model):
     fiftyTwoWeekLow = stock.info.get('fiftyTwoWeekLow', 'N/A')
     fiftyTwoWeekHigh = stock.info.get('fiftyTwoWeekHigh', 'N/A')
     picture_url = f'https://logos.stockanalysis.com/{lowercase_ticker}.svg'
+    ai_model = "llama-3.3-70b-versatile"
 
     #### Exchange Value ####
     exchange = stock.info.get('exchange', 'N/A')
@@ -887,9 +888,9 @@ with main_col1:
     input_col1, input_col2, input_col3 = st.columns([1, 3, 1])
     with input_col1:
         ticker = st.text_input("US Stock Ticker:", "AAPL")
-ai_model = "llama-3.3-70b-versatile"
+
 use_ai = st.checkbox("Analyze using AI", value=True)
-info=f'The system will use the {ai_model} model to analyze the stock. It will take some time for the process to complete. For a faster process, please uncheck this box.'
+info=f'The system will use the llama-3.3-70b-versatile model to analyze the stock. It will take some time for the process to complete. For a faster process, please uncheck this box.'
 st.info(info)
 ""
 if st.button("Get Data"):
