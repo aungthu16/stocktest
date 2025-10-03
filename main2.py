@@ -51,7 +51,7 @@ def get_stock_data(ticker, use_ai=True):
     fiftyTwoWeekLow = stock.info.get('fiftyTwoWeekLow', 'N/A')
     fiftyTwoWeekHigh = stock.info.get('fiftyTwoWeekHigh', 'N/A')
     picture_url = f'https://logos.stockanalysis.com/{lowercase_ticker}.svg'
-    ai_model = 'llama-3.3-70b-versatile'
+    ai_model = "llama-3.3-70b-versatile"
 
     #### Exchange Value ####
     exchange = stock.info.get('exchange', 'N/A')
@@ -890,7 +890,8 @@ with main_col1:
         ticker = st.text_input("US Stock Ticker:", "AAPL")
 
 use_ai = st.checkbox("Analyze using AI", value=True)
-st.info("The system will use the llama-3.3-70b-versatile model to analyze the stock. It will take some time for the process to complete. For a faster process, please uncheck this box.")
+info=f'The system will use the {ai_model} model to analyze the stock. It will take some time for the process to complete. For a faster process, please uncheck this box.'
+st.info(info)
 ""
 if st.button("Get Data"):
     try:
