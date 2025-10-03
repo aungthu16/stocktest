@@ -42,7 +42,7 @@ st.set_page_config(page_title='US Stock Analysis Tool', layout='wide', page_icon
 # """, unsafe_allow_html=True)
 
 @st.cache_data(ttl=3600)
-def get_stock_data(ticker, use_ai=True):
+def get_stock_data(ticker, use_ai=True, ai_model):
 
     stock = yf.Ticker(ticker)
     lowercase_ticker = ticker.lower()
@@ -51,7 +51,7 @@ def get_stock_data(ticker, use_ai=True):
     fiftyTwoWeekLow = stock.info.get('fiftyTwoWeekLow', 'N/A')
     fiftyTwoWeekHigh = stock.info.get('fiftyTwoWeekHigh', 'N/A')
     picture_url = f'https://logos.stockanalysis.com/{lowercase_ticker}.svg'
-    ai_model = "llama-3.3-70b-versatile"
+    ai_model = ai_model
 
     #### Exchange Value ####
     exchange = stock.info.get('exchange', 'N/A')
@@ -874,7 +874,7 @@ def get_stock_data(ticker, use_ai=True):
     insider_mb, mb_alt_headers, mb_alt_df, mb_div_df, mb_com_df, mb_targetprice_value, mb_predicted_upside, mb_consensus_rating, mb_rating_score, mb_earning_df, \
     end_date, extended_data_r, macd_data_r, rsi_data_r, ta_data_r, \
     hist_price, \
-    analysis3, analysis2, analysis, ai_model
+    analysis3, analysis2, analysis
 
 ''
 ''
@@ -888,7 +888,7 @@ with main_col1:
     input_col1, input_col2, input_col3 = st.columns([1, 3, 1])
     with input_col1:
         ticker = st.text_input("US Stock Ticker:", "AAPL")
-
+ai_model = "llama-3.3-70b-versatile"
 use_ai = st.checkbox("Analyze using AI", value=True)
 info=f'The system will use the {ai_model} model to analyze the stock. It will take some time for the process to complete. For a faster process, please uncheck this box.'
 st.info(info)
@@ -914,7 +914,7 @@ if st.button("Get Data"):
         insider_mb, mb_alt_headers, mb_alt_df, mb_div_df, mb_com_df, mb_targetprice_value, mb_predicted_upside, mb_consensus_rating, mb_rating_score, mb_earning_df, \
         end_date, extended_data_r, macd_data_r, rsi_data_r, ta_data_r, \
         hist_price, \
-        analysis3, analysis2, analysis, ai_model = get_stock_data(ticker, use_ai)
+        analysis3, analysis2, analysis = get_stock_data(ticker, use_ai, ai_model)
 
 #############################################         #############################################
 ############################################# Profile #############################################
