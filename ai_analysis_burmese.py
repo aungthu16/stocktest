@@ -179,7 +179,6 @@ try:
                 line=dict(color=color_map[i], width=15),
                 hoverinfo='skip',
                 showlegend=False,
-                #textangle=-90,
             ))
         fig.update_layout(
             title='Economic Cycle Position',
@@ -188,7 +187,8 @@ try:
                 tickmode='array',
                 tickvals=x_phase_points,
                 ticktext=[phase.title() for phase in CYCLE_PHASES],
-                showgrid=False
+                showgrid=False,
+                textangle=40,
             ),
             yaxis=dict(
                 title='Economic Growth Level',
