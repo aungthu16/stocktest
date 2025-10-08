@@ -56,8 +56,8 @@ def get_latest_fred_data_and_process(series_map, n_obs):
     df_combined['Date'] = df_combined['Date'].dt.strftime('%Y-%m-%d')
     return df_combined
 
-st.title("Latest Macroeconomic Data Compilation from FRED API 📈")
-st.caption(f"Showing the **latest {LATEST_OBSERVATIONS} months** of data aligned to a **Monthly** frequency.")
+st.subheader("AI Economy Analysis", divider = "rainbow")
+st.caption(f"Based on the **latest {LATEST_OBSERVATIONS} months** of data aligned to a **Monthly** frequency.")
 
 try:
     with st.spinner(f'Fetching and processing the latest {LATEST_OBSERVATIONS} months of FRED data...'):
@@ -181,7 +181,7 @@ try:
                 showlegend=False,
             ))
         fig.update_layout(
-            title='Economic Cycle Position',
+            title={"text":f"Economic Cycle Visual Chart", "font": {"size": 25}},
             #plot_bgcolor='black',
             xaxis=dict(
                 tickmode='array',
@@ -195,7 +195,7 @@ try:
                 showticklabels=False,
                 showgrid=False,
                 zeroline=True,
-                zerolinecolor='white',
+                zerolinecolor='gray',
                 zerolinewidth=2
             ),
             showlegend=False,
