@@ -114,7 +114,6 @@ try:
     with ai_ans2:
         delimiter = 'Economic Cycle level - '
         extracted_value = cleaned_text.split(delimiter)[-1].strip()
-        st.write(extracted_value)
     
         current_stage = extracted_value.lower()
     
