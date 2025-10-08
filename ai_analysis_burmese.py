@@ -3,6 +3,7 @@ import pandas as pd
 from fredapi import Fred 
 from groq import Groq
 import re
+import numpy as np
 
 st.set_page_config(layout="wide")
 
