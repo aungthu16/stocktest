@@ -178,7 +178,8 @@ try:
                 mode='lines',
                 line=dict(color=color_map[i], width=15),
                 hoverinfo='skip',
-                showlegend=False
+                showlegend=False,
+                textangle=-90,
             ))
         fig.update_layout(
             title='Economic Cycle Position',
@@ -202,7 +203,7 @@ try:
             yaxis_range=[-1.2, 1.2]
         )
         fig.add_annotation(
-            x=0.8, y=1,
+            x=0.5, y=1,
             xref="paper", yref="paper",
             text=f"Current Economic Cycle Stage: {current_stage.upper()}",
             showarrow=False,
