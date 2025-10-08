@@ -99,16 +99,107 @@ try:
         }
     except Exception as e:
         analysis = ""
+    ai_ans1, ai_ans2 = st.columns([3,3])
+    with ai_ans1:
+        try:
+            with st.spinner('Analyzing stock data...'):
+                cleaned_text = analysis['summary'].replace('\\n', '\n').replace('\\', '')
+                special_chars = ['$', '>', '<', '`', '|', '[', ']', '(', ')', '+', '{', '}', '!', '&']
+                for char in special_chars:
+                    cleaned_text = cleaned_text.replace(char, f"\\{char}")
+                st.markdown(cleaned_text, unsafe_allow_html=True)
+        except Exception as e:
+            st.warning("AI analysis is currently unavailable.")
 
-    try:
-        with st.spinner('Analyzing stock data...'):
-            cleaned_text = analysis['summary'].replace('\\n', '\n').replace('\\', '')
-            special_chars = ['$', '>', '<', '`', '|', '[', ']', '(', ')', '+', '{', '}', '!', '&']
-            for char in special_chars:
-                cleaned_text = cleaned_text.replace(char, f"\\{char}")
-            st.markdown(cleaned_text, unsafe_allow_html=True)
-    except Exception as e:
-        st.warning("AI analysis is currently unavailable.")
+    with ai_ans2:
+        delimiter = 'Economic Cycle level - '
+        extracted_value = cleaned_text.split(delimiter)[-1].strip()
+        st.write(extracted_value)
+    
+        current_stage = extracted_value.lower()
+    
+        CYCLE_PHASES = [
+            'moving to expansion', 'expansion', 'moving to peak',
+            'peak', 'moving to contraction', 'contraction',
+            'moving to trough', 'trough'
+        ]
+    
+        try:
+            current_index = CYCLE_PHASES.index(current_stage)
+        except ValueError:
+            st.error(f"Error: '{current_stage}' is not a recognized cycle phase.")
+            st.stop()
+        
+        x_phase_points = np.linspace(0, 1.75 * np.pi, len(CYCLE_PHASES))
+        offset = x_phase_points[3] - np.pi / 2
+        x = np.linspace(0, 1.75 * np.pi, 100)
+        y = np.sin(x - offset) * 1 
+        x_position_for_stage = x_phase_points[current_index]
+        y_position_for_stage = np.interp(x_position_for_stage, x, y)
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(
+            x=x, y=y,
+            mode='lines',
+            line=dict(color='#4FC1E9', width=4),
+            name='Economic Growth'
+        ))
+        fig.add_trace(go.Scatter(
+            x=[x_position_for_stage],
+            y=[y_position_for_stage],
+            mode='markers',
+            marker=dict(size=30, color='#4FC1E9', opacity=1, line=dict(width=2, color='white')),
+            name='Current Position',
+            hoverinfo='text',
+            text=f"Stage: {current_stage.title()}"
+        ))
+        num_segments = len(CYCLE_PHASES)
+        color_map = ['#FF4136', '#FF851B', '#FFDC00', '#2ECC40', '#3D9970', '#FFDC00', '#FF851B', '#FF4136']
+        x_segment_starts = x_phase_points
+        gradient_bar_y_level = -1.2
+        for i in range(num_segments - 1):
+            x_start = x_segment_starts[i]
+            x_end = x_segment_starts[i+1]
+            x_segment = np.linspace(x_start, x_end, 10)
+            y_segment = np.full_like(x_segment, gradient_bar_y_level)
+            fig.add_trace(go.Scatter(
+                x=x_segment,
+                y=y_segment,
+                mode='lines',
+                line=dict(color=color_map[i], width=15),
+                hoverinfo='skip',
+                showlegend=False
+            ))
+        fig.update_layout(
+            title='Economic Cycle Position',
+            #plot_bgcolor='black',
+            xaxis=dict(
+                tickmode='array',
+                tickvals=x_phase_points,
+                ticktext=[phase.title() for phase in CYCLE_PHASES],
+                showgrid=False
+            ),
+            yaxis=dict(
+                title='Economic Growth Level',
+                showticklabels=False,
+                showgrid=False,
+                zeroline=True,
+                zerolinecolor='white',
+                zerolinewidth=2
+            ),
+            showlegend=False,
+            height=450,
+            yaxis_range=[-1.2, 1.2]
+        )
+        fig.add_annotation(
+            x=0.8, y=1,
+            xref="paper", yref="paper",
+            text=f"Current Economic Cycle Stage: {current_stage.upper()}",
+            showarrow=False,
+            font=dict(size=18, color="#4FC1E9"),
+            yanchor="middle",
+            xanchor="center"
+        )
+        st.plotly_chart(fig, use_container_width=True)
     
 except Exception as e:
     st.error(f"An error occurred: {e}")
