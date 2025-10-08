@@ -60,11 +60,11 @@ st.caption(f"Showing the **latest {LATEST_OBSERVATIONS} months** of data aligned
 try:
     with st.spinner(f'Fetching and processing the latest {LATEST_OBSERVATIONS} months of FRED data...'):
         df_latest = get_latest_fred_data_and_process(SERIES_MAP, LATEST_OBSERVATIONS)   
-    if not df_latest.empty:
-        st.subheader(f"Latest {LATEST_OBSERVATIONS} Monthly Economic Time Series Data") 
-        st.dataframe(df_latest, use_container_width=True) 
-    else:
-        st.error("No data could be retrieved. Please check your API key and network connection.")
+    # if not df_latest.empty:
+    #     st.subheader(f"Latest {LATEST_OBSERVATIONS} Monthly Economic Time Series Data") 
+    #     st.dataframe(df_latest, use_container_width=True) 
+    # else:
+    #     st.error("No data could be retrieved. Please check your API key and network connection.")
 
     analysis = ""
     try:
@@ -116,7 +116,7 @@ try:
         extracted_value = cleaned_text.split(delimiter)[-1].strip()
     
         current_stage = extracted_value.lower()
-    
+        st.write(current_stage)
         CYCLE_PHASES = [
             'moving to expansion', 'expansion', 'moving to peak',
             'peak', 'moving to contraction', 'contraction',
