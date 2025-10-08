@@ -188,7 +188,7 @@ try:
                 tickvals=x_phase_points,
                 ticktext=[phase.title() for phase in CYCLE_PHASES],
                 showgrid=False,
-                textangle=40,
+                tickangle=40,
             ),
             yaxis=dict(
                 title='Economic Growth Level',
