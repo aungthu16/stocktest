@@ -4,6 +4,7 @@ from fredapi import Fred
 from groq import Groq
 import re
 import numpy as np
+import plotly.graph_objects as go
 
 st.set_page_config(layout="wide")
 
