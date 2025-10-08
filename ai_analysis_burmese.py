@@ -112,11 +112,21 @@ try:
             st.warning("AI analysis is currently unavailable.")
 
     with ai_ans2:
+        def remove_markdown(text):
+            """Removes common Markdown characters and code blocks from a string."""
+            text = re.sub(r'^\s*>\s*', '', text, flags=re.MULTILINE)
+            text = re.sub(r'^\s*#+\s*', '', text, flags=re.MULTILINE)
+            text = re.sub(r'```.*?```', '', text, flags=re.DOTALL)
+            text = re.sub(r'^\s*[-*_]{3,}\s*$', '', text, flags=re.MULTILINE)
+            text = re.sub(r'^\s*[-*+]?\s*\d*\.?\s*', '', text, flags=re.MULTILINE)
+            text = re.sub(r'([*_]{1,2})', '', text)
+            text = re.sub(r'\n{2,}', '\n', text)
+            return text.strip()
+        cleaned_text = remove_markdown(cleaned_text)
         delimiter = 'Economic Cycle level - '
         extracted_value = cleaned_text.split(delimiter)[-1].strip()
-    
-        current_stage = extracted_value.lower()
-        st.write(current_stage)
+        current_stage = extracted_value.lower() 
+
         CYCLE_PHASES = [
             'moving to expansion', 'expansion', 'moving to peak',
             'peak', 'moving to contraction', 'contraction',
