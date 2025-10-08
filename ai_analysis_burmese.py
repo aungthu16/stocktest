@@ -179,7 +179,7 @@ try:
                 line=dict(color=color_map[i], width=15),
                 hoverinfo='skip',
                 showlegend=False,
-                textangle=-90,
+                #textangle=-90,
             ))
         fig.update_layout(
             title='Economic Cycle Position',
