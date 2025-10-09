@@ -555,7 +555,7 @@ with overview_data:
                     Conclude the analysis with the final determination in the specified format.
                     
                     And provide the answer with the following format:
-                    Economic Cycle level - [expansion or moving to peak or peak or moving to contraction or contraction or moving to trough or trough or moving to expansion]
+                    Economic Cycle level - expansion or moving to peak or peak or moving to contraction or contraction or moving to trough or trough or moving to expansion
                     """
         
                 def analyze_stock(prompt_text, tokens):
