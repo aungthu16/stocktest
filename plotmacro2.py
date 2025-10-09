@@ -539,8 +539,6 @@ with overview_data:
         
             analysis = ""
             pmi_data = fetch_pmi_data(PMI_API_URL)
-            st.write(df_latest)
-            st.write(pmi_data)
             try:
                 api_key = st.secrets["GROQ_API_KEY"]
                 client = Groq(api_key=api_key)
