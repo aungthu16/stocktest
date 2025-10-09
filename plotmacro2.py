@@ -538,8 +538,9 @@ with overview_data:
             #     st.error("No data could be retrieved. Please check your API key and network connection.")
         
             analysis = ""
+            pmi_data = fetch_pmi_data(PMI_API_URL)
             st.write(df_latest)
-            st.write(df_data)
+            st.write(pmi_data)
             try:
                 api_key = st.secrets["GROQ_API_KEY"]
                 client = Groq(api_key=api_key)
