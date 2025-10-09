@@ -14,7 +14,7 @@ import re
 
 st.set_page_config(layout="wide", page_title="Economic Analysis Dashboard", page_icon="./Image/logo.png")
 
-ai_model = 'llama-3.3-70b-versatile'
+ai_model = 'groq/compound'
 FRED_API_KEY = st.secrets["FRED_API_KEY"]
 NUM_POINTS = 20
 GROWTH_COLOR = 'red'
