@@ -503,7 +503,7 @@ with overview_data:
             'FPCPITOTLZGUSA': 'Inflation (Annual % Chg)'
         }
         
-        LATEST_OBSERVATIONS = 5
+        LATEST_OBSERVATIONS = 20
         
         @st.cache_data(ttl=3600)
         def get_latest_fred_data_and_process(series_map, n_obs):
@@ -545,6 +545,8 @@ with overview_data:
             #     st.error("No data could be retrieved. Please check your API key and network connection.")
         
             analysis = ""
+            st.write(df_latest)
+            st.write(df_data)
             try:
                 api_key = st.secrets["GROQ_API_KEY"]
                 client = Groq(api_key=api_key)
