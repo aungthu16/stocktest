@@ -14,7 +14,7 @@ import re
 
 st.set_page_config(layout="wide", page_title="Economic Analysis Dashboard", page_icon="./Image/logo.png")
 
-ai_model = 'llama-3.1-8b-instant'
+ai_model = 'qwen/qwen3-32b'
 FRED_API_KEY = st.secrets["FRED_API_KEY"]
 NUM_POINTS = 20
 GROWTH_COLOR = 'red'
@@ -554,7 +554,7 @@ with overview_data:
                     4.Provide a detailed explanation justifying the determined economic cycle phase by explicitly referencing the trends observed in the provided data.
                     Conclude the analysis with the final determination in the specified format.
                     
-                    For the last sentence, write the result as the following format:
+                    And provide the answer with the following format:
                     Economic Cycle level - [expansion or moving to peak or peak or moving to contraction or contraction or moving to trough or trough or moving to expansion]
                     """
         
