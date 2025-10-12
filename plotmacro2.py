@@ -564,9 +564,6 @@ with overview_data:
                 yield_curve_spread, consumer_sentiment, debt_to_gdp_ratio, fed_fund_rate,
                 inflation_annual_chg
             ):
-                """
-                Performs the AI-based economic analysis and caches the result for one week.
-                """
                 client = get_groq_client() # Get the cached client
             
                 # Reconstruct the prompt
@@ -617,7 +614,17 @@ with overview_data:
                 except Exception as e:
                     st.error(f"Error during AI analysis: {e}")
                     return {'summary': "AI analysis is currently unavailable due to an API error."}
-                
+                    
+            analysis = ""
+            pmi_data = fetch_pmi_data(PMI_API_URL)
+            
+            with st.spinner('Fetching and analyzing economic data... (Cached for 7 days)'):
+                analysis = get_economic_analysis(
+                    pmi_data, real_gdp, nfp, industrial_production, cpi, unemployment_rate,
+                    yield_curve_spread, consumer_sentiment, debt_to_gdp_ratio, fed_fund_rate,
+                    inflation_annual_chg
+                )
+            
             ai_ans1, ai_ans2 = st.columns([3,3])
             with ai_ans1:
                 try:
