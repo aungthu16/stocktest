@@ -1,3 +1,4 @@
+
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
@@ -343,7 +344,7 @@ def plot_single_area_line(df, name, series_id, chart_type, line_color, target_li
     return fig
 
 st.title("U.S. Macroeconomics Dashboard")
-st.markdown(f"Data sourced from FRED, Yahoo Finance and DB.nomics.")
+st.markdown(f"Data sourced from FRED, Yahoo Finance, DB.nomics and API.Alternative.")
 st.info("Data updates may be delayed due to the data providers’ release schedules. For the most recent figures, please refer to the official announcements from the respective sources. To get the most accurate analysis, please verify all figures against the original source documents and official announcements. Analyses and conclusions should be based on those primary documents rather than secondary summaries or third-party reports.")
 st.write("")
 st.write("")
@@ -588,9 +589,9 @@ with overview_data:
                     2.Evaluate the coincident indicators (Real GDP, Non-farm Payroll, Industrial Production) to establish the current level of activity.
                     3.Incorporate lagging indicators (Unemployment Rate, Inflation) and policy/sentiment indicators (FED Fund Rate, Consumer Sentiment) to build a complete picture.
                     4.Provide a detailed explanation justifying the determined economic cycle phase by explicitly referencing the trends observed in the provided data.
-                    Conclude the analysis with the final determination in the specified format.
+                    Firstly, conclude the analysis with the final determination in the specified format. For this section, provide the answer with explaination.
             
-                    And provide the answer with the following format:
+                    Secondly, provide the answer with the following format and do not provide explaination for this section:
                     Economic Cycle level - expansion or moving to peak or peak or moving to contraction or contraction or moving to trough or trough or moving to expansion
                     """
             
@@ -641,105 +642,108 @@ with overview_data:
                     st.warning("AI analysis is currently unavailable.")
         
             with ai_ans2:
-                def remove_markdown(text):
-                    """Removes common Markdown characters and code blocks from a string."""
-                    text = re.sub(r'^\s*>\s*', '', text, flags=re.MULTILINE)
-                    text = re.sub(r'^\s*#+\s*', '', text, flags=re.MULTILINE)
-                    text = re.sub(r'```.*?```', '', text, flags=re.DOTALL)
-                    text = re.sub(r'^\s*[-*_]{3,}\s*$', '', text, flags=re.MULTILINE)
-                    text = re.sub(r'^\s*[-*+]?\s*\d*\.?\s*', '', text, flags=re.MULTILINE)
-                    text = re.sub(r'([*_]{1,2})', '', text)
-                    text = re.sub(r'\n{2,}', '\n', text)
-                    return text.strip()
-                cleaned_text = remove_markdown(cleaned_text)
-                delimiter = 'Economic Cycle level - '
-                extracted_value = cleaned_text.split(delimiter)[-1].strip()
-                current_stage = extracted_value.lower() 
-        
-                CYCLE_PHASES = [
-                    'moving to expansion', 'expansion', 'moving to peak',
-                    'peak', 'moving to contraction', 'contraction',
-                    'moving to trough', 'trough'
-                ]
-            
                 try:
-                    current_index = CYCLE_PHASES.index(current_stage)
-                except ValueError:
-                    st.error(f"Error: '{current_stage}' is not a recognized cycle phase.")
-                    st.stop()
+                    def remove_markdown(text):
+                        """Removes common Markdown characters and code blocks from a string."""
+                        text = re.sub(r'^\s*>\s*', '', text, flags=re.MULTILINE)
+                        text = re.sub(r'^\s*#+\s*', '', text, flags=re.MULTILINE)
+                        text = re.sub(r'```.*?```', '', text, flags=re.DOTALL)
+                        text = re.sub(r'^\s*[-*_]{3,}\s*$', '', text, flags=re.MULTILINE)
+                        text = re.sub(r'^\s*[-*+]?\s*\d*\.?\s*', '', text, flags=re.MULTILINE)
+                        text = re.sub(r'([*_]{1,2})', '', text)
+                        text = re.sub(r'\n{2,}', '\n', text)
+                        return text.strip()
+                    cleaned_text = remove_markdown(cleaned_text)
+                    delimiter = 'Economic Cycle level - '
+                    extracted_value = cleaned_text.split(delimiter)[-1].strip()
+                    current_stage = extracted_value.lower() 
+            
+                    CYCLE_PHASES = [
+                        'moving to expansion', 'expansion', 'moving to peak',
+                        'peak', 'moving to contraction', 'contraction',
+                        'moving to trough', 'trough'
+                    ]
                 
-                x_phase_points = np.linspace(0, 1.75 * np.pi, len(CYCLE_PHASES))
-                offset = x_phase_points[3] - np.pi / 2
-                x = np.linspace(0, 1.75 * np.pi, 100)
-                y = np.sin(x - offset) * 1 
-                x_position_for_stage = x_phase_points[current_index]
-                y_position_for_stage = np.interp(x_position_for_stage, x, y)
-                fig = go.Figure()
-                fig.add_trace(go.Scatter(
-                    x=x, y=y,
-                    mode='lines',
-                    line=dict(color='#4FC1E9', width=4),
-                    name='Economic Growth'
-                ))
-                fig.add_trace(go.Scatter(
-                    x=[x_position_for_stage],
-                    y=[y_position_for_stage],
-                    mode='markers',
-                    marker=dict(size=30, color='#4FC1E9', opacity=1, line=dict(width=2, color='white')),
-                    name='Current Position',
-                    hoverinfo='text',
-                    text=f"Stage: {current_stage.title()}"
-                ))
-                num_segments = len(CYCLE_PHASES)
-                color_map = ['#FF4136', '#FF851B', '#FFDC00', '#2ECC40', '#3D9970', '#FFDC00', '#FF851B', '#FF4136']
-                x_segment_starts = x_phase_points
-                gradient_bar_y_level = -1.2
-                for i in range(num_segments - 1):
-                    x_start = x_segment_starts[i]
-                    x_end = x_segment_starts[i+1]
-                    x_segment = np.linspace(x_start, x_end, 10)
-                    y_segment = np.full_like(x_segment, gradient_bar_y_level)
+                    try:
+                        current_index = CYCLE_PHASES.index(current_stage)
+                    except Exception as e:
+                        st.write("")
+                    
+                    x_phase_points = np.linspace(0, 1.75 * np.pi, len(CYCLE_PHASES))
+                    offset = x_phase_points[3] - np.pi / 2
+                    x = np.linspace(0, 1.75 * np.pi, 100)
+                    y = np.sin(x - offset) * 1 
+                    x_position_for_stage = x_phase_points[current_index]
+                    y_position_for_stage = np.interp(x_position_for_stage, x, y)
+                    fig = go.Figure()
                     fig.add_trace(go.Scatter(
-                        x=x_segment,
-                        y=y_segment,
+                        x=x, y=y,
                         mode='lines',
-                        line=dict(color=color_map[i], width=15),
-                        hoverinfo='skip',
-                        showlegend=False,
+                        line=dict(color='#4FC1E9', width=4),
+                        name='Economic Growth'
                     ))
-                fig.update_layout(
-                    title={"text":f"Economic Cycle Visual Chart", "font": {"size": 25}},
-                    #plot_bgcolor='black',
-                    xaxis=dict(
-                        tickmode='array',
-                        tickvals=x_phase_points,
-                        ticktext=[phase.title() for phase in CYCLE_PHASES],
-                        showgrid=False,
-                        tickangle=-40,
-                    ),
-                    yaxis=dict(
-                        title='Economic Growth Level',
-                        showticklabels=False,
-                        showgrid=False,
-                        zeroline=True,
-                        zerolinecolor='gray',
-                        zerolinewidth=2
-                    ),
-                    showlegend=False,
-                    height=450,
-                    yaxis_range=[-1.2, 1.2]
-                )
-                fig.add_annotation(
-                    x=0.5, y=1,
-                    xref="paper", yref="paper",
-                    text=f"Current Economic Cycle Stage: {current_stage.upper()}",
-                    showarrow=False,
-                    font=dict(size=18, color="#4FC1E9"),
-                    yanchor="middle",
-                    xanchor="center"
-                )
-                st.plotly_chart(fig, use_container_width=True)
-                st.warning("This analysis is generated through artificial intelligence and should not be relied upon as the sole basis for investment decisions. AI-generated insights may contain inaccuracies and should be complemented with independent research and professional judgment.")
+                    fig.add_trace(go.Scatter(
+                        x=[x_position_for_stage],
+                        y=[y_position_for_stage],
+                        mode='markers',
+                        marker=dict(size=30, color='#4FC1E9', opacity=1, line=dict(width=2, color='white')),
+                        name='Current Position',
+                        hoverinfo='text',
+                        text=f"Stage: {current_stage.title()}"
+                    ))
+                    num_segments = len(CYCLE_PHASES)
+                    color_map = ['#FF4136', '#FF851B', '#FFDC00', '#2ECC40', '#3D9970', '#FFDC00', '#FF851B', '#FF4136']
+                    x_segment_starts = x_phase_points
+                    gradient_bar_y_level = -1.2
+                    for i in range(num_segments - 1):
+                        x_start = x_segment_starts[i]
+                        x_end = x_segment_starts[i+1]
+                        x_segment = np.linspace(x_start, x_end, 10)
+                        y_segment = np.full_like(x_segment, gradient_bar_y_level)
+                        fig.add_trace(go.Scatter(
+                            x=x_segment,
+                            y=y_segment,
+                            mode='lines',
+                            line=dict(color=color_map[i], width=15),
+                            hoverinfo='skip',
+                            showlegend=False,
+                        ))
+                    fig.update_layout(
+                        title={"text":f"Economic Cycle Visual Chart", "font": {"size": 25}},
+                        #plot_bgcolor='black',
+                        xaxis=dict(
+                            tickmode='array',
+                            tickvals=x_phase_points,
+                            ticktext=[phase.title() for phase in CYCLE_PHASES],
+                            showgrid=False,
+                            tickangle=-40,
+                        ),
+                        yaxis=dict(
+                            title='Economic Growth Level',
+                            showticklabels=False,
+                            showgrid=False,
+                            zeroline=True,
+                            zerolinecolor='gray',
+                            zerolinewidth=2
+                        ),
+                        showlegend=False,
+                        height=450,
+                        yaxis_range=[-1.2, 1.2]
+                    )
+                    fig.add_annotation(
+                        x=0.5, y=1,
+                        xref="paper", yref="paper",
+                        text=f"Current Economic Cycle Stage: {current_stage.upper()}",
+                        showarrow=False,
+                        font=dict(size=18, color="#4FC1E9"),
+                        yanchor="middle",
+                        xanchor="center"
+                    )
+                    st.plotly_chart(fig, use_container_width=True)
+                    st.warning("This analysis is generated through artificial intelligence and should not be relied upon as the sole basis for investment decisions. AI-generated insights may contain inaccuracies and should be complemented with independent research and professional judgment.")
+                    st.info(f"The system is using {ai_model} model to analyze the current economic condition.")
+                except Exception as e:
+                    st.write("")
             
         except Exception as e:
             st.error(f"An error occurred: {e}")
@@ -1286,7 +1290,7 @@ with crypto_market_data:
             width=400
         )
         return fig
-
+    
     @st.cache_data(ttl=3600) 
     def create_crypto_market_heatmap(current_crypto_data):
         """
@@ -1442,6 +1446,149 @@ with crypto_market_data:
 
         st.write("")
         st.write("")
+
+        ############################################## Fear & Greed ####################################################
+        st.write("")
+        st.write("")
+        
+        try:
+            SENTIMENT_ZONES = {
+                'Fear (0-25)':    {'y_val': 20, 'color': 'red',       'line_label': 'Fear (20)'},
+                'Neutral (50)':   {'y_val': 50, 'color': 'yellow',    'line_label': 'Neutral (50)'},
+                'Greed (75-100)': {'y_val': 80, 'color': 'green',     'line_label': 'Greed (80)'} 
+            }
+            NEUTRAL_MIDPOINT = 50 
+            
+            START_DATE_FILTER = datetime.datetime.now() - datetime.timedelta(days=365)
+            START_DATE_FILTER = START_DATE_FILTER.replace(hour=0, minute=0, second=0, microsecond=0)
+            
+            def get_classification(score):
+                if score < 20: return "Extreme Fear"
+                if score < 40: return "Fear"
+                if score < 60: return "Neutral"
+                if score < 80: return "Greed"
+                return "Extreme Greed"
+            
+            def create_gauge(title, score):
+                classification_text = get_classification(score)
+                label = f"{score:.0f} - {classification_text}"
+                fig = go.Figure(go.Indicator(
+                    mode="gauge",
+                    value=score,  
+                    number={'font': {'size': 24}}, 
+                    title={'text': title, 'font': {'size': 25}},
+                    gauge={
+                        'axis': {'range': [0, 100], 'tickwidth': 1, 'tickcolor': "darkgray"},
+                        'bar': {'color': "#5F9BEB"},
+                        'steps': [
+                            {'range': [0, 20], 'color': "#da4453", 'name': 'Extreme Fear'},
+                            {'range': [20, 40], 'color': "#e9573f", 'name': 'Fear'},
+                            {'range': [40, 60], 'color': "#f6bb42", 'name': 'Neutral'},
+                            {'range': [60, 80], 'color': "#a0d468", 'name': 'Greed'},
+                            {'range': [80, 100], 'color': "#37bc9b", 'name': 'Extreme Greed'}
+                        ],
+                        'threshold': {
+                            'line': {'color': "#5F9BEB", 'width': 4}, 
+                            'thickness': 0.75, 
+                            'value': score
+                        }
+                    }))
+                fig.add_annotation(
+                    x=0.5, y=0.15, 
+                    text=label, 
+                    showarrow=False, 
+                    font=dict(size=20) 
+                )
+                fig.update_layout(
+                    font=dict(size=14),
+                    margin=dict(t=80, b=10, l=50, r=50),
+                    height=350,
+                    template='plotly_dark'
+                )
+                return fig
+            
+            @st.cache_data(ttl=60*60*4)
+            def get_fear_greed_data():
+                """Fetches, processes, and returns the Crypto Fear & Greed Index data."""
+                API_URL = "https://api.alternative.me/fng/?limit=9999"
+                try:
+                    response = requests.get(API_URL)
+                    response.raise_for_status()
+                    json_data = response.json()
+                except requests.exceptions.RequestException as e:
+                    st.error(f"Error fetching data from the API: {e}")
+                    return pd.DataFrame()
+                data_points = json_data.get('data', [])
+                if not data_points:
+                    st.warning("No data found in the API response.")
+                    return pd.DataFrame()
+                df = pd.DataFrame(data_points)
+                df['timestamp'] = pd.to_datetime(df['timestamp'], unit='s')
+                df = df.rename(columns={'timestamp': 'Date', 'value': 'Index_Value'})
+                df['Index_Value'] = pd.to_numeric(df['Index_Value'], errors='coerce')
+                df = df.dropna(subset=['Index_Value']).sort_values('Date', ascending=True)
+                df = df[df['Date'] >= START_DATE_FILTER].copy()
+                return df
+            
+            df = get_fear_greed_data()
+            if not df.empty:
+                latest_value = df['Index_Value'].iloc[-1]
+                col1, col2 = st.columns([3, 2]) 
+                with col1:
+                    fig = go.Figure()
+                    fig.add_trace(go.Scatter(
+                        x=df['Date'], 
+                        y=df['Index_Value'], 
+                        mode='lines', 
+                        name='Index Value',
+                        line=dict(
+                            color='skyblue', 
+                            width=2, 
+                            shape='spline',     
+                            smoothing=1.3    
+                        )
+                    ))
+                    for zone_name, props in SENTIMENT_ZONES.items():
+                        fig.add_hline(
+                            y=props['y_val'],
+                            line_dash="dash" if props['y_val'] == NEUTRAL_MIDPOINT else "dot",
+                            line_color=props['color'],
+                            line_width=2 if props['y_val'] == NEUTRAL_MIDPOINT else 1.5,
+                            annotation_text=props['line_label'],
+                            annotation_position="bottom left", 
+                            annotation_font_color=props['color'],
+                            annotation_x=0.01 
+                        )
+                    fig.update_layout(
+                        title={"text":f"Index Value Over Time (Past 1 Year)", "font": {"size": 25}},
+                        #xaxis_title='Date',
+                        yaxis_title='Index Value (0-100)',
+                        template='plotly_dark',
+                        height=350,
+                        yaxis=dict(
+                            range=[0, 100], 
+                            dtick=10
+                        ),
+                        hovermode="x unified",
+                        margin=dict(l=80, r=80, t=50, b=40) 
+                    )
+                    st.plotly_chart(fig, use_container_width=True)
+            
+                with col2:
+                    gauge_fig = create_gauge("Current Fear & Greed Index", latest_value)
+                    st.plotly_chart(gauge_fig, use_container_width=True)
+                    # latest_date = df['Date'].iloc[-1].strftime('%Y-%m-%d')
+                    # st.markdown(f"**Latest Data Point**:")
+                    # st.markdown(f"**Date**: {latest_date}")
+                    # st.markdown(f"**Value**: **{latest_value:.0f}**")
+                    # st.markdown(f"**Sentiment**: **{get_classification(latest_value)}**")
+            else:
+                st.error("Could not load or process data for the dashboard.")
+        except Exception as e: 
+                st.write("")
+        
+        st.write("")
+        st.write("")
         ########################################################## Heat Map ##########################################################
 
         market_heatmap_fig = create_crypto_market_heatmap(current_data_for_metrics_and_heatmap)
@@ -1511,7 +1658,7 @@ with crypto_market_data:
                 st.warning("Could not generate correlation heatmap.")
     crypto_dashboard()
 
-###########################################################################################################################################
+########################################################## Commodity Market ####################################################################
 
 with commodity_market_data:
     COMMODITY_TICKERS = {
@@ -1639,8 +1786,8 @@ with commodity_market_data:
                 delta_color="normal"
             )
         
-        st.write("")
-        st.write("")
+        #st.write("")
+        #st.write("")
 
         ########################################################## charts  ##########################################################
         
@@ -1679,11 +1826,18 @@ with commodity_market_data:
                             )
                         )
                     fig.update_layout(
-                        title={"text":f"{name.split('(')[0].strip()} Over {PERIOD_CHART}", "font": {"size": 25}},
-                        yaxis_title='Price (USD)',
+                        title={"text":f"{name.split('(')[0].strip()}", "font": {"size": 25}},
+                        #yaxis_title='Price (USD)',
                         hovermode="x unified",
-                        legend_title="Indicators",
-                        margin=dict(l=20, r=20, t=40, b=20),
+                        #legend_title="Indicators",
+                        margin=dict(l=20, r=20, t=100, b=20),
+                        legend=dict(
+                            orientation="h",  
+                            yanchor="bottom",
+                            y=1.02,           
+                            xanchor="center", 
+                            x=0.5             
+                        ),
                         height=300, 
                     )
                     st.plotly_chart(fig, use_container_width=True)
@@ -1719,6 +1873,111 @@ with commodity_market_data:
                 """
             )
 
+        ################################################ Correlation Chart #############################################################
+        st.write("")
+        st.write("")
+        
+        GOLD_TICKER = "GLD"
+        SP500_TICKER = "^GSPC"
+        BITCOIN_TICKER = "BTC-USD"
+        CRUDE_OIL_TICKER = "CL=F"
+        WINDOW_SIZE = 60
+        
+        core_col1, core_col2 = st.columns([3, 1])
+        try:
+            end_date = datetime.datetime.today()
+            start_date = end_date - relativedelta(years=5)
+            with st.spinner(f"Fetching data for {GOLD_TICKER}, {SP500_TICKER}, {BITCOIN_TICKER}, and {CRUDE_OIL_TICKER} (5 years)..."):
+                gold_data = yf.download(GOLD_TICKER, start=start_date, end=end_date)
+                sp500_data = yf.download(SP500_TICKER, start=start_date, end=end_date) 
+                bitcoin_data = yf.download(BITCOIN_TICKER, start=start_date, end=end_date)
+                crude_oil_data = yf.download(CRUDE_OIL_TICKER, start=start_date, end=end_date)
+            if gold_data.empty or sp500_data.empty or bitcoin_data.empty or crude_oil_data.empty:
+                st.error("One or more asset data not found. Check symbols or date range.")
+            else:
+                gold_returns = gold_data["Close"].pct_change().dropna()
+                sp500_returns = sp500_data["Close"].pct_change().dropna()
+                bitcoin_returns = bitcoin_data["Close"].pct_change().dropna()
+                crude_oil_returns = crude_oil_data["Close"].pct_change().dropna()
+                combined = pd.concat([gold_returns, sp500_returns, bitcoin_returns, crude_oil_returns], axis=1)
+                combined.columns = ["Gold", "S&P500", "Bitcoin", "Crude Oil"]
+                combined.dropna(inplace=True)
+                core_asset = "Gold"
+                corr_sp500 = combined[core_asset].rolling(window=WINDOW_SIZE).corr(combined["S&P500"])
+                corr_bitcoin = combined[core_asset].rolling(window=WINDOW_SIZE).corr(combined["Bitcoin"])
+                corr_crude_oil = combined[core_asset].rolling(window=WINDOW_SIZE).corr(combined["Crude Oil"])
+        
+                with core_col1:
+                    fig = go.Figure()
+                    fig.add_trace(go.Scatter(
+                        x=corr_sp500.index,
+                        y=corr_sp500,
+                        mode="lines",
+                        line=dict(color="#5E9BEB", width=2),
+                        name="S&P500"
+                    ))
+                    fig.add_trace(go.Scatter(
+                        x=corr_bitcoin.index,
+                        y=corr_bitcoin,
+                        mode="lines",
+                        name="Bitcoin",
+                        line=dict(color="#F7931A", width=2)
+                    ))
+                    fig.add_trace(go.Scatter(
+                        x=corr_crude_oil.index,
+                        y=corr_crude_oil,
+                        mode="lines",
+                        name="Crude Oil",
+                        line=dict(color="#3C763D", width=2)
+                    ))
+                    fig.add_shape(
+                        type="line",
+                        x0=0, x1=1, y0=0, y1=0,
+                        xref="paper", yref="y",
+                        line=dict(color="#31333E", width=2, dash="dash"),
+                        layer="below"
+                    )
+                    fig.update_layout(
+                        title={
+                            "text":f'Gold vs. S&P 500, Bitcoin, and Crude Oil - Rolling Correlation (Window = {WINDOW_SIZE} Days)', 
+                            "font": {"size": 25}
+                        },
+                        title_y=1, title_x=0, 
+                        margin=dict(t=70, b=40, l=40, r=30),
+                        xaxis=dict(title=None), 
+                        yaxis=dict(title="Correlation", showgrid=True, range=[-1, 1]),
+                        legend=dict(yanchor="top",y=0.99,xanchor="left",x=0.010),
+                        height=450,
+                    )
+                    st.plotly_chart(fig, use_container_width=True)
+        
+                with core_col2:
+                    correlation_sp500 = corr_sp500.dropna().iloc[-1] if not corr_sp500.dropna().empty else None
+                    correlation_bitcoin = corr_bitcoin.dropna().iloc[-1] if not corr_bitcoin.dropna().empty else None
+                    correlation_crude_oil = corr_crude_oil.dropna().iloc[-1] if not corr_crude_oil.dropna().empty else None
+                    st.metric(
+                        label="Current Correlation with S&P500",
+                        value=f"{correlation_sp500:.4f}",
+                    )
+                    st.metric(
+                        label="Current Correlation with Bitcoin",
+                        value=f"{correlation_bitcoin:.4f}",
+                    )
+                    st.metric(
+                        label="Current Correlation with Crude Oil",
+                        value=f"{correlation_crude_oil:.4f}",
+                    )
+                    st.caption("""
+                    **Correlation Range:**
+                    - **+1 (Positive):** Assets move in the same direction.
+                    - **-1 (Negative):** Assets move in opposite directions.
+                    - **0 (No Linear):** Price changes are independent.
+                    """)
+        except Exception as e:
+            st.write("")
+
+        #####################################################################################################################
+
     commodity_dashboard()
 
 ''
@@ -1730,5 +1989,5 @@ with iiqc1:
     st.write("This analysis dashboard is designed to enable beginner investors to analyze stocks effectively and with ease. Please note that the information in this page is intended for educational purposes only and it does not constitute investment advice or a recommendation to buy or sell any security. We are not responsible for any losses resulting from trading decisions based on this information.")
 with iiqc2:
     invest_iq_central='./Image/InvestIQCentral.png'
-    st.image(invest_iq_central,width=300)
+    //st.image(invest_iq_central,width=300)
 ''
