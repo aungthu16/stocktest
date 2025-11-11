@@ -1004,7 +1004,7 @@ if st.button("Get Data"):
                             #f"${price:.2f}", 
                             f"${fiftyTwoWeekHigh:.2f}"
                         ],
-                        'tickfont': {'color': 'white', 'size': 10},
+                        'tickfont': {'size': 10},
                         'ticklen': 0,
                         'tickwidth': 0,
                         'tickcolor': 'white'
@@ -1026,7 +1026,7 @@ if st.button("Get Data"):
                     yref="paper",
                     text="52-Wk Low",
                     showarrow=False,
-                    font=dict(color="white", size=13),
+                    font=dict(size=13),
                     align="left"
                 )
                 fig.add_annotation(
@@ -1036,7 +1036,7 @@ if st.button("Get Data"):
                     yref="paper",
                     text="52-Wk High",
                     showarrow=False,
-                    font=dict(color="white", size=13),
+                    font=dict(size=13),
                     align="right"
                 )
                 fig.update_layout(
@@ -4769,5 +4769,5 @@ with iiqc1:
     st.write("This analysis dashboard is designed to enable beginner investors to analyze stocks effectively and with ease. Please note that the information in this page is intended for educational purposes only and it does not constitute investment advice or a recommendation to buy or sell any security. We are not responsible for any losses resulting from trading decisions based on this information.")
 with iiqc2:
     invest_iq_central='./Image/InvestIQCentral.png'
-    #st.image(invest_iq_central,width=300)
+    //st.image(invest_iq_central,width=300)
 ''
